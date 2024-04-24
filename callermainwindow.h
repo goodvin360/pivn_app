@@ -52,7 +52,10 @@ public:
     bool onFlag = false;
     bool fluxFlag = false;
     std::vector<double>fluxTime;
-    double deltaT = 1;
+    double deltaT = 0;
+    double fluxTrig = 0;
+    double backVal = 0;
+    double backCounter = 1;
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();
 
@@ -228,17 +231,15 @@ public slots:
     }
 
     void addStartFile() {
-
         std::cout << fileName.toStdString() << std::endl;
-        std::cout << "ля ля ля" << std::endl;
         if (fileName!= NULL)
         {
-            std::vector<std::string> fileData;
+            std::vector<std::string> fileData{};
             std::ifstream file;
-            file.open(fileName.toStdString());
             std::string line;
             std::stringstream lineData;
             double t,trig,ch1,ch2,ch3,ch4 = 0;
+            file.open(fileName.toStdString());
             while (getline(file, line))
             {
                 file >> t >> trig >> ch1 >> ch2 >> ch3 >> ch4;
@@ -248,9 +249,9 @@ public slots:
             file.close();
 
             int counter = 0;
-            std::map<double, std::string> resultsNew;
-            int tempVar1;
-            int tempVar2;
+            std::map<double, std::string> resultsNew{};
+            int tempVar1 = 0;
+            int tempVar2 = 0;
 
             for (int i=0; i<fileData.size(); i++)
             {
@@ -282,6 +283,10 @@ public slots:
                         if (checkVar == 5)
                         {
                             resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr), token));
+                            if (vecDataFile->resultsDb.size()>0)
+                            {
+                                fluxTrig = vecDataFile->resultsDb.at(1).back();
+                            }
                             vecDataFile->getData(resultsNew.rbegin()->second,counter);
                             calculateFlux(false);
                             tempVar2 = resultsNew.size();
@@ -309,6 +314,10 @@ public slots:
                     if (checkVar==5)
                     {
                         resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr),inputValStr));
+                        if (vecDataFile->resultsDb.size()>0)
+                        {
+                            fluxTrig = vecDataFile->resultsDb.at(1).back();
+                        }
                         vecDataFile->getData(resultsNew.rbegin()->second,counter);
                         calculateFlux(false);
                         tempVar2 = resultsNew.size();
@@ -340,6 +349,8 @@ public slots:
             }
         }
         vecDataFile->resultsDb.clear();
+        backVal = 0;
+        backCounter = 1;
     }
 
     void addLoadFile() {
@@ -355,37 +366,64 @@ public slots:
         else
             data = vecDataFile;
 
-        for (int i = 2; i < data->resultsDb.size(); i++) {
-            if(data->resultsDb.at(i).rbegin().operator*() < 5 && deltaT == 1)
-            {
-                fluxFlag  = false;
-                return;
-            }
+//        std::cout << "flux trig is " << fluxTrig << std::endl;
+
+        if (data->resultsDb.at(1).back()>fluxTrig)
+        {
+            fluxFlag = true;
         }
 
-        fluxFlag = true;
-        fluxTime.push_back(data->resultsDb.at(0).back());
-
-        deltaT = fluxTime.back()-fluxTime.front();
-
-        if (deltaT==100)
+        if(deltaT == 0 && !fluxFlag)
         {
-            deltaT = 1;
+            for (int i = 2; i < data->resultsDb.size(); i++)
+            {
+                backVal+=data->resultsDb.at(i).back()/(1-data->resultsDb.at(i).back()*5e-4);
+//                std::cout << "data from resultDb is: " << data->resultsDb.at(i).back() << '\t';
+            }
+//            std::cout << std::endl;
+            backVal = backVal/backCounter;
+//            std::cout << fluxFlag << std::endl;
+//            std::cout << deltaT << std::endl;
+//            std::cout << "back val is: " << backVal << std::endl;
+            backCounter+=1;
             return;
         }
 
-        double sum;
-        for (double i = fluxTime.front(); i <= fluxTime.back(); i++) {
+//        for (int i = 2; i < data->resultsDb.size(); i++) {
+//            if(data->resultsDb.at(i).rbegin().operator*() < 5 && deltaT == 1 && !fluxFlag)
+//            {
+//                return;
+//            }
+//        }
+
+
+        if (deltaT>=100)
+        {
+            deltaT = 0;
+            fluxFlag  = false;
+            fluxTime.clear();
+            backVal = 0;
+            backCounter = 1;
+            return;
+        }
+
+        fluxTime.push_back(data->resultsDb.at(0).back());
+        deltaT = fluxTime.back()-fluxTime.front();
+
+        double sum = 0;
+        for (int i = fluxTime.front(); i <= fluxTime.back(); i++) {
             for (int j=2; j<data->resultsDb.size(); j++)
             {
-                sum+=data->resultsDb.at(j).at(i)/(1-data->resultsDb.at(j).at(i)*5e-4);
+                sum+=data->resultsDb.at(j).at(i)/(1-data->resultsDb.at(j).at(i)*5e-4)-backVal;
             }
         }
 
 //        double flux = (sum-991.22)/(coefficient*(1-exp(-(log(2)*deltaT/halfLife))));
-        double flux = (sum-991.22)/(coefficient);
+        double flux = (sum-300)/(coefficient);
         textBrowser_2->setText(QString::number(flux)+'\n');
         QApplication::processEvents();
+        sum = 0;
+        flux = 0;
     }
 };
 
