@@ -28,14 +28,19 @@
 #include "math.h"
 #include <QTextCodec>
 #include <QTextStream>
+#include "QtCharts/QChartView"
+#include "QChart"
+#include <QtCharts>
 
 #pragma region Docs
+
+using namespace QtCharts;
+
 
 class CallerMainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
     QTextBrowser*textBrowser = nullptr;
@@ -56,11 +61,23 @@ public:
     double fluxTrig = 0;
     double backVal = 0;
     double backCounter = 1;
+    std::vector<double>backVector;
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();
+    bool helpVar = true;
+    bool helpVarFile = true;
+
+    QChart*chart = new QChart();
+    QChartView*chartView = new QChartView(chart);
+    QLineSeries*series1 = new QLineSeries();
+    QLineSeries*series2 = new QLineSeries();
+    QLineSeries*series3 = new QLineSeries();
+    QLineSeries*series4 = new QLineSeries();
 
     CallerMainWindow(QWidget* parent = nullptr) : QMainWindow(parent) {
     }
+
+    ~CallerMainWindow() {};
 
 public slots:
 
@@ -98,6 +115,11 @@ public slots:
         int tempVar2;
         while (esp32.isConnected() && counter < endTime && onFlag)
         {
+            series1->clear();
+            series2->clear();
+            series3->clear();
+            series4->clear();
+
             esp32.ReadSerialPort(inputData, INPUT_DATA_BYTES);
             std::string inputValStr(inputData);
             std::cout << inputValStr << std::endl;
@@ -127,6 +149,10 @@ public slots:
                     if (checkVar == 5)
                     {
                         resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr), token));
+                        if (vecData->resultsDb.size()>0)
+                        {
+                            fluxTrig = vecData->resultsDb.at(1).back();
+                        }
                         tempVar2 = resultsNew.size();
                         if (tempVar2>tempVar1)
                         {
@@ -157,7 +183,9 @@ public slots:
                 if (checkVar==5)
                 {
                     resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr),inputValStr));
-
+                    {
+                        fluxTrig = vecData->resultsDb.at(1).back();
+                    }
                     tempVar2 = resultsNew.size();
                     if (tempVar2>tempVar1)
                     {
@@ -172,8 +200,35 @@ public slots:
             {
                 std::stringstream res_out;
                 for (int i = 0; i < vecData->resultsDb.size(); i++) {
-                        res_out << vecData->resultsDb.at(i).rbegin().operator*() << " ";
+                        res_out << vecData->resultsDb.at(i).back() << " ";
                     }
+
+                for (int k = 0; k < vecData->resultsDb.at(0).size(); k++) {
+                    series1->append(vecData->resultsDb.at(0).at(k),vecData->resultsDb.at(2).at(k));
+                    series2->append(vecData->resultsDb.at(0).at(k),vecData->resultsDb.at(3).at(k));
+                    series3->append(vecData->resultsDb.at(0).at(k),vecData->resultsDb.at(4).at(k));
+                    series4->append(vecData->resultsDb.at(0).at(k),vecData->resultsDb.at(5).at(k));
+                }
+
+                chart->legend()->hide();
+                chart->setVisible(1);
+
+                if (helpVar)
+                {chart->addSeries(series1);
+                    chart->addSeries(series2);
+                    chart->addSeries(series3);
+                    chart->addSeries(series4);
+                    helpVar = false;}
+                chart->createDefaultAxes();
+                double max_y = *max_element(vecData->resultsDb.at(2).begin(), vecData->resultsDb.at(2).end());
+                double max_x = *max_element(vecData->resultsDb.at(0).begin(), vecData->resultsDb.at(0).end());
+                chart->axes(Qt::Vertical).first()->setRange(0, 1.2*max_y);
+                chart->axes(Qt::Horizontal).first()->setRange(0, max_x+2);
+                chartView->setVisible(1);
+                chartView->setRenderHint(QPainter::Antialiasing);
+                chartView->setMinimumSize(500,500);
+                QApplication::processEvents();
+
                 QString showLine = QString::fromStdString(res_out.str());
 
                 textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
@@ -194,6 +249,8 @@ public slots:
         textBrowser->setText(textBrowser->toPlainText()
                              +"results stored in the file"+'\n');
         vecData->resultsDb.clear();
+        backVal = 0;
+        backCounter = 1;
     };
 
     void input(QString dataEntered) {
@@ -287,11 +344,13 @@ public slots:
                             {
                                 fluxTrig = vecDataFile->resultsDb.at(1).back();
                             }
-                            vecDataFile->getData(resultsNew.rbegin()->second,counter);
-                            calculateFlux(false);
                             tempVar2 = resultsNew.size();
                             if (tempVar2>tempVar1)
+                            {
+                                vecDataFile->getData(resultsNew.rbegin()->second,counter);
+                                calculateFlux(false);
                                 counter+=1;
+                            }
                         }
                     }
                     inputValStr.erase(0, pos + delimiter.length());
@@ -318,21 +377,51 @@ public slots:
                         {
                             fluxTrig = vecDataFile->resultsDb.at(1).back();
                         }
-                        vecDataFile->getData(resultsNew.rbegin()->second,counter);
-                        calculateFlux(false);
                         tempVar2 = resultsNew.size();
                         if (tempVar2>tempVar1)
+                        {
+                            vecDataFile->getData(resultsNew.rbegin()->second,counter);
+                            calculateFlux(false);
                             counter+=1;
+                        }
                     };
                 }
 
                 if (vecDataFile->resultsDb.size()>0)
                 {
+                    series1->clear();
+                    series2->clear();
+                    series3->clear();
+                    series4->clear();
+
+                    for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
+                        series1->append(vecDataFile->resultsDb.at(0).at(k),vecDataFile->resultsDb.at(2).at(k));
+                        series2->append(vecDataFile->resultsDb.at(0).at(k),vecDataFile->resultsDb.at(3).at(k));
+                        series3->append(vecDataFile->resultsDb.at(0).at(k),vecDataFile->resultsDb.at(4).at(k));
+                        series4->append(vecDataFile->resultsDb.at(0).at(k),vecDataFile->resultsDb.at(5).at(k));
+                    }
+                    chart->legend()->hide();
+                    chart->setVisible(1);
+
+                    if (helpVarFile)
+                    {chart->addSeries(series1);
+                    chart->addSeries(series2);
+                    chart->addSeries(series3);
+                    chart->addSeries(series4);
+                    helpVarFile = false;}
+                    chart->createDefaultAxes();
+                    double max = *max_element(vecDataFile->resultsDb.at(2).begin(), vecDataFile->resultsDb.at(2).end());
+                    chart->axes(Qt::Vertical).first()->setRange(0, 1.2*max);
+                    chartView->setVisible(1);
+                    chartView->setRenderHint(QPainter::Antialiasing);
+                    chartView->setMinimumSize(500,500);
 
                     for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
                         std::stringstream res_out;
                         for (int l=0;l<vecDataFile->resultsDb.size(); l++)
+                        {
                             res_out << vecDataFile->resultsDb.at(l).at(k) << " ";
+                        }
                         QString showLine = QString::fromStdString(res_out.str());
 
                         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
@@ -366,8 +455,6 @@ public slots:
         else
             data = vecDataFile;
 
-//        std::cout << "flux trig is " << fluxTrig << std::endl;
-
         if (data->resultsDb.at(1).back()>fluxTrig)
         {
             fluxFlag = true;
@@ -375,17 +462,33 @@ public slots:
 
         if(deltaT == 0 && !fluxFlag)
         {
+//            backVal = 0;
             for (int i = 2; i < data->resultsDb.size(); i++)
             {
                 backVal+=data->resultsDb.at(i).back()/(1-data->resultsDb.at(i).back()*5e-4);
-//                std::cout << "data from resultDb is: " << data->resultsDb.at(i).back() << '\t';
             }
-//            std::cout << std::endl;
+
+            if (backVector.size()<5)
+                backVector.push_back(backVal);
+            else
+            {
+                backVector.erase(backVector.begin());
+                backVector.push_back(backVal);
+            }
+
             backVal = backVal/backCounter;
-//            std::cout << fluxFlag << std::endl;
-//            std::cout << deltaT << std::endl;
-//            std::cout << "back val is: " << backVal << std::endl;
             backCounter+=1;
+
+            /*if (backVector.size()>0)
+            {
+                double backSum=0;
+                for (int i=0; i<backVector.size(); i++)
+                    backSum+=backVector.at(i);
+
+                backVal = backSum/backVector.size();
+                std::cout << backVal << std::endl;
+            }*/
+
             return;
         }
 
@@ -404,6 +507,7 @@ public slots:
             fluxTime.clear();
             backVal = 0;
             backCounter = 1;
+            backVector.clear();
             return;
         }
 

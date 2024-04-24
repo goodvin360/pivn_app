@@ -5,7 +5,6 @@
 #include  <locale.h>
 
 
-
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     CallerMainWindow window(nullptr);

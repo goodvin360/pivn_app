@@ -13,6 +13,7 @@ find_package(Qt5 COMPONENTS
         Gui
         Widgets
         SerialPort
+        Charts
         REQUIRED)
 
 add_executable(pivn_app main.cpp caller.ui callermainwindow.h SerialPort.h SerialPort.cpp FileWriter.h vecFill.h)
@@ -21,6 +22,7 @@ target_link_libraries(pivn_app
         Qt5::Gui
         Qt5::Widgets
         Qt5::SerialPort
+        Qt5::Charts
         )
 
 if (WIN32)
