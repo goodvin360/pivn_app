@@ -1,9 +1,8 @@
 #include <QApplication>
 #include "ui_caller.h"
-#include "callermainwindow.h"
+#include "include/callermainwindow.h"
 #include "QScrollBar"
 #include  <locale.h>
-
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -19,7 +18,6 @@ int main(int argc, char *argv[]) {
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
           {caller.comboBox->addItem(serialPortInfo.portName());}
     window.pushButton_3 = caller.pushButton_3;
-
     window.resize(480, 640);
     window.show();
     return QApplication::exec();

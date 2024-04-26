@@ -1,18 +1,10 @@
-#ifndef PIVN_APP_VER_2_VECFILL_H
-#define PIVN_APP_VER_2_VECFILL_H
+#include "vecFill.h"
 
-#include "vector"
-#include "string"
+vecFill::vecFill() {}
 
-class vecFill {
+vecFill::~vecFill() {}
 
-public:
-    vecFill() {};
-    ~vecFill() {};
-
-    std::vector<std::vector<double>> resultsDb;
-
-std::vector<std::vector<double>> getData(std::string str, int counter){
+std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) {
 
     if (counter==0)
     {
@@ -65,7 +57,3 @@ std::vector<std::vector<double>> getData(std::string str, int counter){
 
     return resultsDb;
 }
-
-};
-
-#endif //PIVN_APP_VER_2_VECFILL_H

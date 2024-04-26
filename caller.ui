@@ -201,7 +201,7 @@
    <sender>comboBox</sender>
    <signal>activated(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>getComm(QString)</slot>
+   <slot>getCOM(QString)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>64</x>
@@ -313,7 +313,7 @@
  <slots>
   <slot>addStart()</slot>
   <slot>input(QString)</slot>
-  <slot>getComm(QString)</slot>
+  <slot>getCOM(QString)</slot>
   <slot>connectCOM()</slot>
   <slot>addStop()</slot>
   <slot>addCoef(QString)</slot>
