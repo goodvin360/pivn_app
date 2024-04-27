@@ -64,7 +64,7 @@ void CallerMainWindow::addStart() {
 
     int endTime = measTime;
     int counter = 0;
-
+    int flushCounter = 0;
     SerialPort esp32(pName.toStdString());
 
     std::map<double, std::string> resultsNew;
@@ -81,7 +81,6 @@ void CallerMainWindow::addStart() {
         size_t pos = 0;
         std::string token;
         std::string timeStr;
-
         while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
             tempVar1 = resultsNew.size();
             token = inputValStr.substr(0, pos);
@@ -165,6 +164,13 @@ void CallerMainWindow::addStart() {
             QScrollBar*sb = textBrowser->verticalScrollBar();
             sb->setValue(sb->maximum());
             QApplication::processEvents();
+            flushCounter+=1;
+            if (flushCounter>15)
+            {
+                textBrowser->clear();
+                QApplication::processEvents();
+                flushCounter = 0;
+            }
         }
 
         inputValStr.clear();
