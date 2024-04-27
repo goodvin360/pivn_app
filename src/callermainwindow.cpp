@@ -165,7 +165,7 @@ void CallerMainWindow::addStart() {
             sb->setValue(sb->maximum());
             QApplication::processEvents();
             flushCounter+=1;
-            if (flushCounter>15)
+            if (flushCounter>15 )
             {
                 textBrowser->clear();
                 QApplication::processEvents();
