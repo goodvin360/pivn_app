@@ -59,7 +59,7 @@ void CallerMainWindow::addStart() {
     onFlag = true;
     char inputData[INPUT_DATA_BYTES];
 
-    textBrowser->setText("\n");
+    textBrowser->clear();
     QApplication::processEvents();
 
     int endTime = measTime;
@@ -86,7 +86,7 @@ void CallerMainWindow::addStart() {
             tempVar1 = resultsNew.size();
             token = inputValStr.substr(0, pos);
             if (token.length() > 0) {
-                int checkVar = 0;
+                /*int checkVar = 0;
                 std::string checkStr = token;
                 std::string delimiter3 = ":";
                 size_t pos = 0;
@@ -97,12 +97,11 @@ void CallerMainWindow::addStart() {
                     }
                     checkStr.erase(0, pos + delimiter3.length());
                     checkVar += 1;
-                }
+                }*/
                 token.pop_back();
-
-                if (checkVar == 5)
+                if (dotsFind(token,":").second == 5)
                 {
-                    resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr), token));
+                    resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
                     if (vecData->resultsDb.size()>0)
                     {
                         fluxTrig = vecData->resultsDb.at(1).back();
@@ -112,7 +111,6 @@ void CallerMainWindow::addStart() {
                     {
                         vecData->getData(resultsNew.rbegin()->second,counter);
                         counter+=1;
-//                            calculateFluxFo(true);
                         fluxCalc->calculateFlux(*vecData, fluxTrig);
                     }
                 }
@@ -123,7 +121,7 @@ void CallerMainWindow::addStart() {
         if (inputValStr!="")
         {
             tempVar1 = resultsNew.size();
-            int checkVar = 0;
+            /*int checkVar = 0;
             std::string checkStr = inputValStr;
             std::string delimiter3 = ":";
             size_t pos = 0;
@@ -134,10 +132,10 @@ void CallerMainWindow::addStart() {
                 }
                 checkStr.erase(0, pos + delimiter3.length());
                 checkVar+=1;
-            }
-            if (checkVar==5)
+            }*/
+            if (dotsFind(inputValStr,":").second == 5)
             {
-                resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr),inputValStr));
+                resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
                 {
                     fluxTrig = vecData->resultsDb.at(1).back();
                 }
@@ -145,7 +143,6 @@ void CallerMainWindow::addStart() {
                 if (tempVar2>tempVar1)
                 {
                     vecData->getData(resultsNew.rbegin()->second,counter);
-//                        calculateFluxFo(true);
                     fluxCalc->calculateFlux(*vecData, fluxTrig);
                     counter+=1;
                 }
@@ -195,30 +192,35 @@ void CallerMainWindow::addCoef(QString coef) {
         coefficient = std::stod(coef.toStdString());
 }
 
+std::vector<std::string> CallerMainWindow::fileRead(std::string str) {
+
+    std::vector<std::string> fileData{};
+    std::ifstream file;
+    std::string line;
+    std::stringstream lineData;
+    size_t pos = 0;
+    file.open(str);
+    while (getline(file, line))
+    {
+        while ((pos = line.find('\t')) != std::string::npos) {
+            line.replace(line.begin()+pos,line.begin()+pos+1,":");
+        }
+        fileData.push_back(line);
+    }
+    file.close();
+    return fileData;
+}
+
 void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
-    if (fileName!= NULL)
+    if (fileName!= nullptr)
     {
         Plotter*makePlot = new Plotter();
         textBrowser->setText("\n");
         QApplication::processEvents();
 
         std::vector<std::string> fileData{};
-        std::ifstream file;
-        std::string line;
-        std::stringstream lineData;
-        double t,trig,ch1,ch2,ch3,ch4 = 0;
-        size_t pos = 0;
-        file.open(fileName.toStdString());
-        while (getline(file, line))
-        {
-            while ((pos = line.find('\t')) != std::string::npos) {
-                line.replace(line.begin()+pos,line.begin()+pos+1,":");
-            }
-            fileData.push_back(line);
-        }
-
-        file.close();
+        fileData = fileRead(fileName.toStdString());
 
         int counter = 0;
         std::map<double, std::string> resultsNew{};
@@ -238,7 +240,7 @@ void CallerMainWindow::addStartFile() {
             while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
                 token = inputValStr.substr(0, pos);
                 if (token.length() > 0) {
-                    int checkVar = 0;
+                    /*int checkVar = 0;
                     std::string checkStr = token;
                     std::string delimiter3 = ":";
                     size_t pos = 0;
@@ -249,11 +251,11 @@ void CallerMainWindow::addStartFile() {
                         }
                         checkStr.erase(0, pos + delimiter3.length());
                         checkVar += 1;
-                    }
+                    }*/
 //                        token.pop_back();
-                    if (checkVar == 5)
+                    if (dotsFind(token,":").second == 5)
                     {
-                        resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr), token));
+                        resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
                         if (vecDataFile->resultsDb.size()>0)
                         {
                             fluxTrig = vecDataFile->resultsDb.at(1).back();
@@ -262,7 +264,6 @@ void CallerMainWindow::addStartFile() {
                         if (tempVar2>tempVar1)
                         {
                             vecDataFile->getData(resultsNew.rbegin()->second,counter);
-//                                calculateFluxFo(false);
                             fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                             counter+=1;
                         }
@@ -273,7 +274,8 @@ void CallerMainWindow::addStartFile() {
 
             if (inputValStr!="")
             {
-                int checkVar = 0;
+                tempVar1 = resultsNew.size();
+                /*int checkVar = 0;
                 std::string checkStr = inputValStr;
                 std::string delimiter3 = ":";
                 size_t pos = 0;
@@ -284,10 +286,10 @@ void CallerMainWindow::addStartFile() {
                     }
                     checkStr.erase(0, pos + delimiter3.length());
                     checkVar+=1;
-                }
-                if (checkVar==5)
+                }*/
+                if (dotsFind(inputValStr,":").second==5)
                 {
-                    resultsNew.insert(std::pair<double, std::string>(std::stod(timeStr),inputValStr));
+                    resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
                     if (vecDataFile->resultsDb.size()>0)
                     {
                         fluxTrig = vecDataFile->resultsDb.at(1).back();
@@ -296,7 +298,6 @@ void CallerMainWindow::addStartFile() {
                     if (tempVar2>tempVar1)
                     {
                         vecDataFile->getData(resultsNew.rbegin()->second,counter);
-//                            calculateFluxFo(false);
                         fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                         counter+=1;
                     }
@@ -331,4 +332,22 @@ void CallerMainWindow::addStartFile() {
 
 void CallerMainWindow::addLoadFile() {
     fileName = QFileDialog::getOpenFileName(this,tr("Open File"), "../", tr("txt files (*.txt)"));
+}
+
+std::pair<std::string, int> CallerMainWindow::dotsFind(std::string str, std::string delim) {
+    std::pair<std::string, int> myPair;
+    int checkVar = 0;
+    std::string timeStr;
+    size_t pos = 0;
+    while ((pos = str.find(delim)) != std::string::npos) {
+        if (checkVar == 0)
+        {
+            timeStr = str.substr(0, pos);
+        }
+        str.erase(0, pos + delim.length());
+        checkVar += 1;
+    }
+    myPair.first = timeStr;
+    myPair.second = checkVar;
+    return myPair;
 }

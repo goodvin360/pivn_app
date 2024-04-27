@@ -62,6 +62,9 @@ public:
     vecFill*vecDataFile = new vecFill();
     FluxCalc*fluxCalc = new FluxCalc();
 
+    std::pair<std::string, int> dotsFind (std::string str, std::string delim);
+    std::vector<std::string> fileRead (std::string str);
+
 public slots:
 
     void printMsg(QString msg);
