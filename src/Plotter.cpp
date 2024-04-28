@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Plotter.h"
 
 Plotter::Plotter() {
@@ -25,32 +26,68 @@ Plotter::Plotter() {
         lsVector.at(i)->attachAxis(m_axisX);
         lsVector.at(i)->attachAxis(m_axisY);
     }
+    m_axisX->setTickCount(10);
+    m_axisX->setRange(0,100);
+    m_axisY->setRange(0,10);
 };
 
-Plotter::~Plotter() {};
+Plotter::~Plotter() {
+//    delete chart;
+//    delete chartView;
+//    for (int i=0; i<lsVector.size(); i++)
+//    {
+//        lsVector.at(i)->clear();
+//    }
+};
 
 void Plotter::PlotGraph(std::vector<std::vector<double>> &vecData) {
 
-    for (int i=0; i<lsVector.size(); i++)
-    {
-        lsVector.at(i)->clear();
-    }
+//    for (int i=0; i<lsVector.size(); i++)
+//    {
+//        lsVector.at(i)->clear();
+//    }
 
-    for (int k = 0; k < vecData.at(0).size(); k++) {
+
+
+
         for (int i=0; i<lsVector.size(); i++)
         {
-            lsVector.at(i)->append(vecData.at(0).at(k),vecData.at(2+i).at(k));
+            QVector<QPointF> points(vecData.at(0).size());
+            for(std::vector<int>::size_type l = 0; l != vecData.at(2+i).size(); ++l) {
+                points[l] = QPointF(l, vecData.at(2+i)[l]);
+            }
+            lsVector.at(i)->replace(points);
+//            QApplication::processEvents();
         }
-    }
 
-    double max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
-    double max_x = *max_element(vecData.at(0).begin(), vecData.at(0).end());
-    m_axisX->setRange(0,vecData.at(0).size()+1);
-    m_axisY->setRange(0,max_y+10);
+//    for (int i=0; i<lsVector.size(); i++)
+//    {
+//        for(int k = 0; k < vecData.at(0).size(); ++k) {
+//            lsVector.at(i)->append(vecData.at(0).at(k),vecData.at(2+i).at(k));
+//        }
+//    }
 
+
+//    for (int i=0; i<lsVector.size(); i++)
+//    {
+//        lsVector.at(i)->append(vecData.at(0).back(),vecData.at(2+i).back());
+//    }
+
+//    if (vecData.at(0).back()<=100) {
+//        max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+//        m_axisX->setRange(0, 100);
+//    }
+//    else {
+//        max_y = *max_element(vecData.at(2).end() - 100, vecData.at(2).end());
+//        m_axisX->setRange(vecData.at(0).back()-100, vecData.at(0).back());
+//    }
+
+    max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+    m_axisX->setRange(0,vecData.at(0).size());
+
+    m_axisY->setRange(-1,max_y+1);
 
     chartView->setVisible(1);
     chartView->setRenderHint(QPainter::Antialiasing);
     chartView->setMinimumSize(500,500);
-    QApplication::processEvents();
 }

@@ -30,6 +30,7 @@
 #include <QTextStream>
 #include "Plotter.h"
 #include "FluxCalc.h"
+#include "QTimer"
 
 #pragma region Docs
 
@@ -57,10 +58,22 @@ public:
     int measTime = 5;
     double fluxTrig = 0;
     bool onFlag = false;
+    int plotState = 0;
+
+    int counter = 0;
 
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();
     FluxCalc*fluxCalc = new FluxCalc();
+
+    QTimer*m_timer;
+    SerialPort*esp32;
+    Plotter*makePlot;
+
+    std::map<double, std::string> resultsNew;
+    int tempVar1 = 0;
+    int tempVar2 = 0;
+    int flushCounter = 0;
 
     std::pair<std::string, int> dotsFind (std::string str, std::string delim);
     std::vector<std::string> fileRead (std::string str);
@@ -76,6 +89,8 @@ public slots:
     void addCoef(QString coef);
     void addStartFile();
     void addLoadFile();
+    void plotTrigger(int st);
+    void startByTimer();
 
 };
 

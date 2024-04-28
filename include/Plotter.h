@@ -19,6 +19,8 @@ private:
     QValueAxis*m_axisX;
     QValueAxis*m_axisY;
     QVector<QLineSeries*> lsVector;
+    double max_y = 10;
+    double max_x;
 };
 
 #endif //PIVN_APP_PLOTTER_H

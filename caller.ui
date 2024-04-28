@@ -322,6 +322,19 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="0" colspan="3">
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Plot graph</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -345,8 +358,8 @@
    <slot>addStart()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>211</y>
+     <x>93</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -377,8 +390,8 @@
    <slot>input(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>69</y>
+     <x>262</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>368</x>
@@ -393,8 +406,8 @@
    <slot>connectCOM()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>89</y>
+     <x>97</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>156</x>
@@ -409,8 +422,8 @@
    <slot>addStop()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>203</y>
+     <x>97</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
@@ -425,8 +438,8 @@
    <slot>addCoef(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>247</x>
-     <y>62</y>
+     <x>478</x>
+     <y>72</y>
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
@@ -441,8 +454,8 @@
    <slot>addLoadFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>201</x>
-     <y>317</y>
+     <x>262</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>
@@ -457,12 +470,28 @@
    <slot>addStartFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>343</y>
+     <x>230</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>24</x>
      <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_3</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>plotTrigger(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>229</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
@@ -476,5 +505,6 @@
   <slot>addCoef(QString)</slot>
   <slot>addStartFile()</slot>
   <slot>addLoadFile()</slot>
+  <slot>plotTrigger(int)</slot>
  </slots>
 </ui>

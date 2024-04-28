@@ -1,11 +1,123 @@
 #include "callermainwindow.h"
 
+
 CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     parent = nullptr;
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
+    m_timer = new QTimer();
+    connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
+    m_timer->setInterval(1000);
 }
 
 CallerMainWindow::~CallerMainWindow() noexcept {}
+
+void CallerMainWindow::startByTimer() {
+    char inputData[INPUT_DATA_BYTES];
+    esp32->ReadSerialPort(inputData, INPUT_DATA_BYTES);
+
+    std::string inputValStr(inputData);
+    std::cout << inputValStr << std::endl;
+
+    std::string delimiter = "\n";
+    size_t pos = 0;
+    std::string token;
+    std::string timeStr;
+    while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
+        tempVar1 = resultsNew.size();
+        token = inputValStr.substr(0, pos);
+        if (token.length() > 0) {
+            token.pop_back();
+            if (dotsFind(token,":").second == 5)
+            {
+                resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
+                if (vecData->resultsDb.size()>0)
+                {
+                    fluxTrig = vecData->resultsDb.at(1).back();
+                }
+                tempVar2 = resultsNew.size();
+                if (tempVar2>tempVar1)
+                {
+                    vecData->getData(resultsNew.rbegin()->second,counter);
+                    counter+=1;
+                    fluxCalc->calculateFlux(*vecData, fluxTrig);
+                }
+            }
+        }
+        inputValStr.erase(0, pos + delimiter.length());
+    }
+
+    if (inputValStr!="")
+    {
+        tempVar1 = resultsNew.size();
+        if (dotsFind(inputValStr,":").second == 5)
+        {
+            resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
+            {
+                fluxTrig = vecData->resultsDb.at(1).back();
+            }
+            tempVar2 = resultsNew.size();
+            if (tempVar2>tempVar1)
+            {
+                vecData->getData(resultsNew.rbegin()->second,counter);
+                fluxCalc->calculateFlux(*vecData, fluxTrig);
+                counter+=1;
+            }
+        };
+    }
+
+    if (vecData->resultsDb.size()>0)
+    {
+        std::stringstream res_out;
+        for (int i = 0; i < vecData->resultsDb.size(); i++) {
+            res_out << vecData->resultsDb.at(i).back() << " ";
+        }
+
+        if (plotState>0)
+            makePlot->PlotGraph(vecData->resultsDb);
+
+        QString showLine = QString::fromStdString(res_out.str());
+
+        textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
+        QApplication::processEvents();
+        QScrollBar*sb = textBrowser->verticalScrollBar();
+        sb->setValue(sb->maximum());
+        QApplication::processEvents();
+        flushCounter+=1;
+        if (flushCounter>15 )
+        {
+            textBrowser->clear();
+            QApplication::processEvents();
+            flushCounter = 0;
+        }
+    }
+
+    inputValStr.clear();
+    memset(inputData, 0, sizeof inputData);
+
+    if (counter>=measTime || !onFlag)
+    {
+        if (m_timer->isActive())
+            m_timer->stop();
+    }
+
+    if (!m_timer->isActive()) {
+
+        FileWriter writer;
+        writer.fileWriteVec(vecData->resultsDb);
+
+        textBrowser->setText(textBrowser->toPlainText()
+                             + "results stored in the file" + '\n');
+        vecData->resultsDb.clear();
+        fluxCalc->backVal = 0;
+        fluxCalc->backCounter = 1;
+
+        delete esp32;
+        delete makePlot;
+
+        onFlag = false;
+        QApplication::processEvents();
+    }
+}
 
 void CallerMainWindow::printMsg(QString msg) {
     textBrowser_2->setText(msg);
@@ -54,138 +166,19 @@ void CallerMainWindow::addStop() {
 }
 
 void CallerMainWindow::addStart() {
-    Plotter*makePlot = new Plotter();
 
+    makePlot = new Plotter();
     onFlag = true;
-    char inputData[INPUT_DATA_BYTES];
-
+    counter = 0;
+    flushCounter = 0;
     textBrowser->clear();
     QApplication::processEvents();
 
     int endTime = measTime;
-    int counter = 0;
-    int flushCounter = 0;
-    SerialPort esp32(pName.toStdString());
+    resultsNew.clear();
+    esp32 = new SerialPort(pName.toStdString());
 
-    std::map<double, std::string> resultsNew;
-    int tempVar1;
-    int tempVar2;
-    while (esp32.isConnected() && counter < endTime && onFlag)
-    {
-        esp32.ReadSerialPort(inputData, INPUT_DATA_BYTES);
-
-        std::string inputValStr(inputData);
-        std::cout << inputValStr << std::endl;
-
-        std::string delimiter = "\n";
-        size_t pos = 0;
-        std::string token;
-        std::string timeStr;
-        while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
-            tempVar1 = resultsNew.size();
-            token = inputValStr.substr(0, pos);
-            if (token.length() > 0) {
-                /*int checkVar = 0;
-                std::string checkStr = token;
-                std::string delimiter3 = ":";
-                size_t pos = 0;
-                while ((pos = checkStr.find(delimiter3)) != std::string::npos) {
-                    if (checkVar == 0)
-                    {
-                        timeStr = checkStr.substr(0, pos);
-                    }
-                    checkStr.erase(0, pos + delimiter3.length());
-                    checkVar += 1;
-                }*/
-                token.pop_back();
-                if (dotsFind(token,":").second == 5)
-                {
-                    resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
-                    if (vecData->resultsDb.size()>0)
-                    {
-                        fluxTrig = vecData->resultsDb.at(1).back();
-                    }
-                    tempVar2 = resultsNew.size();
-                    if (tempVar2>tempVar1)
-                    {
-                        vecData->getData(resultsNew.rbegin()->second,counter);
-                        counter+=1;
-                        fluxCalc->calculateFlux(*vecData, fluxTrig);
-                    }
-                }
-            }
-            inputValStr.erase(0, pos + delimiter.length());
-        }
-
-        if (inputValStr!="")
-        {
-            tempVar1 = resultsNew.size();
-            /*int checkVar = 0;
-            std::string checkStr = inputValStr;
-            std::string delimiter3 = ":";
-            size_t pos = 0;
-            while ((pos = checkStr.find(delimiter3)) != std::string::npos) {
-                if (checkVar==0)
-                {
-                    timeStr = checkStr.substr(0, pos);
-                }
-                checkStr.erase(0, pos + delimiter3.length());
-                checkVar+=1;
-            }*/
-            if (dotsFind(inputValStr,":").second == 5)
-            {
-                resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
-                {
-                    fluxTrig = vecData->resultsDb.at(1).back();
-                }
-                tempVar2 = resultsNew.size();
-                if (tempVar2>tempVar1)
-                {
-                    vecData->getData(resultsNew.rbegin()->second,counter);
-                    fluxCalc->calculateFlux(*vecData, fluxTrig);
-                    counter+=1;
-                }
-            };
-        }
-
-        if (vecData->resultsDb.size()>0)
-        {
-            std::stringstream res_out;
-            for (int i = 0; i < vecData->resultsDb.size(); i++) {
-                res_out << vecData->resultsDb.at(i).back() << " ";
-            }
-
-            makePlot->PlotGraph(vecData->resultsDb);
-
-            QString showLine = QString::fromStdString(res_out.str());
-
-            textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-            QApplication::processEvents();
-            QScrollBar*sb = textBrowser->verticalScrollBar();
-            sb->setValue(sb->maximum());
-            QApplication::processEvents();
-            flushCounter+=1;
-            if (flushCounter>15 )
-            {
-                textBrowser->clear();
-                QApplication::processEvents();
-                flushCounter = 0;
-            }
-        }
-
-        inputValStr.clear();
-        memset(inputData, 0, sizeof inputData);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }
-
-    FileWriter writer;
-    writer.fileWriteVec(vecData->resultsDb);
-
-    textBrowser->setText(textBrowser->toPlainText()
-                         +"results stored in the file"+'\n');
-    vecData->resultsDb.clear();
-    fluxCalc->backVal = 0;
-    fluxCalc->backCounter = 1;
+    m_timer->start();
 }
 
 void CallerMainWindow::input(QString dataEntered) {
@@ -221,24 +214,22 @@ void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
     if (fileName!= nullptr)
     {
-        Plotter*makePlot = new Plotter();
+        makePlot = new Plotter();
         textBrowser->setText("\n");
         QApplication::processEvents();
 
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
 
-        int counter = 0;
-        std::map<double, std::string> resultsNew{};
-        int tempVar1 = 0;
-        int tempVar2 = 0;
+        counter = 0;
+        resultsNew.clear();
+        tempVar1 = 0;
+        tempVar2 = 0;
 
         for (int i=0; i<fileData.size(); i++)
         {
             tempVar1 = resultsNew.size();
             std::string inputValStr = fileData.at(i);
-//                inputValStr+='\n';
-
             std::string delimiter = "\n";
             size_t pos = 0;
             std::string token;
@@ -246,19 +237,6 @@ void CallerMainWindow::addStartFile() {
             while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
                 token = inputValStr.substr(0, pos);
                 if (token.length() > 0) {
-                    /*int checkVar = 0;
-                    std::string checkStr = token;
-                    std::string delimiter3 = ":";
-                    size_t pos = 0;
-                    while ((pos = checkStr.find(delimiter3)) != std::string::npos) {
-                        if (checkVar == 0)
-                        {
-                            timeStr = checkStr.substr(0, pos);
-                        }
-                        checkStr.erase(0, pos + delimiter3.length());
-                        checkVar += 1;
-                    }*/
-//                        token.pop_back();
                     if (dotsFind(token,":").second == 5)
                     {
                         resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
@@ -281,18 +259,6 @@ void CallerMainWindow::addStartFile() {
             if (inputValStr!="")
             {
                 tempVar1 = resultsNew.size();
-                /*int checkVar = 0;
-                std::string checkStr = inputValStr;
-                std::string delimiter3 = ":";
-                size_t pos = 0;
-                while ((pos = checkStr.find(delimiter3)) != std::string::npos) {
-                    if (checkVar==0)
-                    {
-                        timeStr = checkStr.substr(0, pos);
-                    }
-                    checkStr.erase(0, pos + delimiter3.length());
-                    checkVar+=1;
-                }*/
                 if (dotsFind(inputValStr,":").second==5)
                 {
                     resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
@@ -312,7 +278,8 @@ void CallerMainWindow::addStartFile() {
         }
         if (vecDataFile->resultsDb.size()>0)
         {
-            makePlot->PlotGraph(vecDataFile->resultsDb);
+            if (plotState>0)
+                makePlot->PlotGraph(vecDataFile->resultsDb);
 
             for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
                 std::stringstream res_out;
@@ -322,11 +289,11 @@ void CallerMainWindow::addStartFile() {
                 }
                 QString showLine = QString::fromStdString(res_out.str());
 
-                textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-                QApplication::processEvents();
-                QScrollBar*sb = textBrowser->verticalScrollBar();
-                sb->setValue(sb->maximum());
-                QApplication::processEvents();
+//                textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
+//                QApplication::processEvents();
+//                QScrollBar*sb = textBrowser->verticalScrollBar();
+//                sb->setValue(sb->maximum());
+//                QApplication::processEvents();
                 res_out.clear();
             }
         }
@@ -356,4 +323,9 @@ std::pair<std::string, int> CallerMainWindow::dotsFind(std::string str, std::str
     myPair.first = timeStr;
     myPair.second = checkVar;
     return myPair;
+}
+
+void CallerMainWindow::plotTrigger(int st) {
+    plotState = st;
+    QApplication::processEvents();
 }
