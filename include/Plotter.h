@@ -14,6 +14,7 @@ public:
     ~Plotter();
 
     void PlotGraph(std::vector<std::vector<double>> &vecData);
+    void PlotGraphTotal(std::vector<std::vector<double>> &vecDataTot);
 
 private:
     Chart*chart;
@@ -23,6 +24,13 @@ private:
     QVector<QLineSeries*> lsVector;
     double max_y = 10;
     double max_x;
+
+    Chart*chartTot;
+    ChartView*chartViewTot;
+    QValueAxis*m_axisX_Tot;
+    QValueAxis*m_axisY_Tot;
+    QVector<QLineSeries*> lsVectorTot;
+    double max_y_tot = 10;
 };
 
 #endif //PIVN_APP_PLOTTER_H

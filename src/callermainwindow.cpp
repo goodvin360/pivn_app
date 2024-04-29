@@ -75,6 +75,8 @@ void CallerMainWindow::startByTimer() {
 
         if (plotState>0)
             makePlot->PlotGraph(vecData->resultsDb);
+        if (plotTotalState > 0)
+            makePlot->PlotGraphTotal(vecDataFile->resultsDbTotal);
 
         QString showLine = QString::fromStdString(res_out.str());
 
@@ -109,6 +111,7 @@ void CallerMainWindow::startByTimer() {
         textBrowser->setText(textBrowser->toPlainText()
                              + "results stored in the file" + '\n');
         vecData->resultsDb.clear();
+        vecData->resultsDbTotal.clear();
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
 
@@ -288,6 +291,8 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     if (plotState > 0)
                         makePlot->PlotGraph(vecDataFile->resultsDb);
+                    if (plotTotalState > 0)
+                        makePlot->PlotGraphTotal(vecDataFile->resultsDbTotal);
 
                     for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
                         std::stringstream res_out;
@@ -314,6 +319,7 @@ void CallerMainWindow::addStartFile() {
             }
         }
         vecDataFile->resultsDb.clear();
+        vecDataFile->resultsDbTotal.clear();
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
         delete makePlot;

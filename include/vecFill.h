@@ -12,7 +12,19 @@ public:
 
     std::vector<std::vector<double>> resultsDb;
 
+    std::vector<std::vector<double>> resultsDbTotal;
+
     std::vector<std::vector<double>> getData(std::string str, int counter);
+
+    double backVal = 0;
+    std::vector<double> backVec;
+    double fluxTrig = 4;
+    double temp = 0;
+    double fluxTime = 100;
+    double fluxTimeCounter = 0;
+    bool isBack = true;
+    double peakVal = 0;
+    double backLastVal = 0;
 
 };
 
