@@ -21,13 +21,25 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Choose COM port:</string>
+    <item row="8" column="0" colspan="6">
+     <widget class="QTextBrowser" name="textBrowser">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="maximumSize">
+       <size>
+        <width>481</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
      </widget>
     </item>
@@ -35,97 +47,6 @@
      <widget class="QCheckBox" name="checkBox">
       <property name="text">
        <string>Final time measure</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="5">
-     <widget class="QCheckBox" name="checkBox_2">
-      <property name="text">
-       <string>User's coefficients</string>
-      </property>
-      <property name="tristate">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QComboBox" name="comboBox"/>
-    </item>
-    <item row="1" column="1">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="measureTime">
-      <property name="text">
-       <string>Enter measuring time, s:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="4">
-     <widget class="QLabel" name="label_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>coeff. a:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5">
-     <widget class="QLineEdit" name="lineEdit_2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>Connect to COM</string>
       </property>
      </widget>
     </item>
@@ -145,6 +66,22 @@
       </property>
      </widget>
     </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Message window:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="4">
      <widget class="QLabel" name="label_5">
       <property name="sizePolicy">
@@ -161,63 +98,37 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="5">
-     <widget class="QLineEdit" name="lineEdit_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="1" column="1">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
       </property>
-     </widget>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
-    <item row="3" column="4">
-     <widget class="QLabel" name="label_6">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="1" column="3">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="text">
-       <string>dist., cm:</string>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
-     </widget>
-    </item>
-    <item row="3" column="5">
-     <widget class="QLineEdit" name="lineEdit_4">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="5">
-     <widget class="QLabel" name="label_4">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Neutrons per impuls:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
+     </spacer>
     </item>
     <item row="5" column="0">
      <widget class="QPushButton" name="pushButton">
@@ -238,6 +149,179 @@
       </property>
       <property name="flat">
        <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="testWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_6">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="measureTime">
+      <property name="text">
+       <string>Enter measuring time, s:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QLineEdit" name="lineEdit_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>Connect to COM</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="5">
+     <widget class="QLabel" name="label_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Neutrons per impuls:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="4">
+     <widget class="QLabel" name="label_6">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>dist., cm:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QLineEdit" name="lineEdit_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="text">
+       <string>User's coefficients</string>
+      </property>
+      <property name="tristate">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="5">
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="text">
+       <string>Start from File</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="comboBox"/>
+    </item>
+    <item row="1" column="4">
+     <widget class="QLabel" name="label_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>coeff. a:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Choose COM port:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="3">
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Plot graph</string>
       </property>
      </widget>
     </item>
@@ -264,77 +348,6 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Stop</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2">
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="text">
-       <string>Start from File</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Message window:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="6">
-     <widget class="QTextBrowser" name="textBrowser">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>481</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::DefaultContextMenu</enum>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="3">
-     <widget class="QCheckBox" name="checkBox_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Plot graph</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -349,6 +362,17 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>testWidget</class>
+   <extends>QWidget</extends>
+   <header>testwidget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>addButton()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -495,6 +519,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>addButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>327</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setFiniteTime(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>113</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addStart()</slot>
@@ -506,5 +562,6 @@
   <slot>addStartFile()</slot>
   <slot>addLoadFile()</slot>
   <slot>plotTrigger(int)</slot>
+  <slot>setFiniteTime(int)</slot>
  </slots>
 </ui>

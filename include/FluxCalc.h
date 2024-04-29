@@ -4,11 +4,13 @@
 #include "QObject"
 #include "iostream"
 #include "vecFill.h"
+#include "testWidget.h"
+#include "../ui_caller.h"
 
 class FluxCalc:public QObject{
 Q_OBJECT
 public:
-    FluxCalc();
+    FluxCalc(QWidget*parent= nullptr);
     ~FluxCalc();
 
     void printMessage(QString msg);
@@ -28,6 +30,9 @@ private:
     std::vector<double>backVector;
     double coefficient = 0.0004;
     double halfLife = 14.1;
+
+    Ui::MainWindow caller;
+
 };
 
 #endif //PIVN_APP_FLUXCALC_H

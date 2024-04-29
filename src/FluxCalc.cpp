@@ -1,6 +1,9 @@
 #include "FluxCalc.h"
 
-FluxCalc::FluxCalc() {}
+FluxCalc::FluxCalc(QWidget *parent) {
+    parent = nullptr;
+//    wdg = new testWidget(parent);
+}
 
 FluxCalc::~FluxCalc() noexcept {}
 
@@ -9,7 +12,6 @@ void FluxCalc::printMessage(QString msg) {
 }
 
 void FluxCalc::calculateFlux(vecFill &data, double trig) {
-
     fluxTrig = trig;
 
     if (data.resultsDb.at(1).back()>fluxTrig)
@@ -76,4 +78,5 @@ void FluxCalc::calculateFlux(vecFill &data, double trig) {
     printMessage(QString::number(flux));
     sum = 0;
     flux = 0;
+    std::cout << caller.widget->getVar() << std::endl;
 }

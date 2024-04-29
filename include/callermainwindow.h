@@ -14,7 +14,6 @@
 #include "QApplication"
 #include "QScrollBar"
 #include "windows.h"
-
 #include <sstream>
 #include "fstream"
 #include "iomanip"
@@ -52,6 +51,7 @@ public:
     QPushButton*pushButton_3 = new QPushButton();
     QPushButton*pushButton_4 = new QPushButton();
     QPushButton*pushButton_5 = new QPushButton();
+    QCheckBox*checkBox = new QCheckBox();
     QString pName;
     QString fileName;
     double coefficient = 0.0004;
@@ -59,6 +59,7 @@ public:
     double fluxTrig = 0;
     bool onFlag = false;
     int plotState = 0;
+    int timeState = 0;
 
     int counter = 0;
 
@@ -90,8 +91,8 @@ public slots:
     void addStartFile();
     void addLoadFile();
     void plotTrigger(int st);
+    void setFiniteTime(int stTime);
     void startByTimer();
-
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

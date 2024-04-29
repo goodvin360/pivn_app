@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "ui_caller.h"
-#include "include/callermainwindow.h"
+#include "callermainwindow.h"
 #include "QScrollBar"
 #include  <locale.h>
 
@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     window.lineEdit = caller.lineEdit;
     window.lineEdit_2 = caller.lineEdit_2;
     caller.lineEdit->setText(QString::number(window.measTime));
+    caller.checkBox->setChecked(1);
     caller.lineEdit_2->setText(QString::number(window.coefficient));
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
           {caller.comboBox->addItem(serialPortInfo.portName());}

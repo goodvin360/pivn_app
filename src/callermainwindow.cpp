@@ -329,3 +329,19 @@ void CallerMainWindow::plotTrigger(int st) {
     plotState = st;
     QApplication::processEvents();
 }
+
+void CallerMainWindow::setFiniteTime(int stTime) {
+    timeState = stTime;
+    QApplication::processEvents();
+    if (timeState == 0)
+    {   measTime = 1e10;
+        lineEdit->setText("- - -");
+        lineEdit->setReadOnly(1);
+    }
+    else
+    {
+        measTime = 5;
+        lineEdit->setReadOnly(0);
+        lineEdit->setText(QString::number(measTime));
+    }
+}
