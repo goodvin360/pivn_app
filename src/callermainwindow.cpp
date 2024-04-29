@@ -1,3 +1,4 @@
+#include <qtestsupport_core.h>
 #include "callermainwindow.h"
 
 
@@ -181,14 +182,27 @@ void CallerMainWindow::addStart() {
     m_timer->start();
 }
 
-void CallerMainWindow::input(QString dataEntered) {
+void CallerMainWindow::setTime(QString dataEntered) {
     if (dataEntered.length()>0)
         measTime = std::stoi(dataEntered.toStdString());
 }
 
-void CallerMainWindow::addCoef(QString coef) {
-    if (coef.length()>0)
-        coefficient = std::stod(coef.toStdString());
+void CallerMainWindow::setCoefA(QString coef_a)
+{
+    if (coef_a.length()>0)
+        coeff_a = std::stod(coef_a.toStdString());
+}
+
+void CallerMainWindow::setCoefB(QString coef_b)
+{
+    if (coef_b.length()>0)
+        coeff_b = std::stod(coef_b.toStdString());
+}
+
+void CallerMainWindow::setDist(QString dist)
+{
+    if (dist.length()>0)
+        distance = std::stod(dist.toStdString());
 }
 
 std::vector<std::string> CallerMainWindow::fileRead(std::string str) {
@@ -220,7 +234,7 @@ void CallerMainWindow::addStartFile() {
 
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
-
+        onFlag = true;
         counter = 0;
         resultsNew.clear();
         tempVar1 = 0;
@@ -228,79 +242,83 @@ void CallerMainWindow::addStartFile() {
 
         for (int i=0; i<fileData.size(); i++)
         {
-            tempVar1 = resultsNew.size();
-            std::string inputValStr = fileData.at(i);
-            std::string delimiter = "\n";
-            size_t pos = 0;
-            std::string token;
-            std::string timeStr;
-            while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
-                token = inputValStr.substr(0, pos);
-                if (token.length() > 0) {
-                    if (dotsFind(token,":").second == 5)
-                    {
-                        resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
-                        if (vecDataFile->resultsDb.size()>0)
-                        {
+            if (onFlag) {
+                tempVar1 = resultsNew.size();
+                std::string inputValStr = fileData.at(i);
+                std::string delimiter = "\n";
+                size_t pos = 0;
+                std::string token;
+                std::string timeStr;
+                while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
+                    token = inputValStr.substr(0, pos);
+                    if (token.length() > 0) {
+                        if (dotsFind(token, ":").second == 5) {
+                            resultsNew.insert(
+                                    std::pair<double, std::string>(std::stod(dotsFind(token, ":").first), token));
+                            if (vecDataFile->resultsDb.size() > 0) {
+                                fluxTrig = vecDataFile->resultsDb.at(1).back();
+                            }
+                            tempVar2 = resultsNew.size();
+                            if (tempVar2 > tempVar1) {
+                                vecDataFile->getData(resultsNew.rbegin()->second, counter);
+                                fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
+                                counter += 1;
+                            }
+                        }
+                    }
+                    inputValStr.erase(0, pos + delimiter.length());
+                }
+
+                if (inputValStr != "") {
+                    tempVar1 = resultsNew.size();
+                    if (dotsFind(inputValStr, ":").second == 5) {
+                        resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr, ":").first),
+                                                                         inputValStr));
+                        if (vecDataFile->resultsDb.size() > 0) {
                             fluxTrig = vecDataFile->resultsDb.at(1).back();
                         }
                         tempVar2 = resultsNew.size();
-                        if (tempVar2>tempVar1)
-                        {
-                            vecDataFile->getData(resultsNew.rbegin()->second,counter);
+                        if (tempVar2 > tempVar1) {
+                            vecDataFile->getData(resultsNew.rbegin()->second, counter);
                             fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
-                            counter+=1;
+                            counter += 1;
                         }
+                    };
+                }
+                if (vecDataFile->resultsDb.size() > 0) {
+                    if (plotState > 0)
+                        makePlot->PlotGraph(vecDataFile->resultsDb);
+
+                    for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
+                        std::stringstream res_out;
+                        for (int l = 0; l < vecDataFile->resultsDb.size(); l++) {
+                            res_out << vecDataFile->resultsDb.at(l).at(k) << " ";
+                        }
+                        QString showLine = QString::fromStdString(res_out.str());
+                        /*textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
+                        QApplication::processEvents();
+                        QScrollBar*sb = textBrowser->verticalScrollBar();
+                        sb->setValue(sb->maximum());
+                        QApplication::processEvents();
+                        flushCounter+=1;
+                        if (flushCounter>15 )
+                        {
+                            textBrowser->clear();
+                            QApplication::processEvents();
+                            flushCounter = 0;
+                        }*/
+                        res_out.clear();
                     }
                 }
-                inputValStr.erase(0, pos + delimiter.length());
-            }
-
-            if (inputValStr!="")
-            {
-                tempVar1 = resultsNew.size();
-                if (dotsFind(inputValStr,":").second==5)
-                {
-                    resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
-                    if (vecDataFile->resultsDb.size()>0)
-                    {
-                        fluxTrig = vecDataFile->resultsDb.at(1).back();
-                    }
-                    tempVar2 = resultsNew.size();
-                    if (tempVar2>tempVar1)
-                    {
-                        vecDataFile->getData(resultsNew.rbegin()->second,counter);
-                        fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
-                        counter+=1;
-                    }
-                };
+                QTest::qWait(10);
             }
         }
-        if (vecDataFile->resultsDb.size()>0)
-        {
-            if (plotState>0)
-                makePlot->PlotGraph(vecDataFile->resultsDb);
-
-            for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
-                std::stringstream res_out;
-                for (int l=0;l<vecDataFile->resultsDb.size(); l++)
-                {
-                    res_out << vecDataFile->resultsDb.at(l).at(k) << " ";
-                }
-                QString showLine = QString::fromStdString(res_out.str());
-
-//                textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-//                QApplication::processEvents();
-//                QScrollBar*sb = textBrowser->verticalScrollBar();
-//                sb->setValue(sb->maximum());
-//                QApplication::processEvents();
-                res_out.clear();
-            }
-        }
+        vecDataFile->resultsDb.clear();
+        fluxCalc->backVal = 0;
+        fluxCalc->backCounter = 1;
+        delete makePlot;
+        onFlag = false;
     }
-    vecDataFile->resultsDb.clear();
-    fluxCalc->backVal = 0;
-    fluxCalc->backCounter = 1;
 }
 
 void CallerMainWindow::addLoadFile() {
@@ -330,6 +348,11 @@ void CallerMainWindow::plotTrigger(int st) {
     QApplication::processEvents();
 }
 
+void CallerMainWindow::plotTriggerTotal(int stTot) {
+    plotTotalState = stTot;
+    QApplication::processEvents();
+}
+
 void CallerMainWindow::setFiniteTime(int stTime) {
     timeState = stTime;
     QApplication::processEvents();
@@ -344,4 +367,24 @@ void CallerMainWindow::setFiniteTime(int stTime) {
         lineEdit->setReadOnly(0);
         lineEdit->setText(QString::number(measTime));
     }
+}
+
+void CallerMainWindow::coefTrigger(int trig) {
+    coefState = trig;
+    QApplication::processEvents();
+    if (coefState == 0)
+    {
+        lineEdit_2->setReadOnly(1);
+        lineEdit_3->setReadOnly(1);
+    }
+    else
+    {
+        lineEdit_2->setReadOnly(0);
+        lineEdit_3->setReadOnly(0);
+    }
+}
+
+void CallerMainWindow::setCountIntTime(QString intTime) {
+    if (intTime.length()>0)
+        integrationTime = std::stod(intTime.toStdString());
 }

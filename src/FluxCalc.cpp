@@ -78,5 +78,5 @@ void FluxCalc::calculateFlux(vecFill &data, double trig) {
     printMessage(QString::number(flux));
     sum = 0;
     flux = 0;
-    std::cout << caller.widget->getVar() << std::endl;
+//    std::cout << caller.widget->getVar() << std::endl;
 }

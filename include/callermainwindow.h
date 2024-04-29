@@ -45,6 +45,10 @@ public:
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
+    QLineEdit*lineEdit_3 = nullptr;
+    QLineEdit*lineEdit_4 = nullptr;
+    QLineEdit*lineEdit_5 = nullptr;
+    QLineEdit*lineEdit_6 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QComboBox*comboBox = new QComboBox();
@@ -52,14 +56,21 @@ public:
     QPushButton*pushButton_4 = new QPushButton();
     QPushButton*pushButton_5 = new QPushButton();
     QCheckBox*checkBox = new QCheckBox();
+    QCheckBox*checkBox_2 = new QCheckBox();
     QString pName;
     QString fileName;
-    double coefficient = 0.0004;
+    double coeff_a = 0.0004;
+    double coeff_b = 300;
+    double distance = 24;
     int measTime = 5;
     double fluxTrig = 0;
     bool onFlag = false;
     int plotState = 0;
+    int plotTotalState = 0;
+    int coefState = 0;
     int timeState = 0;
+    double integrationTime = 100;
+    double totalCounts = 0;
 
     int counter = 0;
 
@@ -85,13 +96,18 @@ public slots:
     void addStop();
     void connectCOM();
     void addStart();
-    void input(QString dataEntered);
+    void setTime(QString dataEntered);
     void getCOM(QString itemName);
-    void addCoef(QString coef);
+    void setCoefA(QString coef_a);
+    void setCoefB(QString coef_b);
+    void setDist(QString dist);
     void addStartFile();
     void addLoadFile();
     void plotTrigger(int st);
+    void plotTriggerTotal(int stTot);
+    void coefTrigger(int trig);
     void setFiniteTime(int stTime);
+    void setCountIntTime(QString intTime);
     void startByTimer();
 };
 

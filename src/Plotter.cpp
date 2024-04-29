@@ -3,13 +3,14 @@
 
 Plotter::Plotter() {
 
-    chart = new QChart();
-    chartView = new QChartView(chart);
+    chart = new Chart();
+    chartView = new ChartView(chart);
     m_axisX = new QValueAxis();
     m_axisY = new QValueAxis();
     for (int i=0; i<4; i++)
     {
         QLineSeries*series = new QLineSeries();
+        series->setName(QString("channel " + QString::number(i+1)));
         lsVector.push_back(series);
     }
 
@@ -17,7 +18,7 @@ Plotter::Plotter() {
     {
         chart->addSeries(lsVector.at(i));
     }
-    chart->legend()->hide();
+    chart->legend()->setVisible(1);
     chart->setVisible(1);
     chart->addAxis(m_axisX, Qt::AlignBottom);
     chart->addAxis(m_axisY, Qt::AlignLeft);
@@ -29,6 +30,7 @@ Plotter::Plotter() {
     m_axisX->setTickCount(10);
     m_axisX->setRange(0,100);
     m_axisY->setRange(0,10);
+    chartView->setGeometry(1500,500,500,500);
 };
 
 Plotter::~Plotter() {
@@ -89,5 +91,6 @@ void Plotter::PlotGraph(std::vector<std::vector<double>> &vecData) {
 
     chartView->setVisible(1);
     chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setMinimumSize(500,500);
+//    chartView->setMinimumSize(500,500);
+
 }
