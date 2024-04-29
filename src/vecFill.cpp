@@ -9,7 +9,7 @@ vecFill::vecFill() {
 vecFill::~vecFill() {}
 
 std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) {
-
+    cnt = counter;
     if (counter==0)
     {
         for (int i=0; i<6; i++)
@@ -65,21 +65,25 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     m = 0;
     flag = true;
 
+    return resultsDb;
+}
 
-    if (resultsDb.at(0).size()==1)
-        fluxTrig = resultsDb.at(1).back();
+std::vector<std::vector<double>> vecFill::getDataTotal(std::vector<std::vector<double>> data) {
 
-    if (resultsDb.at(0).size()>0)
+    if (data.at(0).size()==1)
+        fluxTrig = data.at(1).back();
+
+    if (data.at(0).size()>0)
     {
-        resultsDbTotal.at(0).push_back(counter);
+        resultsDbTotal.at(0).push_back(cnt);
         double sum = 0;
-        for (int i = 2; i < resultsDb.size(); i++) {
-            sum += resultsDb.at(i).back()/(1-resultsDb.at(i).back()*5e-4);
+        for (int i = 2; i < data.size(); i++) {
+            sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
         }
         resultsDbTotal.at(1).push_back(sum);
         sum = 0;
 
-        temp = resultsDb.at(1).back();
+        temp = data.at(1).back();
 
         if (temp > fluxTrig) {
             isBack = false;
@@ -100,7 +104,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
 
         if (!isBack) {
             backVal = peakVal - (peakVal - backLastVal)/(1 + 0.01*exp(-(log(2)*fluxTimeCounter/3600)) +
-                                                           0.1*exp(-(log(2)*fluxTimeCounter/71)));
+                                                         0.1*exp(-(log(2)*fluxTimeCounter/71)));
             resultsDbTotal.at(2).push_back(backVal);
             fluxTimeCounter++;
         }
@@ -114,5 +118,5 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
         }
     }
 
-    return resultsDb;
+    return resultsDbTotal;
 }

@@ -72,11 +72,12 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
+        vecData->getDataTotal(vecData->resultsDb);
 
         if (plotState>0)
-            makePlot->PlotGraph(vecData->resultsDb);
-        if (plotTotalState > 0)
-            makePlot->PlotGraphTotal(vecDataFile->resultsDbTotal);
+            makePlot->PlotGraph();
+        if (plotTotalState>0)
+            makePlot->PlotGraphTotal();
 
         QString showLine = QString::fromStdString(res_out.str());
 
@@ -117,6 +118,9 @@ void CallerMainWindow::startByTimer() {
 
         delete esp32;
         delete makePlot;
+
+        vecData->backVec.clear();
+        vecData->backVal = 0;
 
         onFlag = false;
         QApplication::processEvents();
@@ -171,7 +175,7 @@ void CallerMainWindow::addStop() {
 
 void CallerMainWindow::addStart() {
 
-    makePlot = new Plotter();
+    makePlot = new Plotter(vecData);
     onFlag = true;
     counter = 0;
     flushCounter = 0;
@@ -231,7 +235,7 @@ void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
     if (fileName!= nullptr)
     {
-        makePlot = new Plotter();
+        makePlot = new Plotter(vecDataFile);
         textBrowser->setText("\n");
         QApplication::processEvents();
 
@@ -289,10 +293,11 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb);
                     if (plotState > 0)
-                        makePlot->PlotGraph(vecDataFile->resultsDb);
+                        makePlot->PlotGraph();
                     if (plotTotalState > 0)
-                        makePlot->PlotGraphTotal(vecDataFile->resultsDbTotal);
+                        makePlot->PlotGraphTotal();
 
                     for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
                         std::stringstream res_out;
@@ -324,6 +329,8 @@ void CallerMainWindow::addStartFile() {
         fluxCalc->backCounter = 1;
         delete makePlot;
         onFlag = false;
+        vecDataFile->backVec.clear();
+        vecDataFile->backVal = 0;
     }
 }
 

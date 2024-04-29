@@ -6,15 +6,16 @@
 #include <QtCharts>
 #include "Chart.h"
 #include "ChartView.h"
+#include "vecFill.h"
 
 class Plotter
 {
 public:
-    Plotter();
+    Plotter(vecFill*data);
     ~Plotter();
 
-    void PlotGraph(std::vector<std::vector<double>> &vecData);
-    void PlotGraphTotal(std::vector<std::vector<double>> &vecDataTot);
+    void PlotGraph();
+    void PlotGraphTotal();
 
 private:
     Chart*chart;
@@ -31,6 +32,7 @@ private:
     QValueAxis*m_axisY_Tot;
     QVector<QLineSeries*> lsVectorTot;
     double max_y_tot = 10;
+    vecFill*Data;
 };
 
 #endif //PIVN_APP_PLOTTER_H

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Plotter.h"
 
-Plotter::Plotter() {
+Plotter::Plotter(vecFill*data):Data(data) {
 
     chart = new Chart();
     chartView = new ChartView(chart);
@@ -76,13 +76,13 @@ Plotter::~Plotter() {
 //    }
 };
 
-void Plotter::PlotGraph(std::vector<std::vector<double>> &vecData) {
+void Plotter::PlotGraph() {
 
 //    for (int i=0; i<lsVector.size(); i++)
 //    {
 //        lsVector.at(i)->clear();
 //    }
-
+        std::vector<std::vector<double>> vecData = Data->resultsDb;
         for (int i=0; i<lsVector.size(); i++)
         {
             QVector<QPointF> points(vecData.at(0).size());
@@ -116,12 +116,13 @@ void Plotter::PlotGraph(std::vector<std::vector<double>> &vecData) {
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void Plotter::PlotGraphTotal(std::vector<std::vector<double>> &vecDataTot) {
+void Plotter::PlotGraphTotal() {
 
 //    for (int i=0; i<lsVector.size(); i++)
 //    {
 //        lsVector.at(i)->clear();
 //    }
+    std::vector<std::vector<double>> vecDataTot = Data->resultsDbTotal;
 
     for (int i=0; i<lsVectorTot.size(); i++)
     {
@@ -131,7 +132,6 @@ void Plotter::PlotGraphTotal(std::vector<std::vector<double>> &vecDataTot) {
         }
         lsVectorTot.at(i)->replace(points);
     }
-
 
 //    for (int i=0; i<lsVectorTot.size(); i++)
 //    {

@@ -15,6 +15,7 @@ public:
     std::vector<std::vector<double>> resultsDbTotal;
 
     std::vector<std::vector<double>> getData(std::string str, int counter);
+    std::vector<std::vector<double>> getDataTotal(std::vector<std::vector<double>> data);
 
     double backVal = 0;
     std::vector<double> backVec;
@@ -25,6 +26,7 @@ public:
     bool isBack = true;
     double peakVal = 0;
     double backLastVal = 0;
+    double cnt = 0;
 
 };
 
