@@ -342,8 +342,8 @@ void CallerMainWindow::addStartFile() {
                 }
                 QTest::qWait(10);
             }
-            textBrowser_2->setText("Finished");
         }
+        textBrowser->setText("Finished");
         vecDataFile->resultsDb.clear();
         vecDataFile->resultsDbTotal.clear();
         fluxCalc->backVal = 0;
