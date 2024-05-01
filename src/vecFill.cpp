@@ -9,8 +9,8 @@ vecFill::vecFill(QWidget *parent) {
 
 vecFill::~vecFill() {}
 
-void vecFill::printMessage(QString msg) {
-    emit sentMessage(msg);
+void vecFill::printMessage(QString msg, int num) {
+    emit sentMessage(msg, num);
 }
 
 std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) {
@@ -23,7 +23,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
             resultsDb.push_back(smData);
         }
 
-        for (int i=0; i<3; i++)
+        for (int i=0; i<4; i++)
         {
             std::vector<double> smData;
             resultsDbTotal.push_back(smData);
@@ -73,7 +73,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     return resultsDb;
 }
 
-void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux) {
+void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b) {
     fluxTime = totTime;
     if (data.at(0).size()==1)
         fluxTrig = data.at(1).back();
@@ -82,11 +82,15 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
     {
         resultsDbTotal.at(0)=data.at(0);
         double sum = 0;
+        double sum_clean = 0;
         for (int i = 2; i < data.size(); i++) {
             sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
+            sum_clean += data.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
+        resultsDbTotal.at(3).push_back(sum_clean);
         sum = 0;
+        sum_clean = 0;
 
         temp = data.at(1).back();
 
@@ -103,34 +107,44 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         if (!isBack && fluxTimeCounter == 0) {
             peakVal = resultsDbTotal.at(1).back();
+            peakValClean = resultsDbTotal.at(3).back();
             backLastVal = backVal;
             totalCnt=peakVal;
+            totalCntClean=peakValClean;
             fluxTimeCounter++;
         }
 
         if (!isBack && fluxTimeCounter>0) {
-            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
-                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
-                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
-//            backVal = backLastVal + (0.005 + 0.000313) *
-//                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
-//                                                             0.000313);
+//            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
+//                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
+//                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
+            backVal = backLastVal + (0.005 + 0.000313) *
+                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
+                                                             0.000313);
             resultsDbTotal.at(2).push_back(backVal);
-            if (fluxTimeCounter>1)
+            if (fluxTimeCounter>1) {
                 totalCnt += resultsDbTotal.at(1).back();
+                totalCntClean += resultsDbTotal.at(3).back();
+            }
             fluxTimeCounter++;
-            if (resultsDbTotal.at(1).back()>=resultsDbTotal.at(2).back())
+//            if (resultsDbTotal.at(1).back()>=resultsDbTotal.at(2).back())
                 minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
         }
 
 //        std::cout << "time: " << fluxTimeCounter << " diff value: " << resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back() << std::endl;
 
-        if (fluxTimeCounter>0)
-            Flux = (minusBack+353)/(0.0004035)*
-               ((1-exp(-(log(2)*fluxTime/14.1)))/(1-exp(-(log(2)*fluxTimeCounter/14.1))));
+        if (fluxTimeCounter>0) {
+            Flux = minusBack *
+                   ((1 - exp(-(log(2) * fluxTime / 14.1))) / (1 - exp(-(log(2) * fluxTimeCounter / 14.1)))) * c_a +
+                   c_b;
+            flux = Flux;
+        }
 
         if (fluxTimeCounter == fluxTime) {
-            printMessage(QString::number(Flux));
+
+            double error = 0.09*Flux;
+            printMessage(QString::number(Flux,'g',3)+"+/-"+QString::number(error,'g',3),1);
+            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
             isBack = true;
             fluxTimeCounter = 0;
             backVal = 0;

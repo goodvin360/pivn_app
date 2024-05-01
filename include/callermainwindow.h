@@ -51,6 +51,7 @@ public:
     QLineEdit*lineEdit_6 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
+    QTextBrowser*textBrowser_3 = nullptr;
     QComboBox*comboBox = new QComboBox();
     QPushButton*pushButton_3 = new QPushButton();
     QPushButton*pushButton_4 = new QPushButton();
@@ -59,8 +60,8 @@ public:
     QCheckBox*checkBox_2 = new QCheckBox();
     QString pName;
     QString fileName;
-    double coeff_a = 0.0004;
-    double coeff_b = 300;
+    double coeff_a = 2504;
+    double coeff_b = 534326;
     double distance = 24;
     int measTime = 5;
     double fluxTrig = 0;
@@ -95,7 +96,7 @@ public:
 
 public slots:
 
-    void printMsg(QString msg);
+    void printMsg(QString msg, int num);
     void addStop();
     void connectCOM();
     void addStart();

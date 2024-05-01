@@ -13,14 +13,14 @@ public:
     FluxCalc(QWidget*parent= nullptr);
     ~FluxCalc();
 
-    void printMessage(QString msg);
+    void printMessage(QString msg, int num);
     void calculateFlux(vecFill& data, double trig);
 
     double backVal = 0;
     double backCounter = 1;
 
 signals:
-    void sentMessage(QString);
+    void sentMessage(QString, int);
 
 private:
     bool fluxFlag = false;

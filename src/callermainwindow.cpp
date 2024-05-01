@@ -80,7 +80,7 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b);
 
         if (plotState>0)
             makePlot->PlotGraph();
@@ -135,9 +135,14 @@ void CallerMainWindow::startByTimer() {
     }
 }
 
-void CallerMainWindow::printMsg(QString msg) {
-    shotCounter+=1;
-    textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+void CallerMainWindow::printMsg(QString msg, int num) {
+    if (num == 1) {
+        shotCounter+=1;
+        textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+    }
+    if (num == 2)
+        textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg +'\n');
+
 }
 
 void CallerMainWindow::getCOM(QString itemName) {
@@ -188,6 +193,7 @@ void CallerMainWindow::addStart() {
     onFlag = true;
     counter = 0;
     flushCounter = 0;
+    shotCounter = 0;
     textBrowser->clear();
     QApplication::processEvents();
 
@@ -244,6 +250,7 @@ void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
     if (fileName!= nullptr)
     {
+        shotCounter = 0;
         makePlot = new Plotter(vecDataFile);
         plotObjVec.push_back(makePlot);
         textBrowser->setText("\n");
@@ -303,7 +310,7 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b);
                     if (plotState > 0)
                         makePlot->PlotGraph();
                     if (plotTotalState > 0)
@@ -316,7 +323,7 @@ void CallerMainWindow::addStartFile() {
                         }
                         QString showLine = QString::fromStdString(res_out.str());
                         totalCounts = vecDataFile->totalCnt;
-                        lineEdit_6->setText(QString::number(totalCounts));
+                        lineEdit_6->setText(QString::number(nFlux,'g',3));
 //                        textBrowser_2->setText(QString::number(nFlux));
                         /*textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
                         QApplication::processEvents();

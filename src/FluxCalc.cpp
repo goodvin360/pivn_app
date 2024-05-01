@@ -7,8 +7,8 @@ FluxCalc::FluxCalc(QWidget *parent) {
 
 FluxCalc::~FluxCalc() noexcept {}
 
-void FluxCalc::printMessage(QString msg) {
-    emit sentMessage(msg);
+void FluxCalc::printMessage(QString msg, int num) {
+    emit sentMessage(msg, num);
 }
 
 void FluxCalc::calculateFlux(vecFill &data, double trig) {

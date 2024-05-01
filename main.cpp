@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
     caller.setupUi(window);
     window->textBrowser = caller.textBrowser;
     window->textBrowser_2 = caller.textBrowser_2;
+    window->textBrowser_3 = caller.textBrowser_3;
     window->lineEdit = caller.lineEdit;
     window->lineEdit_2 = caller.lineEdit_2;
     window->lineEdit_3 = caller.lineEdit_3;
