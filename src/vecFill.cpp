@@ -109,12 +109,12 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
         if (!isBack && fluxTimeCounter>0) {
-//            backVal = backLastVal + (0.000*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0313*exp(-(log(2)*fluxTimeCounter/72))) *
-//                                             (peakVal - backLastVal)/(1 + 0.000*exp(-(log(2)*fluxTimeCounter/3240)) +
-//                                                         0.0313*exp(-(log(2)*fluxTimeCounter/72)));
-            backVal = backLastVal + (0.005 + 0.000313) *
-                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
-                                                             0.000313);
+            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
+                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
+                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
+//            backVal = backLastVal + (0.005 + 0.000313) *
+//                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
+//                                                             0.000313);
             resultsDbTotal.at(2).push_back(backVal);
             if (fluxTimeCounter>1)
                 totalCnt += resultsDbTotal.at(1).back();
