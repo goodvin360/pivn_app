@@ -141,9 +141,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
         if (fluxTimeCounter == fluxTime) {
-
+            QString s(0x00B1);
             double error = 0.09*Flux;
-            printMessage(QString::number(Flux,'g',3)+"+/-"+QString::number(error,'g',3),1);
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
             isBack = true;
             fluxTimeCounter = 0;

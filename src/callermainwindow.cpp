@@ -342,6 +342,7 @@ void CallerMainWindow::addStartFile() {
                 }
                 QTest::qWait(10);
             }
+            textBrowser_2->setText("Finished");
         }
         vecDataFile->resultsDb.clear();
         vecDataFile->resultsDbTotal.clear();
