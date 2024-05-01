@@ -80,7 +80,7 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true);
 
         if (plotState>0)
             makePlot->PlotGraph();
@@ -115,7 +115,7 @@ void CallerMainWindow::startByTimer() {
     if (!m_timer->isActive()) {
 
         FileWriter writer;
-        writer.fileWriteVec(vecData->resultsDb);
+        writer.fileWriteVec(vecData->resultsDb, "full");
 
         textBrowser->setText(textBrowser->toPlainText()
                              + "results stored in the file" + '\n');
@@ -310,7 +310,7 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false);
                     if (plotState > 0)
                         makePlot->PlotGraph();
                     if (plotTotalState > 0)

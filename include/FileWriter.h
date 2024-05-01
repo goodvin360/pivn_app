@@ -16,7 +16,7 @@ public:
 
     void fileWrite(std::map<std::string, int> &res);
 
-    void fileWriteVec(std::vector<std::vector<double>> &res);
+    void fileWriteVec(std::vector<std::vector<double>> &res, std::string marker);
 };
 
 #endif //PIVN_APP_VER_1_FILEWRITER_H

@@ -4,6 +4,7 @@
 #include "QObject"
 #include "vector"
 #include "string"
+#include "FileWriter.h"
 
 class vecFill: public QObject {
 Q_OBJECT
@@ -13,10 +14,12 @@ public:
 
     std::vector<std::vector<double>> resultsDb;
 
+    std::vector<std::vector<double>> resultsDbPart;
+
     std::vector<std::vector<double>> resultsDbTotal;
 
     std::vector<std::vector<double>> getData(std::string str, int counter);
-    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b);
+    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b, bool fileParting);
 
     double backVal = 0;
     std::vector<double> backVec;
@@ -33,6 +36,9 @@ public:
     double totalCntClean = 0;
     double minusBack = 0;
     double Flux = 0;
+    FileWriter*fileWriter;
+    int fileTimer = 0;
+    bool fileTrigger = false;
 
     void printMessage(QString msg, int num);
 

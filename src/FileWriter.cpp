@@ -82,14 +82,14 @@ void FileWriter::fileWrite(std::map<std::string, int> &res) {
     };
 }
 
-void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res) {
+void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string marker) {
     auto tme = std::time(nullptr);
     auto tm = *std::localtime(&tme);
 
     if (res.size() > 0) {
 
         std::stringstream res_out;
-        res_out << "../outDataVec " << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ".txt";
+        res_out << "../outDataVec " << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << " " << marker << ".txt";
         std::ofstream myFile(res_out.str(), std::ios::out);
         for (int i = 0; i < res.at(0).size(); i++) {
             for (int j = 0; j < res.size(); j++) {

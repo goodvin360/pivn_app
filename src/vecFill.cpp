@@ -5,6 +5,7 @@
 vecFill::vecFill(QWidget *parent) {
     parent = nullptr;
     backVec.clear();
+    fileWriter = new FileWriter();
 }
 
 vecFill::~vecFill() {}
@@ -21,6 +22,12 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
         {
             std::vector<double> smData;
             resultsDb.push_back(smData);
+        }
+
+        for (int i=0; i<6; i++)
+        {
+            std::vector<double> smData;
+            resultsDbPart.push_back(smData);
         }
 
         for (int i=0; i<4; i++)
@@ -73,7 +80,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     return resultsDb;
 }
 
-void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b) {
+void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b, bool fileParting) {
     fluxTime = totTime;
     if (data.at(0).size()==1)
         fluxTrig = data.at(1).back();
@@ -96,7 +103,33 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         if (temp > fluxTrig) {
             isBack = false;
+            fileTrigger = true;
             fluxTrig = temp;
+        }
+
+        if (fileTrigger)
+            fileTimer++;
+
+        if (fileTimer>=150 && fileParting)
+        {
+            int start = 0;
+            if (resultsDb.at(0).size()>200)
+                start = resultsDb.at(0).back()-200;
+            for (int i = start; i<resultsDb.at(0).size(); i++)
+            {
+                for (int j=0; j<resultsDb.size(); j++)
+                {
+                    resultsDbPart.at(j).push_back(resultsDb.at(j).at(i));
+                }
+            }
+
+            fileWriter->fileWriteVec(resultsDbPart, "part");
+
+            for (int i=0; i<resultsDbPart.size(); i++)
+                resultsDbPart.at(i).clear();
+
+            fileTimer = 0;
+            fileTrigger = false;
         }
 
         if (isBack) {
