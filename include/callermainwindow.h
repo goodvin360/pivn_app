@@ -71,6 +71,8 @@ public:
     int timeState = 0;
     double integrationTime = 100;
     double totalCounts = 0;
+    double nFlux = 0;
+    int shotCounter = 0;
 
     int counter = 0;
 
@@ -81,6 +83,7 @@ public:
     QTimer*m_timer;
     SerialPort*esp32;
     Plotter*makePlot;
+    std::vector<Plotter*> plotObjVec;
 
     std::map<double, std::string> resultsNew;
     int tempVar1 = 0;

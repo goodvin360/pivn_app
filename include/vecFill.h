@@ -1,13 +1,14 @@
 #ifndef PIVN_APP_VER_2_VECFILL_H
 #define PIVN_APP_VER_2_VECFILL_H
 
+#include "QObject"
 #include "vector"
 #include "string"
 
-class vecFill {
-
+class vecFill: public QObject {
+Q_OBJECT
 public:
-    vecFill();
+    vecFill(QWidget*parent= nullptr);
     ~vecFill();
 
     std::vector<std::vector<double>> resultsDb;
@@ -15,7 +16,7 @@ public:
     std::vector<std::vector<double>> resultsDbTotal;
 
     std::vector<std::vector<double>> getData(std::string str, int counter);
-    std::vector<std::vector<double>> getDataTotal(std::vector<std::vector<double>> data);
+    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux);
 
     double backVal = 0;
     std::vector<double> backVec;
@@ -27,6 +28,14 @@ public:
     double peakVal = 0;
     double backLastVal = 0;
     double cnt = 0;
+    double totalCnt = 0;
+    double minusBack = 0;
+    double Flux = 0;
+
+    void printMessage(QString msg);
+
+signals:
+    void sentMessage(QString);
 
 };
 

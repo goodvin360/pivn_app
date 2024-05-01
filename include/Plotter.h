@@ -17,6 +17,7 @@ public:
     void PlotGraph();
     void PlotGraphTotal();
 
+
 private:
     Chart*chart;
     ChartView*chartView;
@@ -25,7 +26,6 @@ private:
     QVector<QLineSeries*> lsVector;
     double max_y = 10;
     double max_x;
-
     Chart*chartTot;
     ChartView*chartViewTot;
     QValueAxis*m_axisX_Tot;

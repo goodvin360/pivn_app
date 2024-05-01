@@ -28,8 +28,13 @@ Plotter::Plotter(vecFill*data):Data(data) {
         lsVector.at(i)->attachAxis(m_axisY);
     }
     m_axisX->setTickCount(10);
+    m_axisY->setTickCount(10);
     m_axisX->setRange(0,100);
     m_axisY->setRange(0,10);
+    m_axisX->setMinorTickCount(5);
+    m_axisY->setMinorTickCount(5);
+    m_axisX->applyNiceNumbers();
+    m_axisY->applyNiceNumbers();
     chartView->setGeometry(525,500,500,500);
 
 ////////////////////////////////////////////////////////
@@ -62,14 +67,25 @@ Plotter::Plotter(vecFill*data):Data(data) {
         lsVectorTot.at(i)->attachAxis(m_axisY_Tot);
     }
     m_axisX_Tot->setTickCount(10);
+    m_axisY_Tot->setTickCount(10);
     m_axisX_Tot->setRange(0,100);
     m_axisY_Tot->setRange(0,10);
+    m_axisX_Tot->setMinorTickCount(5);
+    m_axisY_Tot->setMinorTickCount(5);
+    m_axisX_Tot->applyNiceNumbers();
+    m_axisY_Tot->applyNiceNumbers();
     chartViewTot->setGeometry(1525,500,500,500);
 };
 
 Plotter::~Plotter() {
-//    delete chart;
-//    delete chartView;
+    delete chart;
+    delete chartView;
+    delete chartTot;
+    delete chartViewTot;
+//    chart->deleteLater();
+//    chartView->deleteLater();
+//    chartTot->deleteLater();
+//    chartViewTot->deleteLater();
 //    for (int i=0; i<lsVector.size(); i++)
 //    {
 //        lsVector.at(i)->clear();

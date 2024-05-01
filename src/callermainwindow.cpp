@@ -4,13 +4,21 @@
 
 CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     parent = nullptr;
+    this->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
+    QObject::connect(vecData, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
+    QObject::connect(vecDataFile, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
     m_timer->setInterval(1000);
 }
 
-CallerMainWindow::~CallerMainWindow() noexcept {}
+CallerMainWindow::~CallerMainWindow() {
+    std::cout << "destructor is called" << std::endl;
+//    delete makePlot;
+    for (int i=0; i<plotObjVec.size(); i++)
+        delete plotObjVec.at(i);
+}
 
 void CallerMainWindow::startByTimer() {
     char inputData[INPUT_DATA_BYTES];
@@ -72,7 +80,7 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux);
 
         if (plotState>0)
             makePlot->PlotGraph();
@@ -117,7 +125,7 @@ void CallerMainWindow::startByTimer() {
         fluxCalc->backCounter = 1;
 
         delete esp32;
-        delete makePlot;
+//        delete makePlot;
 
         vecData->backVec.clear();
         vecData->backVal = 0;
@@ -128,7 +136,8 @@ void CallerMainWindow::startByTimer() {
 }
 
 void CallerMainWindow::printMsg(QString msg) {
-    textBrowser_2->setText(msg);
+    shotCounter+=1;
+    textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
 }
 
 void CallerMainWindow::getCOM(QString itemName) {
@@ -174,8 +183,8 @@ void CallerMainWindow::addStop() {
 }
 
 void CallerMainWindow::addStart() {
-
     makePlot = new Plotter(vecData);
+    plotObjVec.push_back(makePlot);
     onFlag = true;
     counter = 0;
     flushCounter = 0;
@@ -236,6 +245,7 @@ void CallerMainWindow::addStartFile() {
     if (fileName!= nullptr)
     {
         makePlot = new Plotter(vecDataFile);
+        plotObjVec.push_back(makePlot);
         textBrowser->setText("\n");
         QApplication::processEvents();
 
@@ -293,7 +303,7 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux);
                     if (plotState > 0)
                         makePlot->PlotGraph();
                     if (plotTotalState > 0)
@@ -305,6 +315,9 @@ void CallerMainWindow::addStartFile() {
                             res_out << vecDataFile->resultsDb.at(l).at(k) << " ";
                         }
                         QString showLine = QString::fromStdString(res_out.str());
+                        totalCounts = vecDataFile->totalCnt;
+                        lineEdit_6->setText(QString::number(totalCounts));
+//                        textBrowser_2->setText(QString::number(nFlux));
                         /*textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
                         QApplication::processEvents();
                         QScrollBar*sb = textBrowser->verticalScrollBar();
@@ -327,7 +340,7 @@ void CallerMainWindow::addStartFile() {
         vecDataFile->resultsDbTotal.clear();
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
-        delete makePlot;
+//        delete makePlot;
         onFlag = false;
         vecDataFile->backVec.clear();
         vecDataFile->backVal = 0;

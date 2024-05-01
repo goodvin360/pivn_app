@@ -75,7 +75,7 @@ void FluxCalc::calculateFlux(vecFill &data, double trig) {
 //        double flux = (sum-991.22)/(coefficient*(1-exp(-(log(2)*deltaT/halfLife))));
     if (deltaT>0)
         flux = (sum-300)/(coefficient)*((1-exp(-(log(2)*100/halfLife)))/(1-exp(-(log(2)*deltaT/halfLife))));
-    printMessage(QString::number(flux));
+//    printMessage(QString::number(flux));
     sum = 0;
     flux = 0;
 //    std::cout << caller.widget->getVar() << std::endl;

@@ -2,11 +2,16 @@
 #include "vecFill.h"
 #include "iostream"
 
-vecFill::vecFill() {
+vecFill::vecFill(QWidget *parent) {
+    parent = nullptr;
     backVec.clear();
 }
 
 vecFill::~vecFill() {}
+
+void vecFill::printMessage(QString msg) {
+    emit sentMessage(msg);
+}
 
 std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) {
     cnt = counter;
@@ -68,14 +73,14 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     return resultsDb;
 }
 
-std::vector<std::vector<double>> vecFill::getDataTotal(std::vector<std::vector<double>> data) {
-
+void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux) {
+    fluxTime = totTime;
     if (data.at(0).size()==1)
         fluxTrig = data.at(1).back();
 
     if (data.at(0).size()>0)
     {
-        resultsDbTotal.at(0).push_back(cnt);
+        resultsDbTotal.at(0)=data.at(0);
         double sum = 0;
         for (int i = 2; i < data.size(); i++) {
             sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
@@ -99,24 +104,42 @@ std::vector<std::vector<double>> vecFill::getDataTotal(std::vector<std::vector<d
         if (!isBack && fluxTimeCounter == 0) {
             peakVal = resultsDbTotal.at(1).back();
             backLastVal = backVal;
+            totalCnt=peakVal;
             fluxTimeCounter++;
         }
 
-        if (!isBack) {
-            backVal = peakVal - (peakVal - backLastVal)/(1 + 0.01*exp(-(log(2)*fluxTimeCounter/3600)) +
-                                                         0.1*exp(-(log(2)*fluxTimeCounter/71)));
+        if (!isBack && fluxTimeCounter>0) {
+//            backVal = backLastVal + (0.000*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0313*exp(-(log(2)*fluxTimeCounter/72))) *
+//                                             (peakVal - backLastVal)/(1 + 0.000*exp(-(log(2)*fluxTimeCounter/3240)) +
+//                                                         0.0313*exp(-(log(2)*fluxTimeCounter/72)));
+            backVal = backLastVal + (0.005 + 0.000313) *
+                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
+                                                             0.000313);
             resultsDbTotal.at(2).push_back(backVal);
+            if (fluxTimeCounter>1)
+                totalCnt += resultsDbTotal.at(1).back();
             fluxTimeCounter++;
+            if (resultsDbTotal.at(1).back()>=resultsDbTotal.at(2).back())
+                minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
         }
+
+//        std::cout << "time: " << fluxTimeCounter << " diff value: " << resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back() << std::endl;
+
+        if (fluxTimeCounter>0)
+            Flux = (minusBack+353)/(0.0004035)*
+               ((1-exp(-(log(2)*fluxTime/14.1)))/(1-exp(-(log(2)*fluxTimeCounter/14.1))));
 
         if (fluxTimeCounter == fluxTime) {
+            printMessage(QString::number(Flux));
             isBack = true;
             fluxTimeCounter = 0;
             backVal = 0;
             backVec.clear();
             temp = 0;
+            minusBack = 0;
+            Flux = 0;
         }
     }
 
-    return resultsDbTotal;
+//    return resultsDbTotal;
 }
