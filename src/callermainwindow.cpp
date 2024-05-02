@@ -31,6 +31,7 @@ void CallerMainWindow::startByTimer() {
     size_t pos = 0;
     std::string token;
     std::string timeStr;
+    resultsNew.clear();
     while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
         tempVar1 = resultsNew.size();
         token = inputValStr.substr(0, pos);
@@ -95,7 +96,7 @@ void CallerMainWindow::startByTimer() {
         sb->setValue(sb->maximum());
         QApplication::processEvents();
         flushCounter+=1;
-        if (flushCounter>15 )
+        if (flushCounter>150)
         {
             textBrowser->clear();
             QApplication::processEvents();
@@ -316,34 +317,32 @@ void CallerMainWindow::addStartFile() {
                     if (plotTotalState > 0)
                         makePlot->PlotGraphTotal();
 
-                    for (int k = 0; k < vecDataFile->resultsDb.at(0).size(); k++) {
-                        std::stringstream res_out;
-                        for (int l = 0; l < vecDataFile->resultsDb.size(); l++) {
-                            res_out << vecDataFile->resultsDb.at(l).at(k) << " ";
-                        }
+                    std::stringstream res_out;
+                    for (int k = 0; k < vecDataFile->resultsDb.size(); k++) {
+                        res_out << vecDataFile->resultsDb.at(k).back() << " ";}
+
                         QString showLine = QString::fromStdString(res_out.str());
                         totalCounts = vecDataFile->totalCnt;
                         lineEdit_6->setText(QString::number(nFlux,'g',3));
 //                        textBrowser_2->setText(QString::number(nFlux));
-                        /*textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
+                        textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
                         QApplication::processEvents();
                         QScrollBar*sb = textBrowser->verticalScrollBar();
                         sb->setValue(sb->maximum());
                         QApplication::processEvents();
                         flushCounter+=1;
-                        if (flushCounter>15 )
+                        if (flushCounter>150)
                         {
                             textBrowser->clear();
                             QApplication::processEvents();
                             flushCounter = 0;
-                        }*/
-                        res_out.clear();
-                    }
+                        }
+                    res_out.clear();
                 }
                 QTest::qWait(10);
             }
         }
-        textBrowser->setText("Finished");
+        textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
         vecDataFile->resultsDb.clear();
         vecDataFile->resultsDbTotal.clear();
         fluxCalc->backVal = 0;

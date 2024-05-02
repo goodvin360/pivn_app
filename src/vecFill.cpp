@@ -74,8 +74,6 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     {
         resultsDb.at(m).push_back(stod(var));
     }
-    m = 0;
-    flag = true;
 
     return resultsDb;
 }
@@ -87,17 +85,17 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
     if (data.at(0).size()>0)
     {
-        resultsDbTotal.at(0)=data.at(0);
+        resultsDbTotal.at(0).push_back(data.at(0).back());
         double sum = 0;
         double sum_clean = 0;
         for (int i = 2; i < data.size(); i++) {
+            if (data.at(i).back()>=2000)
+                data.at(i).back()=1999;
             sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
             sum_clean += data.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
         resultsDbTotal.at(3).push_back(sum_clean);
-        sum = 0;
-        sum_clean = 0;
 
         temp = data.at(1).back();
 
