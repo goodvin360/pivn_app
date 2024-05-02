@@ -339,7 +339,7 @@ void CallerMainWindow::addStartFile() {
                         }
                     res_out.clear();
                 }
-                QTest::qWait(10);
+//                QTest::qWait(10);
             }
         }
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
