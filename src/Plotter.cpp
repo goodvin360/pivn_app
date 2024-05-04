@@ -29,13 +29,13 @@ Plotter::Plotter(vecFill*data):Data(data) {
     }
     m_axisX->setTickCount(10);
     m_axisY->setTickCount(10);
-    m_axisX->setRange(0,100);
+    m_axisX->setRange(0,200);
     m_axisY->setRange(0,10);
     m_axisX->setMinorTickCount(5);
     m_axisY->setMinorTickCount(5);
     m_axisX->applyNiceNumbers();
     m_axisY->applyNiceNumbers();
-    chartView->setGeometry(525,500,500,500);
+    chartView->setGeometry(500,500,500,500);
 
 ////////////////////////////////////////////////////////
 
@@ -68,13 +68,13 @@ Plotter::Plotter(vecFill*data):Data(data) {
     }
     m_axisX_Tot->setTickCount(10);
     m_axisY_Tot->setTickCount(10);
-    m_axisX_Tot->setRange(0,100);
+    m_axisX_Tot->setRange(0,200);
     m_axisY_Tot->setRange(0,10);
     m_axisX_Tot->setMinorTickCount(5);
     m_axisY_Tot->setMinorTickCount(5);
     m_axisX_Tot->applyNiceNumbers();
     m_axisY_Tot->applyNiceNumbers();
-    chartViewTot->setGeometry(1525,500,500,500);
+    chartViewTot->setGeometry(500,500,500,500);
 };
 
 Plotter::~Plotter() {
@@ -82,22 +82,9 @@ Plotter::~Plotter() {
     delete chartView;
     delete chartTot;
     delete chartViewTot;
-//    chart->deleteLater();
-//    chartView->deleteLater();
-//    chartTot->deleteLater();
-//    chartViewTot->deleteLater();
-//    for (int i=0; i<lsVector.size(); i++)
-//    {
-//        lsVector.at(i)->clear();
-//    }
 };
 
-void Plotter::PlotGraph() {
-
-//    for (int i=0; i<lsVector.size(); i++)
-//    {
-//        lsVector.at(i)->clear();
-//    }
+void Plotter::PlotGraph(int rescaleTrig) {
         std::vector<std::vector<double>> vecData = Data->resultsDb;
         for (int i=0; i<lsVector.size(); i++)
         {
@@ -108,36 +95,28 @@ void Plotter::PlotGraph() {
             lsVector.at(i)->replace(points);
         }
 
-
-//    for (int i=0; i<lsVector.size(); i++)
-//    {
-//        lsVector.at(i)->append(vecData.at(0).back(),vecData.at(2+i).back());
-//    }
-
-//    if (vecData.at(0).back()<=100) {
-//        max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
-//        m_axisX->setRange(0, 100);
-//    }
-//    else {
-//        max_y = *max_element(vecData.at(2).end() - 100, vecData.at(2).end());
-//        m_axisX->setRange(vecData.at(0).back()-100, vecData.at(0).back());
-//    }
-
-    max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
-    m_axisX->setRange(0,vecData.at(0).size());
-
-    m_axisY->setRange(-1,max_y+1);
+    if (rescaleTrig>0) {
+        if (vecData.at(0).back() <= 200) {
+            max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+            m_axisX->setRange(0, 200);
+        } else {
+            max_y = *max_element(vecData.at(2).end() - 200, vecData.at(2).end());
+            m_axisX->setRange(vecData.at(0).back()-200, vecData.at(0).back());
+        }
+        m_axisY->setRange(-1, max_y + 1);
+    }
+    else {
+        max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+        m_axisX->setRange(0, vecData.at(0).size());
+        m_axisY->setRange(-1, max_y + 1);
+    }
 
     chartView->setVisible(1);
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void Plotter::PlotGraphTotal() {
+void Plotter::PlotGraphTotal(int rescaleTrig) {
 
-//    for (int i=0; i<lsVector.size(); i++)
-//    {
-//        lsVector.at(i)->clear();
-//    }
     std::vector<std::vector<double>> vecDataTot = Data->resultsDbTotal;
 
     for (int i=0; i<lsVectorTot.size(); i++)
@@ -149,24 +128,24 @@ void Plotter::PlotGraphTotal() {
         lsVectorTot.at(i)->replace(points);
     }
 
-//    for (int i=0; i<lsVectorTot.size(); i++)
-//    {
-//        lsVectorTot.at(i)->append(vecDataTot.at(0).back(),vecDataTot.at(2+i).back());
-//    }
-
-//    if (vecDataTot.at(0).back()<=100) {
-//        max_y_tot = *max_element(vecDataTot.at(2).begin(), vecDataTot.at(2).end());
-//        m_axisX_Tot->setRange(0, 100);
-//    }
-//    else {
-//        max_y_tot = *max_element(vecDataTot.at(2).end() - 100, vecDataTot.at(2).end());
-//        m_axisX_Tot->setRange(vecDataTot.at(0).back()-100, vecDataTot.at(0).back());
-//    }
-
-    max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
-    m_axisX_Tot->setRange(0,vecDataTot.at(0).size());
-
-    m_axisY_Tot->setRange(-1,max_y_tot+1);
+    if(rescaleTrig>0)
+    {
+        if (vecDataTot.at(0).back()<=200) {
+        max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
+        m_axisX_Tot->setRange(0, 200);
+        }
+        else {
+        max_y_tot = *max_element(vecDataTot.at(1).end()-200, vecDataTot.at(1).end());
+        m_axisX_Tot->setRange(vecDataTot.at(0).back()-200, vecDataTot.at(0).back());
+        }
+        m_axisY_Tot->setRange(-1,max_y_tot+1);
+    }
+    else
+    {
+        max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
+        m_axisX_Tot->setRange(0,vecDataTot.at(0).size());
+        m_axisY_Tot->setRange(-1,max_y_tot+1);
+    }
 
     chartViewTot->setVisible(1);
     chartViewTot->setRenderHint(QPainter::Antialiasing);

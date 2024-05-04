@@ -84,12 +84,12 @@ void CallerMainWindow::startByTimer() {
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true);
 
         if (plotState>0)
-            makePlot->PlotGraph();
+            makePlot->PlotGraph(rescaleTrigger);
         if (plotTotalState>0)
-            makePlot->PlotGraphTotal();
+            makePlot->PlotGraphTotal(rescaleTrigger);
 
         QString showLine = QString::fromStdString(res_out.str());
-
+        lineEdit_6->setText(QString::number(nFlux,'g',3));
         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
         QApplication::processEvents();
         QScrollBar*sb = textBrowser->verticalScrollBar();
@@ -313,9 +313,9 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false);
                     if (plotState > 0)
-                        makePlot->PlotGraph();
+                        makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
-                        makePlot->PlotGraphTotal();
+                        makePlot->PlotGraphTotal(rescaleTrigger);
 
                     std::stringstream res_out;
                     for (int k = 0; k < vecDataFile->resultsDb.size(); k++) {
@@ -383,6 +383,11 @@ void CallerMainWindow::plotTrigger(int st) {
 
 void CallerMainWindow::plotTriggerTotal(int stTot) {
     plotTotalState = stTot;
+    QApplication::processEvents();
+}
+
+void CallerMainWindow::rescalePlotTrigger(int stRescale) {
+    rescaleTrigger = stRescale;
     QApplication::processEvents();
 }
 

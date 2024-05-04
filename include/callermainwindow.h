@@ -68,6 +68,7 @@ public:
     bool onFlag = false;
     int plotState = 0;
     int plotTotalState = 0;
+    int rescaleTrigger = 0;
     int coefState = 0;
     int timeState = 0;
     double integrationTime = 100;
@@ -109,6 +110,7 @@ public slots:
     void addLoadFile();
     void plotTrigger(int st);
     void plotTriggerTotal(int stTot);
+    void rescalePlotTrigger(int stRescale);
     void coefTrigger(int trig);
     void setFiniteTime(int stTime);
     void setCountIntTime(QString intTime);

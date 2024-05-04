@@ -14,8 +14,8 @@ public:
     Plotter(vecFill*data);
     ~Plotter();
 
-    void PlotGraph();
-    void PlotGraphTotal();
+    void PlotGraph(int rescaleTrig);
+    void PlotGraphTotal(int rescaleTrig);
 
 
 private:

@@ -186,6 +186,4 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             Flux = 0;
         }
     }
-
-//    return resultsDbTotal;
 }
