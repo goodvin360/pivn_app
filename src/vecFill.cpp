@@ -80,8 +80,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b, bool fileParting) {
     fluxTime = totTime;
-//    if (data.at(0).size()==1)
-//        fluxTrig = data.at(1).back();
+    if (data.at(0).size()==1)
+        fluxTrig = data.at(1).back();
 
     if (data.at(0).size()>0)
     {
@@ -167,7 +167,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         if (fluxTimeCounter>0) {
             Flux = minusBack *
-                   ((1 - exp(-(log(2) * fluxTime / 14.1))) / (1 - exp(-(log(2) * fluxTimeCounter / 14.1)))) * c_a +
+                   ((1 - exp(-(log(2) * 100 / 14.1))) / (1 - exp(-(log(2) * fluxTimeCounter / 14.1)))) * c_a +
                    c_b;
             flux = Flux;
         }

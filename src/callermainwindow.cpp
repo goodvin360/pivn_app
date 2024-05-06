@@ -126,7 +126,6 @@ void CallerMainWindow::startByTimer() {
         fluxCalc->backCounter = 1;
 
         delete esp32;
-//        delete makePlot;
 
         vecData->backVec.clear();
         vecData->backVal = 0;
@@ -198,7 +197,6 @@ void CallerMainWindow::addStart() {
     textBrowser->clear();
     QApplication::processEvents();
 
-    int endTime = measTime;
     resultsNew.clear();
     esp32 = new SerialPort(pName.toStdString());
 
@@ -212,20 +210,36 @@ void CallerMainWindow::setTime(QString dataEntered) {
 
 void CallerMainWindow::setCoefA(QString coef_a)
 {
-    if (coef_a.length()>0)
-        coeff_a = std::stod(coef_a.toStdString());
+    inputProcessing(coeff_a,coef_a.toStdString());
 }
 
 void CallerMainWindow::setCoefB(QString coef_b)
 {
-    if (coef_b.length()>0)
-        coeff_b = std::stod(coef_b.toStdString());
+    inputProcessing(coeff_b,coef_b.toStdString());
 }
 
 void CallerMainWindow::setDist(QString dist)
 {
-    if (dist.length()>0)
-        distance = std::stod(dist.toStdString());
+    inputProcessing(distance,dist.toStdString());
+}
+
+void CallerMainWindow::inputProcessing(double &var, std::string inp) {
+    std::string str = inp;
+    for (int i = 0; i < str.size(); i++) {
+        if ((str[i] < '0' || str[i] > '9') && str[i]!='-') {
+            return;
+        }
+    }
+    if (inp.length()>0)
+    {
+        if (str[0]=='-') {
+            str.erase(0, 1);
+            if (str.length()>0)
+                var = -1*std::stod(str);
+        }
+        else
+            var = std::stod(str);
+    }
 }
 
 std::vector<std::string> CallerMainWindow::fileRead(std::string str) {
@@ -233,7 +247,6 @@ std::vector<std::string> CallerMainWindow::fileRead(std::string str) {
     std::vector<std::string> fileData{};
     std::ifstream file;
     std::string line;
-    std::stringstream lineData;
     size_t pos = 0;
     file.open(str);
     while (getline(file, line))
@@ -324,7 +337,6 @@ void CallerMainWindow::addStartFile() {
                         QString showLine = QString::fromStdString(res_out.str());
                         totalCounts = vecDataFile->totalCnt;
                         lineEdit_6->setText(QString::number(nFlux,'g',3));
-//                        textBrowser_2->setText(QString::number(nFlux));
                         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
                         QApplication::processEvents();
                         QScrollBar*sb = textBrowser->verticalScrollBar();
@@ -347,7 +359,6 @@ void CallerMainWindow::addStartFile() {
         vecDataFile->resultsDbTotal.clear();
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
-//        delete makePlot;
         onFlag = false;
         vecDataFile->backVec.clear();
         vecDataFile->backVal = 0;

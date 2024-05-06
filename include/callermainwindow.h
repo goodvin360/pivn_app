@@ -60,8 +60,8 @@ public:
     QCheckBox*checkBox_2 = new QCheckBox();
     QString pName;
     QString fileName;
-    double coeff_a = 2504;
-    double coeff_b = 534326;
+    double coeff_a = 2671;
+    double coeff_b = -450245;
     double distance = 24;
     int measTime = 5;
     double fluxTrig = 0;
@@ -115,6 +115,7 @@ public slots:
     void setFiniteTime(int stTime);
     void setCountIntTime(QString intTime);
     void startByTimer();
+    void inputProcessing(double &var, std::string inp);
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H
