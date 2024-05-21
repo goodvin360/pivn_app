@@ -366,7 +366,10 @@ void CallerMainWindow::addStartFile() {
 }
 
 void CallerMainWindow::addLoadFile() {
-    fileName = QFileDialog::getOpenFileName(this,tr("Open File"), "../", tr("txt files (*.txt)"));
+    if (!fileName.isEmpty())
+        fileName = QFileDialog::getOpenFileName(this,tr("Open File"), fileName, tr("txt files (*.txt)"));
+    else
+        fileName = QFileDialog::getOpenFileName(this,tr("Open File"), "../", tr("txt files (*.txt)"));
 }
 
 std::pair<std::string, int> CallerMainWindow::dotsFind(std::string str, std::string delim) {
