@@ -58,6 +58,8 @@ public:
     QPushButton*pushButton_5 = new QPushButton();
     QCheckBox*checkBox = new QCheckBox();
     QCheckBox*checkBox_2 = new QCheckBox();
+    QCheckBox*checkBox_6 = new QCheckBox();
+    QCheckBox*checkBox_7 = new QCheckBox();
     QString pName;
     QString fileName;
     double coeff_a = 2671;
@@ -75,6 +77,8 @@ public:
     double totalCounts = 0;
     double nFlux = 0;
     int shotCounter = 0;
+    int trigMode = 0;
+    int trigVal = 0;
 
     int counter = 0;
 
@@ -116,6 +120,9 @@ public slots:
     void setCountIntTime(QString intTime);
     void startByTimer();
     void inputProcessing(double &var, std::string inp);
+    void addGoTrigger();
+    void autoTrigger(int st);
+    void manualTrigger(int st);
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

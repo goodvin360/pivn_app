@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>552</height>
+    <width>446</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_4">
     <item row="0" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
@@ -31,7 +31,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1" rowspan="2" colspan="2">
+    <item row="0" column="1" colspan="2">
      <widget class="QCheckBox" name="checkBox">
       <property name="text">
        <string>Final time measure</string>
@@ -48,7 +48,23 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="3" rowspan="2">
+    <item row="1" column="0">
+     <widget class="QComboBox" name="comboBox"/>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QLabel" name="measureTime">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>Enter measuring time, s:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
      <widget class="QLabel" name="label_3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -64,7 +80,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="4" rowspan="2">
+    <item row="1" column="4">
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -78,29 +94,13 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QComboBox" name="comboBox"/>
-    </item>
-    <item row="2" column="1" colspan="2">
-     <widget class="QLabel" name="measureTime">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="text">
-       <string>Enter measuring time, s:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
      <widget class="QPushButton" name="pushButton_2">
       <property name="text">
        <string>Connect to COM</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="2">
+    <item row="2" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -116,7 +116,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
+    <item row="2" column="3">
      <widget class="QLabel" name="label_5">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -132,7 +132,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="4">
+    <item row="2" column="4">
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -145,7 +145,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" rowspan="2">
+    <item row="3" column="0">
      <widget class="QPushButton" name="pushButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -167,14 +167,14 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" rowspan="2" colspan="2">
+    <item row="3" column="1" colspan="2">
      <widget class="QPushButton" name="pushButton_4">
       <property name="text">
        <string>Load File</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="3">
+    <item row="3" column="3">
      <widget class="QLabel" name="label_6">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -190,7 +190,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="4">
+    <item row="3" column="4">
      <widget class="QLineEdit" name="lineEdit_4">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -203,7 +203,27 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="4" rowspan="2">
+    <item row="4" column="0" rowspan="2">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" rowspan="2" colspan="2">
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="text">
+       <string>Start from File</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="4">
      <widget class="QLabel" name="label_4">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -219,27 +239,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0" rowspan="2">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Stop</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1" rowspan="2" colspan="2">
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="text">
-       <string>Start from File</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="4" rowspan="7">
+    <item row="5" column="4" rowspan="8">
      <widget class="QTextBrowser" name="textBrowser_2">
       <property name="maximumSize">
        <size>
@@ -249,7 +249,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
+    <item row="6" column="0">
      <widget class="QCheckBox" name="checkBox_3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -262,21 +262,55 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="1" colspan="2">
+    <item row="6" column="1">
      <widget class="QCheckBox" name="checkBox_4">
       <property name="text">
        <string>Plot total</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <widget class="QCheckBox" name="checkBox_5">
       <property name="text">
        <string>Rescale plot to last 200 s</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="2">
+    <item row="8" column="0" colspan="2">
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Trigger mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_7">
+         <property name="text">
+          <string>Manual</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_7">
+         <property name="text">
+          <string>Go</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="checkBox_6">
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="9" column="0" colspan="2">
      <widget class="QLabel" name="label_7">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -289,7 +323,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="2" colspan="2">
+    <item row="9" column="2" colspan="2">
      <widget class="QLabel" name="label_8">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -302,7 +336,7 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="2">
+    <item row="10" column="0" colspan="2">
      <widget class="QLineEdit" name="lineEdit_5">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -315,24 +349,24 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="2" colspan="2">
+    <item row="10" column="2" colspan="2">
      <widget class="QLineEdit" name="lineEdit_6">
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="12" column="0">
+    <item row="11" column="0">
      <widget class="QLabel" name="label_9">
       <property name="text">
        <string>Count integrals:</string>
       </property>
      </widget>
     </item>
-    <item row="13" column="0" colspan="4">
+    <item row="12" column="0" colspan="4">
      <widget class="QTextBrowser" name="textBrowser_3"/>
     </item>
-    <item row="14" column="0" colspan="5">
+    <item row="13" column="0" colspan="5">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -382,7 +416,7 @@
       </layout>
      </widget>
     </item>
-    <item row="15" column="4">
+    <item row="14" column="4">
      <widget class="testWidget" name="widget" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
@@ -402,7 +436,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>436</width>
+     <width>446</width>
      <height>21</height>
     </rect>
    </property>
@@ -430,7 +464,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>97</x>
-     <y>134</y>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -461,7 +495,7 @@
    <slot>setTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>262</x>
+     <x>236</x>
      <y>99</y>
     </hint>
     <hint type="destinationlabel">
@@ -494,7 +528,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>97</x>
-     <y>165</y>
+     <y>159</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
@@ -509,7 +543,7 @@
    <slot>setCoefA(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>607</x>
+     <x>436</x>
      <y>72</y>
     </hint>
     <hint type="destinationlabel">
@@ -525,8 +559,8 @@
    <slot>addLoadFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>134</y>
+     <x>242</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>
@@ -541,8 +575,8 @@
    <slot>addStartFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>165</y>
+     <x>242</x>
+     <y>159</y>
     </hint>
     <hint type="destinationlabel">
      <x>24</x>
@@ -557,8 +591,8 @@
    <slot>plotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>188</y>
+     <x>55</x>
+     <y>182</y>
     </hint>
     <hint type="destinationlabel">
      <x>229</x>
@@ -573,12 +607,12 @@
    <slot>addButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>598</x>
-     <y>787</y>
+     <x>427</x>
+     <y>611</y>
     </hint>
     <hint type="destinationlabel">
-     <x>607</x>
-     <y>796</y>
+     <x>436</x>
+     <y>620</y>
     </hint>
    </hints>
   </connection>
@@ -605,7 +639,7 @@
    <slot>setCoefB(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>607</x>
+     <x>436</x>
      <y>101</y>
     </hint>
     <hint type="destinationlabel">
@@ -621,8 +655,8 @@
    <slot>setDist(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>607</x>
-     <y>130</y>
+     <x>436</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>440</x>
@@ -637,8 +671,8 @@
    <slot>setCountIntTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>233</y>
+     <x>139</x>
+     <y>339</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -653,8 +687,8 @@
    <slot>plotTriggerTotal(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>188</y>
+     <x>174</x>
+     <y>182</y>
     </hint>
     <hint type="destinationlabel">
      <x>283</x>
@@ -669,7 +703,7 @@
    <slot>coefTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>607</x>
+     <x>436</x>
      <y>46</y>
     </hint>
     <hint type="destinationlabel">
@@ -685,12 +719,60 @@
    <slot>rescalePlotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>287</x>
-     <y>181</y>
+     <x>174</x>
+     <y>205</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
      <y>222</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addGoTrigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>123</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_7</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>manualTrigger(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>246</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_6</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>autoTrigger(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>277</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>273</y>
     </hint>
    </hints>
   </connection>
@@ -712,5 +794,8 @@
   <slot>setDist(QString)</slot>
   <slot>coefTrigger(int)</slot>
   <slot>rescalePlotTrigger(int)</slot>
+  <slot>addGoTrigger()</slot>
+  <slot>autoTrigger(int)</slot>
+  <slot>manualTrigger(int)</slot>
  </slots>
 </ui>

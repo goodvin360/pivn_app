@@ -19,7 +19,8 @@ public:
     std::vector<std::vector<double>> resultsDbTotal;
 
     std::vector<std::vector<double>> getData(std::string str, int counter);
-    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b, bool fileParting);
+    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b,
+                      bool fileParting, int trMode, int trVal);
 
     double backVal = 0;
     std::vector<double> backVec;
@@ -39,6 +40,7 @@ public:
     FileWriter*fileWriter;
     int fileTimer = 0;
     bool fileTrigger = false;
+    double trigDelta = 0;
 
     void printMessage(QString msg, int num);
 

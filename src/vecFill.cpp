@@ -78,10 +78,15 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     return resultsDb;
 }
 
-void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b, bool fileParting) {
+void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
+                           bool fileParting, int trMode, int trVal) {
     fluxTime = totTime;
-    if (data.at(0).size()==1)
-        fluxTrig = data.at(1).back();
+    if (data.at(0).size()==1) {
+        if (trMode==0)
+            fluxTrig = data.at(1).back();
+        else
+            fluxTrig = trVal;
+    }
 
     if (data.at(0).size()>0)
     {
@@ -97,9 +102,13 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         resultsDbTotal.at(1).push_back(sum);
         resultsDbTotal.at(3).push_back(sum_clean);
 
-        temp = data.at(1).back();
+        if (trMode==0)
+            temp = data.at(1).back();
+        else
+            temp = trVal;
 
         if (temp > fluxTrig) {
+            trigDelta = temp - fluxTrig;
             isBack = false;
             fileTrigger = true;
         }
@@ -134,12 +143,15 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         if (isBack) {
             backVec.push_back(resultsDbTotal.at(1).back());
             backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (backVec.size());
+//            backVal = (0.01 * resultsDbTotal.at(1).back()) + (1.0 - 0.01) * backVal;
             resultsDbTotal.at(2).push_back(backVal);
         }
 
         if (!isBack && fluxTimeCounter == 0) {
-            peakVal = resultsDbTotal.at(1).back();
-            peakValClean = resultsDbTotal.at(3).back();
+            peakVal = resultsDbTotal.at(1).back()-trigDelta*4;
+            resultsDbTotal.at(1).back() = peakVal;
+            peakValClean = resultsDbTotal.at(3).back()-trigDelta*4;
+            resultsDbTotal.at(3).back() = peakValClean;
             backLastVal = backVal;
             totalCnt=peakVal;
             totalCntClean=peakValClean;
@@ -147,12 +159,17 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
         if (!isBack && fluxTimeCounter>0) {
+
 //            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
 //                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
 //                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
-            backVal = backLastVal + (0.005 + 0.000313) *
-                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
-                                                             0.000313);
+
+//            backVal = backLastVal + (0.005 + 0.000313) *
+//                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
+//                                                             0.000313);
+
+            backVal = backLastVal;
+
             resultsDbTotal.at(2).push_back(backVal);
             if (fluxTimeCounter>1) {
                 totalCnt += resultsDbTotal.at(1).back();

@@ -18,9 +18,12 @@ int main(int argc, char *argv[]) {
     window->lineEdit_4 = caller.lineEdit_4;
     window->lineEdit_5 = caller.lineEdit_5;
     window->lineEdit_6 = caller.lineEdit_6;
+    window->checkBox_6 = caller.checkBox_6;
+    window->checkBox_7 = caller.checkBox_7;
     caller.lineEdit->setText(QString::number(window->measTime));
     caller.checkBox->setChecked(1);
     caller.checkBox_2->setChecked(1);
+    caller.checkBox_6->setChecked(1);
     caller.lineEdit_2->setText(QString::number(window->coeff_a));
     caller.lineEdit_3->setText(QString::number(window->coeff_b));
     caller.lineEdit_4->setText(QString::number(window->distance));

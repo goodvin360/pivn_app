@@ -81,7 +81,7 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true, trigMode, trigVal);
 
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
@@ -324,7 +324,7 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false, trigMode, trigVal);
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
@@ -351,7 +351,7 @@ void CallerMainWindow::addStartFile() {
                         }
                     res_out.clear();
                 }
-//                QTest::qWait(10);
+                QTest::qWait(10);
             }
         }
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
@@ -439,4 +439,34 @@ void CallerMainWindow::coefTrigger(int trig) {
 void CallerMainWindow::setCountIntTime(QString intTime) {
     if (intTime.length()>0)
         integrationTime = std::stod(intTime.toStdString());
+}
+
+void CallerMainWindow::addGoTrigger() {
+    trigVal++;
+}
+
+void CallerMainWindow::autoTrigger(int st) {
+    if (st>0)
+    {
+        trigMode = 0;
+        checkBox_7->setChecked(0);
+    }
+    else
+    {
+        trigMode = 1;
+        checkBox_7->setChecked(1);
+    }
+}
+
+void CallerMainWindow::manualTrigger(int st) {
+    if (st>0)
+    {
+        trigMode = 1;
+        checkBox_6->setChecked(0);
+    }
+    else
+    {
+        trigMode = 0;
+        checkBox_6->setChecked(1);
+    }
 }
