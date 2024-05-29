@@ -15,7 +15,7 @@ public:
     ~Plotter();
 
     void PlotGraph(int rescaleTrig);
-    void PlotGraphTotal(int rescaleTrig);
+    void PlotGraphTotal(int rescaleTrig, double ePoint);
 
 
 private:

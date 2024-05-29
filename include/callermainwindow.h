@@ -49,6 +49,7 @@ public:
     QLineEdit*lineEdit_4 = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
+    QLineEdit*lineEdit_7 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
@@ -60,6 +61,7 @@ public:
     QCheckBox*checkBox_2 = new QCheckBox();
     QCheckBox*checkBox_6 = new QCheckBox();
     QCheckBox*checkBox_7 = new QCheckBox();
+    QCheckBox*checkBox_8 = new QCheckBox();
     QString pName;
     QString fileName;
     double coeff_a = 2671;
@@ -79,6 +81,11 @@ public:
     int shotCounter = 0;
     int trigMode = 0;
     int trigVal = 0;
+    double edgePoint = 0;
+    double tempTime = 0;
+    double tempTimeSet = 0;
+    int constFluxTrig = 0;
+    int edgePointTrig = 0;
 
     int counter = 0;
 
@@ -123,6 +130,10 @@ public slots:
     void addGoTrigger();
     void autoTrigger(int st);
     void manualTrigger(int st);
+    void addConstFluxGo();
+    void addConstFluxTrig(int st);
+    void setEdgePoint(QString ePoint);
+    void addSetEdgePoint();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>650</height>
+    <width>511</width>
+    <height>777</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_4">
+   <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
@@ -167,7 +167,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="2">
+    <item row="3" column="1">
      <widget class="QPushButton" name="pushButton_4">
       <property name="text">
        <string>Load File</string>
@@ -216,7 +216,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" rowspan="2" colspan="2">
+    <item row="4" column="1" rowspan="2">
      <widget class="QPushButton" name="pushButton_5">
       <property name="text">
        <string>Start from File</string>
@@ -239,7 +239,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="4" rowspan="8">
+    <item row="5" column="4" rowspan="9">
      <widget class="QTextBrowser" name="textBrowser_2">
       <property name="maximumSize">
        <size>
@@ -310,7 +310,48 @@
       </layout>
      </widget>
     </item>
-    <item row="9" column="0" colspan="2">
+    <item row="9" column="0" colspan="4">
+     <widget class="QWidget" name="widget_3" native="true">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="checkBox_8">
+         <property name="text">
+          <string>Const. flux</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Edge point, s:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_8">
+         <property name="text">
+          <string>Go</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_7">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pushButton_9">
+         <property name="text">
+          <string>Set</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="2">
      <widget class="QLabel" name="label_7">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -323,7 +364,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="2" colspan="2">
+    <item row="10" column="2" colspan="2">
      <widget class="QLabel" name="label_8">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -336,7 +377,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="2">
+    <item row="11" column="0" colspan="2">
      <widget class="QLineEdit" name="lineEdit_5">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -349,24 +390,24 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="2" colspan="2">
+    <item row="11" column="2" colspan="2">
      <widget class="QLineEdit" name="lineEdit_6">
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="11" column="0">
+    <item row="12" column="0">
      <widget class="QLabel" name="label_9">
       <property name="text">
        <string>Count integrals:</string>
       </property>
      </widget>
     </item>
-    <item row="12" column="0" colspan="4">
+    <item row="13" column="0" colspan="4">
      <widget class="QTextBrowser" name="textBrowser_3"/>
     </item>
-    <item row="13" column="0" colspan="5">
+    <item row="14" column="0" colspan="5">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -416,7 +457,7 @@
       </layout>
      </widget>
     </item>
-    <item row="14" column="4">
+    <item row="15" column="4">
      <widget class="testWidget" name="widget" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
@@ -436,7 +477,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>446</width>
+     <width>511</width>
      <height>21</height>
     </rect>
    </property>
@@ -559,7 +600,7 @@
    <slot>addLoadFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
+     <x>179</x>
      <y>130</y>
     </hint>
     <hint type="destinationlabel">
@@ -575,7 +616,7 @@
    <slot>addStartFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
+     <x>179</x>
      <y>159</y>
     </hint>
     <hint type="destinationlabel">
@@ -607,12 +648,12 @@
    <slot>addButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>611</y>
+     <x>492</x>
+     <y>738</y>
     </hint>
     <hint type="destinationlabel">
-     <x>436</x>
-     <y>620</y>
+     <x>501</x>
+     <y>747</y>
     </hint>
    </hints>
   </connection>
@@ -671,8 +712,8 @@
    <slot>setCountIntTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>339</y>
+     <x>148</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -776,6 +817,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox_8</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addConstFluxTrig(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>318</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>235</x>
+     <y>283</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addConstFluxGo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>280</x>
+     <y>332</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_7</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setEdgePoint(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_9</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addSetEdgePoint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>341</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>419</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addStart()</slot>
@@ -797,5 +902,9 @@
   <slot>addGoTrigger()</slot>
   <slot>autoTrigger(int)</slot>
   <slot>manualTrigger(int)</slot>
+  <slot>addConstFluxGo()</slot>
+  <slot>addConstFluxTrig(int)</slot>
+  <slot>setEdgePoint(QString)</slot>
+  <slot>addSetEdgePoint()</slot>
  </slots>
 </ui>

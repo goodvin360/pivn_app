@@ -79,7 +79,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
 }
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
-                           bool fileParting, int trMode, int trVal) {
+                           bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig) {
     fluxTime = totTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -88,9 +88,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             fluxTrig = trVal;
     }
 
-    if (data.at(0).size()>0)
+    if (data.at(0).size()>0 && constFluxTr == 0)
     {
         resultsDbTotal.at(0).push_back(data.at(0).back());
+        ePoint = resultsDbTotal.at(0).back();
         double sum = 0;
         double sum_clean = 0;
         for (int i = 2; i < data.size(); i++) {
@@ -197,7 +198,85 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             isBack = true;
             fluxTimeCounter = 0;
             backVal = 0;
-            backVec.clear();
+//            backVec.clear();
+            temp = 0;
+            minusBack = 0;
+            Flux = 0;
+        }
+    }
+
+    if (data.at(0).size()>0 && constFluxTr > 0)
+    {
+        resultsDbTotal.at(0).push_back(data.at(0).back());
+        ePoint = resultsDbTotal.at(0).back();
+        double sum = 0;
+        double sum_clean = 0;
+        for (int i = 2; i < data.size(); i++) {
+            if (data.at(i).back()>=2000)
+                data.at(i).back()=1999;
+            sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
+            sum_clean += data.at(i).back();
+        }
+        resultsDbTotal.at(1).push_back(sum);
+        resultsDbTotal.at(3).push_back(sum_clean);
+
+        temp = constTrig;
+
+        if (!isBackForConst && fluxTimeCounter == 0 && temp > fluxTrigConst) {
+            peakVal = resultsDbTotal.at(1).back();
+            peakValClean = resultsDbTotal.at(3).back();
+            totalCnt=peakVal;
+            totalCntClean=peakValClean;
+            fluxTimeCounter++;
+        }
+
+        if (!isBackForConst && fluxTimeCounter > 0 && fluxTimeCounter <= fluxTime+backConstWindow) {
+
+            if (fluxTimeCounter>1 && fluxTimeCounter < fluxTime) {
+                totalCnt += resultsDbTotal.at(1).back();
+                totalCntClean += resultsDbTotal.at(3).back();
+            }
+            fluxTimeCounter++;
+        }
+
+
+        if (fluxTimeCounter >= fluxTime) {
+            isBackForConst = true;
+        }
+
+        if (fluxTimeCounter > fluxTime+backConstWindow) {
+            isBackForConst = false;
+        }
+
+        if (isBackForConst) {
+            backVecConst.push_back(resultsDbTotal.at(1).back());
+//            if (!backVecConst.empty())
+                backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (backVecConst.size());
+            resultsDbTotal.at(2).push_back(backVal);
+            fluxTimeCounter++;
+        }
+
+        if (!isBackForConst && (fluxTimeCounter < fluxTime || fluxTimeCounter > fluxTime+20))
+            resultsDbTotal.at(2).push_back(0);
+
+        fluxTrigConst = temp;
+
+        if (fluxTimeCounter == fluxTime+backConstWindow) {
+            minusBack = totalCnt-backVal*fluxTime;
+
+            Flux = minusBack * c_a + c_b;
+            flux = Flux;
+        }
+
+        if (fluxTimeCounter == fluxTime+backConstWindow) {
+            QString s(0x00B1);
+            double error = 0.09*Flux;
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
+            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
+            isBackForConst = false;
+            fluxTimeCounter = 0;
+            backVal = 0;
+            backVecConst.clear();
             temp = 0;
             minusBack = 0;
             Flux = 0;

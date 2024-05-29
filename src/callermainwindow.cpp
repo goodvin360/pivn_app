@@ -81,12 +81,12 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true, trigMode, trigVal);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true, trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig);
 
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
         if (plotTotalState>0)
-            makePlot->PlotGraphTotal(rescaleTrigger);
+            makePlot->PlotGraphTotal(rescaleTrigger,tempTime);
 
         QString showLine = QString::fromStdString(res_out.str());
         lineEdit_6->setText(QString::number(nFlux,'g',3));
@@ -324,11 +324,11 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false, trigMode, trigVal);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false, trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig);
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
-                        makePlot->PlotGraphTotal(rescaleTrigger);
+                        makePlot->PlotGraphTotal(rescaleTrigger, tempTime);
 
                     std::stringstream res_out;
                     for (int k = 0; k < vecDataFile->resultsDb.size(); k++) {
@@ -351,7 +351,7 @@ void CallerMainWindow::addStartFile() {
                         }
                     res_out.clear();
                 }
-                QTest::qWait(10);
+                QTest::qWait(100);
             }
         }
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
@@ -469,4 +469,26 @@ void CallerMainWindow::manualTrigger(int st) {
         trigMode = 0;
         checkBox_6->setChecked(1);
     }
+}
+
+void CallerMainWindow::addConstFluxGo() {
+    if (constFluxTrig>0)
+    {
+        tempTime = edgePoint;
+        lineEdit_7->setText(QString::number(tempTime));
+        edgePointTrig++;
+    }
+}
+
+void CallerMainWindow::addConstFluxTrig(int st) {
+    constFluxTrig = st;
+}
+
+void CallerMainWindow::setEdgePoint(QString ePoint) {
+    inputProcessing(edgePoint, ePoint.toStdString());
+    tempTimeSet = edgePoint;
+}
+
+void CallerMainWindow::addSetEdgePoint() {
+    tempTime = tempTimeSet;
 }

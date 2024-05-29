@@ -43,7 +43,7 @@ Plotter::Plotter(vecFill*data):Data(data) {
     chartViewTot = new ChartView(chartTot);
     m_axisX_Tot = new QValueAxis();
     m_axisY_Tot = new QValueAxis();
-    for (int i=0; i<2; i++)
+    for (int i=0; i<3; i++)
     {
         QLineSeries*series = new QLineSeries();
         if (i==0)
@@ -115,18 +115,26 @@ void Plotter::PlotGraph(int rescaleTrig) {
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void Plotter::PlotGraphTotal(int rescaleTrig) {
+void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
 
     std::vector<std::vector<double>> vecDataTot = Data->resultsDbTotal;
 
     for (int i=0; i<lsVectorTot.size(); i++)
     {
         QVector<QPointF> points(vecDataTot.at(0).size());
+        if (i<2)
         for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1+i).size(); ++l) {
             points[l] = QPointF(l, vecDataTot.at(1+i)[l]);
         }
+        if (i==2)
+            for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1).size(); ++l) {
+                points[l] = QPointF(l, 0);
+                if (l == int(ePoint))
+                    points[l] = QPointF(l, max_y_tot);
+            }
         lsVectorTot.at(i)->replace(points);
     }
+
 
     if(rescaleTrig>0)
     {
