@@ -256,7 +256,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             fluxTimeCounter++;
         }
 
-        if (!isBackForConst && (fluxTimeCounter < fluxTime || fluxTimeCounter > fluxTime+20))
+        if (!isBackForConst && (fluxTimeCounter < fluxTime || fluxTimeCounter > fluxTime+backConstWindow))
             resultsDbTotal.at(2).push_back(0);
 
         fluxTrigConst = temp;
