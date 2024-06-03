@@ -47,7 +47,7 @@ void CallerMainWindow::startByTimer() {
                 tempVar2 = resultsNew.size();
                 if (tempVar2>tempVar1)
                 {
-                    vecData->getData(resultsNew.rbegin()->second,counter);
+                    vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
                     counter+=1;
                     fluxCalc->calculateFlux(*vecData, fluxTrig);
                 }
@@ -68,7 +68,7 @@ void CallerMainWindow::startByTimer() {
             tempVar2 = resultsNew.size();
             if (tempVar2>tempVar1)
             {
-                vecData->getData(resultsNew.rbegin()->second,counter);
+                vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
                 fluxCalc->calculateFlux(*vecData, fluxTrig);
                 counter+=1;
             }
@@ -81,7 +81,9 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true, trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig);
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
+                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
 
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
@@ -298,7 +300,7 @@ void CallerMainWindow::addStartFile() {
                             }
                             tempVar2 = resultsNew.size();
                             if (tempVar2 > tempVar1) {
-                                vecDataFile->getData(resultsNew.rbegin()->second, counter);
+                                vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
                                 fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                                 counter += 1;
                             }
@@ -317,14 +319,16 @@ void CallerMainWindow::addStartFile() {
                         }
                         tempVar2 = resultsNew.size();
                         if (tempVar2 > tempVar1) {
-                            vecDataFile->getData(resultsNew.rbegin()->second, counter);
+                            vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
                             fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                             counter += 1;
                         }
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false, trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig);
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
+                                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
@@ -351,7 +355,7 @@ void CallerMainWindow::addStartFile() {
                         }
                     res_out.clear();
                 }
-                QTest::qWait(10);
+//                QTest::qWait(10);
             }
         }
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
@@ -491,4 +495,20 @@ void CallerMainWindow::setEdgePoint(QString ePoint) {
 
 void CallerMainWindow::addSetEdgePoint() {
     tempTime = tempTimeSet;
+}
+
+void CallerMainWindow::cnt1(int val) {
+    cnt1_trig = val;
+}
+
+void CallerMainWindow::cnt2(int val) {
+    cnt2_trig = val;
+}
+
+void CallerMainWindow::cnt3(int val) {
+    cnt3_trig = val;
+}
+
+void CallerMainWindow::cnt4(int val) {
+    cnt4_trig = val;
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>777</height>
+    <height>817</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_5">
+   <layout class="QGridLayout" name="gridLayout_6">
     <item row="0" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
@@ -38,7 +38,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="4">
+    <item row="0" column="4" colspan="2">
      <widget class="QCheckBox" name="checkBox_2">
       <property name="text">
        <string>User's coefficients</string>
@@ -80,7 +80,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="4">
+    <item row="1" column="4" colspan="2">
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -132,7 +132,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="4">
+    <item row="2" column="4" colspan="2">
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -190,7 +190,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="4">
+    <item row="3" column="4" colspan="2">
      <widget class="QLineEdit" name="lineEdit_4">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -239,7 +239,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="4" rowspan="9">
+    <item row="5" column="4" rowspan="10" colspan="2">
      <widget class="QTextBrowser" name="textBrowser_2">
       <property name="maximumSize">
        <size>
@@ -249,7 +249,48 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="6" column="0" colspan="2">
+     <widget class="QWidget" name="widget_4" native="true">
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Counters:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_9">
+         <property name="text">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="checkBox_10">
+         <property name="text">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="checkBox_11">
+         <property name="text">
+          <string>3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="checkBox_12">
+         <property name="text">
+          <string>4</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="7" column="0">
      <widget class="QCheckBox" name="checkBox_3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -262,21 +303,21 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="1">
      <widget class="QCheckBox" name="checkBox_4">
       <property name="text">
        <string>Plot total</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item row="8" column="0" colspan="2">
      <widget class="QCheckBox" name="checkBox_5">
       <property name="text">
        <string>Rescale plot to last 200 s</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="2">
+    <item row="9" column="0" colspan="2">
      <widget class="QWidget" name="widget_2" native="true">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
@@ -310,7 +351,7 @@
       </layout>
      </widget>
     </item>
-    <item row="9" column="0" colspan="4">
+    <item row="10" column="0" colspan="4">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
@@ -351,7 +392,7 @@
       </layout>
      </widget>
     </item>
-    <item row="10" column="0" colspan="2">
+    <item row="11" column="0" colspan="2">
      <widget class="QLabel" name="label_7">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -364,7 +405,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="2" colspan="2">
+    <item row="11" column="2" colspan="2">
      <widget class="QLabel" name="label_8">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -377,7 +418,7 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="2">
+    <item row="12" column="0" colspan="2">
      <widget class="QLineEdit" name="lineEdit_5">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -390,24 +431,24 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="2" colspan="2">
+    <item row="12" column="2" colspan="2">
      <widget class="QLineEdit" name="lineEdit_6">
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="12" column="0">
+    <item row="13" column="0">
      <widget class="QLabel" name="label_9">
       <property name="text">
        <string>Count integrals:</string>
       </property>
      </widget>
     </item>
-    <item row="13" column="0" colspan="4">
+    <item row="14" column="0" colspan="4">
      <widget class="QTextBrowser" name="textBrowser_3"/>
     </item>
-    <item row="14" column="0" colspan="5">
+    <item row="15" column="0" colspan="6">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -457,20 +498,25 @@
       </layout>
      </widget>
     </item>
-    <item row="15" column="4">
-     <widget class="testWidget" name="widget" native="true">
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_6">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+    <item row="16" column="5">
+     <widget class="QPushButton" name="pushButton_6">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
      </widget>
     </item>
    </layout>
+   <widget class="testWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>305</x>
+      <y>686</y>
+      <width>93</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2"/>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -632,8 +678,8 @@
    <slot>plotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>55</x>
-     <y>182</y>
+     <x>64</x>
+     <y>242</y>
     </hint>
     <hint type="destinationlabel">
      <x>229</x>
@@ -648,11 +694,11 @@
    <slot>addButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>492</x>
-     <y>738</y>
+     <x>501</x>
+     <y>787</y>
     </hint>
     <hint type="destinationlabel">
-     <x>501</x>
+     <x>397</x>
      <y>747</y>
     </hint>
    </hints>
@@ -712,8 +758,8 @@
    <slot>setCountIntTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>148</x>
-     <y>409</y>
+     <x>157</x>
+     <y>469</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -728,8 +774,8 @@
    <slot>plotTriggerTotal(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>182</y>
+     <x>179</x>
+     <y>242</y>
     </hint>
     <hint type="destinationlabel">
      <x>283</x>
@@ -760,8 +806,8 @@
    <slot>rescalePlotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>205</y>
+     <x>179</x>
+     <y>265</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -776,8 +822,8 @@
    <slot>addGoTrigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>247</y>
+     <x>170</x>
+     <y>322</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
@@ -792,8 +838,8 @@
    <slot>manualTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>39</x>
-     <y>246</y>
+     <x>57</x>
+     <y>319</y>
     </hint>
     <hint type="destinationlabel">
      <x>272</x>
@@ -808,8 +854,8 @@
    <slot>autoTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>32</x>
-     <y>277</y>
+     <x>50</x>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
      <x>275</x>
@@ -824,8 +870,8 @@
    <slot>addConstFluxTrig(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>56</x>
-     <y>318</y>
+     <x>74</x>
+     <y>386</y>
     </hint>
     <hint type="destinationlabel">
      <x>235</x>
@@ -840,8 +886,8 @@
    <slot>addConstFluxGo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>75</x>
-     <y>339</y>
+     <x>93</x>
+     <y>415</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
@@ -857,7 +903,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>208</x>
-     <y>345</y>
+     <y>413</y>
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
@@ -872,12 +918,76 @@
    <slot>addSetEdgePoint()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>253</x>
-     <y>341</y>
+     <x>289</x>
+     <y>415</y>
     </hint>
     <hint type="destinationlabel">
      <x>246</x>
      <y>419</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_12</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cnt4(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_11</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cnt3(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_10</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cnt2(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>254</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_9</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cnt1(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>25</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>204</y>
     </hint>
    </hints>
   </connection>
@@ -906,5 +1016,9 @@
   <slot>addConstFluxTrig(int)</slot>
   <slot>setEdgePoint(QString)</slot>
   <slot>addSetEdgePoint()</slot>
+  <slot>cnt1(int)</slot>
+  <slot>cnt2(int)</slot>
+  <slot>cnt3(int)</slot>
+  <slot>cnt4(int)</slot>
  </slots>
 </ui>

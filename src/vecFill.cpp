@@ -14,7 +14,7 @@ void vecFill::printMessage(QString msg, int num) {
     emit sentMessage(msg, num);
 }
 
-std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) {
+std::vector<std::vector<double>> vecFill::getData(std::string str, int counter, int cnt1, int cnt2, int cnt3, int cnt4) {
     cnt = counter;
     if (counter==0)
     {
@@ -59,6 +59,12 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
         }
         else if (flag)
         {
+            if (m==2 && cnt1 == 0)
+                token = "0";
+            if (m==3 && cnt2 == 0)
+                token = "0";
+            if (m==4 && cnt3 == 0)
+                token = "0";
             resultsDb.at(m).push_back(stod(token));
         }
         var.erase(0, pos + delimiter2.length());
@@ -72,6 +78,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
     }
     if (flag)
     {
+        if (m==5 && cnt4 == 0)
+            var = "0";
         resultsDb.at(m).push_back(stod(var));
     }
 
@@ -79,7 +87,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter) 
 }
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
-                           bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig) {
+                           bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
+                           int cnt1, int cnt2, int cnt3, int cnt4) {
     fluxTime = totTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -97,6 +106,14 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         for (int i = 2; i < data.size(); i++) {
             if (data.at(i).back()>=2000)
                 data.at(i).back()=1999;
+            if (cnt1==0)
+                data.at(2).back()=0;
+            if (cnt2==0)
+                data.at(3).back()=0;
+            if (cnt3==0)
+                data.at(4).back()=0;
+            if (cnt4==0)
+                data.at(5).back()=0;
             sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
             sum_clean += data.at(i).back();
         }
@@ -143,9 +160,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         if (isBack) {
             backVec.push_back(resultsDbTotal.at(1).back());
-            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (backVec.size());
+            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
 //            backVal = (0.01 * resultsDbTotal.at(1).back()) + (1.0 - 0.01) * backVal;
             resultsDbTotal.at(2).push_back(backVal);
+//            std::cout << backVal << std::endl;
         }
 
         if (!isBack && fluxTimeCounter == 0) {
@@ -170,6 +188,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 //                                                             0.000313);
 
             backVal = backLastVal;
+//            backVal = 3;
 
             resultsDbTotal.at(2).push_back(backVal);
             if (fluxTimeCounter>1) {
@@ -198,7 +217,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             isBack = true;
             fluxTimeCounter = 0;
             backVal = 0;
-//            backVec.clear();
+            backVec.clear();
             temp = 0;
             minusBack = 0;
             Flux = 0;
@@ -214,6 +233,14 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         for (int i = 2; i < data.size(); i++) {
             if (data.at(i).back()>=2000)
                 data.at(i).back()=1999;
+            if (cnt1==0)
+                data.at(2).back()=0;
+            if (cnt2==0)
+                data.at(3).back()=0;
+            if (cnt3==0)
+                data.at(4).back()=0;
+            if (cnt4==0)
+                data.at(5).back()=0;
             sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
             sum_clean += data.at(i).back();
         }
@@ -251,7 +278,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         if (isBackForConst) {
             backVecConst.push_back(resultsDbTotal.at(1).back());
 //            if (!backVecConst.empty())
-                backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (backVecConst.size());
+                backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
             resultsDbTotal.at(2).push_back(backVal);
             fluxTimeCounter++;
         }

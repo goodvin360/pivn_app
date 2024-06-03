@@ -18,9 +18,10 @@ public:
 
     std::vector<std::vector<double>> resultsDbTotal;
 
-    std::vector<std::vector<double>> getData(std::string str, int counter);
+    std::vector<std::vector<double>> getData(std::string str, int counter, int cnt1, int cnt2, int cnt3, int cnt4);
     void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b,
-                      bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig);
+                      bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
+                      int cnt1, int cnt2, int cnt3, int cnt4);
 
     double backVal = 0;
     std::vector<double> backVec;
