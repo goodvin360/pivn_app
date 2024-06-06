@@ -91,6 +91,7 @@ void Plotter::PlotGraph(int rescaleTrig) {
             QVector<QPointF> points(vecData.at(0).size());
             for(std::vector<int>::size_type l = 0; l != vecData.at(2+i).size(); ++l) {
                 points[l] = QPointF(l, vecData.at(2+i)[l]);
+//                points[l] = QPointF(l, vecData.at(2+i)[l]/(1-vecData.at(2+i)[l]*7e-4));
             }
             lsVector.at(i)->replace(points);
         }
