@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
     window->lineEdit_5 = caller.lineEdit_5;
     window->lineEdit_6 = caller.lineEdit_6;
     window->lineEdit_7 = caller.lineEdit_7;
+    window->lineEdit_8 = caller.lineEdit_8;
+    window->lineEdit_9 = caller.lineEdit_9;
     window->checkBox_6 = caller.checkBox_6;
     window->checkBox_7 = caller.checkBox_7;
     window->checkBox_9 = caller.checkBox_9;
@@ -27,6 +29,7 @@ int main(int argc, char *argv[]) {
     window->checkBox_12 = caller.checkBox_12;
     caller.lineEdit->setText(QString::number(window->measTime));
     caller.lineEdit_7->setText(QString::number(window->edgePoint));
+    caller.lineEdit_9->setText(QString::number(window->avWindow));
     caller.checkBox->setChecked(1);
     caller.checkBox_2->setChecked(1);
     caller.checkBox_6->setChecked(1);
@@ -39,6 +42,7 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_4->setText(QString::number(window->distance));
     caller.lineEdit_5->setText(QString::number(window->integrationTime));
     caller.lineEdit_6->setText(QString::number(window->totalCounts));
+    caller.lineEdit_8->setText(QString::number(window->readDelay));
     caller.lineEdit_6->setReadOnly(1);
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
           {caller.comboBox->addItem(serialPortInfo.portName());}

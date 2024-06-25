@@ -88,7 +88,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter, 
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window) {
     fluxTime = totTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -114,7 +114,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                 data.at(4).back()=0;
             if (cnt4==0)
                 data.at(5).back()=0;
-            sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
+            sum += data.at(i).back()/(1-data.at(i).back()*6e-4);
             sum_clean += data.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
@@ -159,6 +159,12 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
         if (isBack) {
+            if (backVec.size()>window)
+            {
+                for (int i=0; i<backVec.size()-window;i++)
+                    backVec.erase(backVec.begin());
+            }
+
             backVec.push_back(resultsDbTotal.at(1).back());
             backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
 //            backVal = (0.01 * resultsDbTotal.at(1).back()) + (1.0 - 0.01) * backVal;
@@ -166,22 +172,28 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 //            std::cout << backVal << std::endl;
         }
 
-        if (!isBack && fluxTimeCounter == 0) {
-            peakVal = resultsDbTotal.at(1).back()-trigDelta*4;
+        if (!isBack && fluxTimeCounter < 2) {
+            peakVal = resultsDbTotal.at(1).back()-trigDelta*0;
             resultsDbTotal.at(1).back() = peakVal;
-            peakValClean = resultsDbTotal.at(3).back()-trigDelta*4;
+            peakValClean = resultsDbTotal.at(3).back()-trigDelta*0;
             resultsDbTotal.at(3).back() = peakValClean;
             backLastVal = backVal;
             totalCnt=peakVal;
             totalCntClean=peakValClean;
+            if (fluxTimeCounter == 0)
+                resultsDbTotal.at(2).push_back(backVal);
             fluxTimeCounter++;
         }
 
-        if (!isBack && fluxTimeCounter>0) {
+        if (!isBack && fluxTimeCounter>1) {
 
-            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
-                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
-                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
+//            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
+//                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
+//                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
+
+            backVal = backLastVal + (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
+                                    (peakVal - backLastVal)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
+                    0.002643049*exp(-(log(2)*fluxTimeCounter/72)));
 
 //            backVal = backLastVal + (0.005 + 0.00313) *
 //                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
@@ -196,16 +208,13 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                 totalCntClean += resultsDbTotal.at(3).back();
             }
             fluxTimeCounter++;
-//            if (resultsDbTotal.at(1).back()>=resultsDbTotal.at(2).back())
             if (fluxTimeCounter>0)
                 minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
         }
 
-//        std::cout << "time: " << fluxTimeCounter << " diff value: " << resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back() << std::endl;
-
         if (fluxTimeCounter>0) {
             Flux = minusBack *
-                   ((1 - exp(-(log(2) * 100 / 14.1))) / (1 - exp(-(log(2) * fluxTimeCounter / 14.1)))) * c_a +
+                   ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
                    c_b;
             flux = Flux;
         }

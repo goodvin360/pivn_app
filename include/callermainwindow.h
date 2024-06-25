@@ -50,6 +50,8 @@ public:
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
     QLineEdit*lineEdit_7 = nullptr;
+    QLineEdit*lineEdit_8 = nullptr;
+    QLineEdit*lineEdit_9 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
@@ -95,6 +97,8 @@ public:
     int cnt3_trig = 0;
     int cnt4_trig = 0;
     int counter = 0;
+    double readDelay = 10;
+    double avWindow = 5;
 
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();
@@ -140,6 +144,8 @@ public slots:
     void addConstFluxGo();
     void addConstFluxTrig(int st);
     void setEdgePoint(QString ePoint);
+    void setReadDelay(QString delay);
+    void setAverageWindow(QString window);
     void addSetEdgePoint();
     void cnt1(int val);
     void cnt2(int val);

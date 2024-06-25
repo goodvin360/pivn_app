@@ -88,28 +88,52 @@ void Plotter::PlotGraph(int rescaleTrig) {
         std::vector<std::vector<double>> vecData = Data->resultsDb;
         for (int i=0; i<lsVector.size(); i++)
         {
-            QVector<QPointF> points(vecData.at(0).size());
+            QVector<QPointF> points(2*vecData.at(0).size());
             for(std::vector<int>::size_type l = 0; l != vecData.at(2+i).size(); ++l) {
-                points[l] = QPointF(l, vecData.at(2+i)[l]);
+//                points[l] = QPointF(l, vecData.at(2+i)[l]);
+                for (int m=0; m<=l;m++)
+                {
+                    if (l==m) {
+                        points[l+m] = QPointF(l, vecData.at(2+i)[l]);
+                        points[l+m+1] = QPointF(l+1, vecData.at(2+i)[l]);
+                    }
+                }
+
 //                points[l] = QPointF(l, vecData.at(2+i)[l]/(1-vecData.at(2+i)[l]*7e-4));
+
             }
             lsVector.at(i)->replace(points);
         }
 
     if (rescaleTrig>0) {
         if (vecData.at(0).back() <= 200) {
-            max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+            maxValVec.clear();
+            for (int i=0; i<4; i++)
+            {
+                maxValVec.push_back(*max_element(vecData.at(i+2).begin(), vecData.at(i+2).end()));
+            }
+            max_y = *max_element(maxValVec.begin(), maxValVec.end());
             m_axisX->setRange(0, 200);
         } else {
-            max_y = *max_element(vecData.at(2).end() - 200, vecData.at(2).end());
+            maxValVec.clear();
+            for (int i=0; i<4; i++)
+            {
+                maxValVec.push_back(*max_element(vecData.at(i+2).end() - 200, vecData.at(i+2).end()));
+            }
+            max_y = *max_element(maxValVec.begin(), maxValVec.end());
             m_axisX->setRange(vecData.at(0).back()-200, vecData.at(0).back());
         }
-        m_axisY->setRange(-1, max_y + 1);
+        m_axisY->setRange(-1, 1.2*max_y);
     }
     else {
-        max_y = *max_element(vecData.at(2).begin(), vecData.at(2).end());
+        maxValVec.clear();
+        for (int i=0; i<4; i++)
+        {
+            maxValVec.push_back(*max_element(vecData.at(i+2).begin(), vecData.at(i+2).end()));
+        }
+        max_y = *max_element(maxValVec.begin(), maxValVec.end());
         m_axisX->setRange(0, vecData.at(0).size());
-        m_axisY->setRange(-1, max_y + 1);
+        m_axisY->setRange(-1, 1.2*max_y);
     }
 
     chartView->setVisible(1);
@@ -122,10 +146,17 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
 
     for (int i=0; i<lsVectorTot.size(); i++)
     {
-        QVector<QPointF> points(vecDataTot.at(0).size());
+        QVector<QPointF> points(2*vecDataTot.at(0).size());
         if (i<2)
         for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1+i).size(); ++l) {
-            points[l] = QPointF(l, vecDataTot.at(1+i)[l]);
+//            points[l] = QPointF(l, vecDataTot.at(1+i)[l]);
+            for (int m=0; m<=l;m++)
+            {
+                if (l==m) {
+                    points[l+m] = QPointF(l, vecDataTot.at(1+i)[l]);
+                    points[l+m+1] = QPointF(l+1, vecDataTot.at(1+i)[l]);
+                }
+            }
         }
         if (i==2)
             for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1).size(); ++l) {
@@ -147,13 +178,13 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
         max_y_tot = *max_element(vecDataTot.at(1).end()-200, vecDataTot.at(1).end());
         m_axisX_Tot->setRange(vecDataTot.at(0).back()-200, vecDataTot.at(0).back());
         }
-        m_axisY_Tot->setRange(-1,max_y_tot+1);
+        m_axisY_Tot->setRange(-1,1.2*max_y_tot);
     }
     else
     {
         max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
         m_axisX_Tot->setRange(0,vecDataTot.at(0).size());
-        m_axisY_Tot->setRange(-1,max_y_tot+1);
+        m_axisY_Tot->setRange(-1,1.2*max_y_tot);
     }
 
     chartViewTot->setVisible(1);

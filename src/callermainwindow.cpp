@@ -83,7 +83,7 @@ void CallerMainWindow::startByTimer() {
         }
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow);
 
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
@@ -328,7 +328,7 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow);
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
@@ -355,7 +355,7 @@ void CallerMainWindow::addStartFile() {
                         }
                     res_out.clear();
                 }
-//                QTest::qWait(1000);
+                QTest::qWait(readDelay);
             }
         }
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
@@ -491,6 +491,14 @@ void CallerMainWindow::addConstFluxTrig(int st) {
 void CallerMainWindow::setEdgePoint(QString ePoint) {
     inputProcessing(edgePoint, ePoint.toStdString());
     tempTimeSet = edgePoint;
+}
+
+void CallerMainWindow::setReadDelay(QString delay) {
+    inputProcessing(readDelay, delay.toStdString());
+}
+
+void CallerMainWindow::setAverageWindow(QString window) {
+    inputProcessing(avWindow, window.toStdString());
 }
 
 void CallerMainWindow::addSetEdgePoint() {

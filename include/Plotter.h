@@ -7,6 +7,7 @@
 #include "Chart.h"
 #include "ChartView.h"
 #include "vecFill.h"
+#include "vector"
 
 class Plotter
 {
@@ -33,6 +34,7 @@ private:
     QVector<QLineSeries*> lsVectorTot;
     double max_y_tot = 10;
     vecFill*Data;
+    std::vector<double> maxValVec;
 };
 
 #endif //PIVN_APP_PLOTTER_H
