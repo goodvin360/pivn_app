@@ -88,7 +88,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter, 
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
     fluxTime = totTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -104,8 +104,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         double sum = 0;
         double sum_clean = 0;
         for (int i = 2; i < data.size(); i++) {
-            if (data.at(i).back()>=2000)
-                data.at(i).back()=1999;
+            if (data.at(i).back()>=1/resTime[i-2])
+                data.at(i).back()=1/resTime[i-2]-1;
             if (cnt1==0)
                 data.at(2).back()=0;
             if (cnt2==0)
@@ -114,7 +114,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                 data.at(4).back()=0;
             if (cnt4==0)
                 data.at(5).back()=0;
-            sum += data.at(i).back()/(1-data.at(i).back()*6e-4);
+            sum += data.at(i).back()/(1-data.at(i).back()*resTime[i-2]);
             sum_clean += data.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
@@ -219,6 +219,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             flux = Flux;
         }
 
+        lftTime = fluxTime-fluxTimeCounter;
+
         if (fluxTimeCounter == fluxTime) {
             QString s(0x00B1);
             double error = 0.09*Flux;
@@ -231,6 +233,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             temp = 0;
             minusBack = 0;
             Flux = 0;
+            lftTime = fluxTime;
         }
     }
 
@@ -241,8 +244,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         double sum = 0;
         double sum_clean = 0;
         for (int i = 2; i < data.size(); i++) {
-            if (data.at(i).back()>=2000)
-                data.at(i).back()=1999;
+            if (data.at(i).back()>=1/resTime[i-2])
+                data.at(i).back()=1/resTime[i-2]-1;
             if (cnt1==0)
                 data.at(2).back()=0;
             if (cnt2==0)
@@ -251,7 +254,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                 data.at(4).back()=0;
             if (cnt4==0)
                 data.at(5).back()=0;
-            sum += data.at(i).back()/(1-data.at(i).back()*5e-4);
+            sum += data.at(i).back()/(1-data.at(i).back()*resTime[i-2]);
             sum_clean += data.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
@@ -305,6 +308,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             flux = Flux;
         }
 
+        lftTime = fluxTime-fluxTimeCounter;
+
         if (fluxTimeCounter == fluxTime+backConstWindow) {
             QString s(0x00B1);
             double error = 0.09*Flux;
@@ -317,6 +322,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             temp = 0;
             minusBack = 0;
             Flux = 0;
+            lftTime = fluxTime;
         }
     }
 }

@@ -52,6 +52,7 @@ public:
     QLineEdit*lineEdit_7 = nullptr;
     QLineEdit*lineEdit_8 = nullptr;
     QLineEdit*lineEdit_9 = nullptr;
+    QLineEdit*lineEdit_10 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
@@ -82,6 +83,7 @@ public:
     int coefState = 0;
     int timeState = 0;
     double integrationTime = 100;
+    double leftTime = integrationTime;
     double totalCounts = 0;
     double nFlux = 0;
     int shotCounter = 0;

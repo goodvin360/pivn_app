@@ -83,7 +83,7 @@ void CallerMainWindow::startByTimer() {
         }
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow);
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
 
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
@@ -328,7 +328,8 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow);
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
+                    lineEdit_10->setText(QString::number(leftTime));
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
