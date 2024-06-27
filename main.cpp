@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     window->checkBox_10 = caller.checkBox_10;
     window->checkBox_11 = caller.checkBox_11;
     window->checkBox_12 = caller.checkBox_12;
+    window->checkBox_13 = caller.checkBox_13;
     caller.lineEdit->setText(QString::number(window->measTime));
     caller.lineEdit_7->setText(QString::number(window->edgePoint));
     caller.lineEdit_9->setText(QString::number(window->avWindow));

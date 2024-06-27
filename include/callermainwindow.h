@@ -69,6 +69,7 @@ public:
     QCheckBox*checkBox_10 = new QCheckBox();
     QCheckBox*checkBox_11 = new QCheckBox();
     QCheckBox*checkBox_12 = new QCheckBox();
+    QCheckBox*checkBox_13 = new QCheckBox();
     QString pName;
     QString fileName;
     double coeff_a = 2671;
@@ -94,6 +95,7 @@ public:
     double tempTimeSet = 0;
     int constFluxTrig = 0;
     int edgePointTrig = 0;
+    int multiPulse = 0;
     int cnt1_trig = 0;
     int cnt2_trig = 0;
     int cnt3_trig = 0;
@@ -143,6 +145,7 @@ public slots:
     void addGoTrigger();
     void autoTrigger(int st);
     void manualTrigger(int st);
+    void multiPulseTrigger(int st);
     void addConstFluxGo();
     void addConstFluxTrig(int st);
     void setEdgePoint(QString ePoint);

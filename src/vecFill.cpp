@@ -88,7 +88,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string str, int counter, 
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int multiPulseTrig) {
     fluxTime = totTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -125,9 +125,34 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         else
             temp = trVal;
 
-        if (temp > fluxTrig) {
+        if (multiPulseTrig==0)
+            isSecondPulse = false;
+
+        if (isPulse && temp>fluxTrig)
+        {
+            if (multiPulseTrig>0)
+                isSecondPulse = true;
+        }
+
+        if (isSecondPulse)
+        {
+            QString s(0x00B1);
+            double error = 0.09*Flux;
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
+            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
+            plsD = fluxTimeCounter;
+            fluxTimeCounter = 0;
+            minusBack = 0;
+            Flux = 0;
+            isSecondPulse = false;
+            secondPulseCounter = true;
+            prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2);
+        }
+
+        if (temp > fluxTrig && !isPulse) {
             trigDelta = temp - fluxTrig;
             isBack = false;
+            isPulse = true;
             fileTrigger = true;
         }
 
@@ -167,12 +192,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
             backVec.push_back(resultsDbTotal.at(1).back());
             backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
-//            backVal = (0.01 * resultsDbTotal.at(1).back()) + (1.0 - 0.01) * backVal;
             resultsDbTotal.at(2).push_back(backVal);
-//            std::cout << backVal << std::endl;
         }
 
-        if (!isBack && fluxTimeCounter < 2) {
+        if (!isBack && fluxTimeCounter < 1) {
             peakVal = resultsDbTotal.at(1).back()-trigDelta*0;
             resultsDbTotal.at(1).back() = peakVal;
             peakValClean = resultsDbTotal.at(3).back()-trigDelta*0;
@@ -180,46 +203,74 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             backLastVal = backVal;
             totalCnt=peakVal;
             totalCntClean=peakValClean;
-            if (fluxTimeCounter == 0)
-                resultsDbTotal.at(2).push_back(backVal);
             fluxTimeCounter++;
         }
+        double t = resultsDbTotal.at(0).back();
 
-        if (!isBack && fluxTimeCounter>1) {
+        if (!isBack && fluxTimeCounter>0) {
 
 //            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
 //                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
 //                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
 
-            backVal = backLastVal + (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
+            if (!secondPulseCounter)
+            backVal = backLastVal*0+
+                    (exp(-lmd116*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
+                    backLastVal*exp(-lmd116*fluxTimeCounter)+
+                    (0.002027726*exp(-lmd116m*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
+                    backLastVal*exp(-lmd116m*fluxTimeCounter)+
+                    (0.002643049*exp(-lmd114*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
+                    backLastVal*exp(-lmd114*fluxTimeCounter)+
+                    (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
                                     (peakVal - backLastVal)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
                     0.002643049*exp(-(log(2)*fluxTimeCounter/72)));
+
+            if (secondPulseCounter)
+                backVal = backLastVal*0 +
+                        (exp(-lmd116*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                                backLastVal*exp(-lmd116*fluxTimeCounter)+
+                        (0.002027726*exp(-lmd116m*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                                backLastVal*exp(-lmd116m*fluxTimeCounter)+
+                        (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                                backLastVal*exp(-lmd114*fluxTimeCounter)+
+                        (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
+                                        (peakVal-prePulse)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
+                                                                 0.002643049*exp(-(log(2)*fluxTimeCounter/72)))+
+                        (exp(-lmd116*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                        prePulse*exp(-lmd116*fluxTimeCounter)+
+                        (0.002027726*exp(-lmd116m*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                        prePulse*exp(-lmd116m*fluxTimeCounter)+
+                        (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
+                        prePulse*exp(-lmd114*fluxTimeCounter);
 
 //            backVal = backLastVal + (0.005 + 0.00313) *
 //                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
 //                                                             0.00313);
 
 //            backVal = backLastVal;
-//            backVal = 3;
 
             resultsDbTotal.at(2).push_back(backVal);
+
             if (fluxTimeCounter>1) {
                 totalCnt += resultsDbTotal.at(1).back();
                 totalCntClean += resultsDbTotal.at(3).back();
             }
-            fluxTimeCounter++;
+
             if (fluxTimeCounter>0)
                 minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
+
+            if (fluxTimeCounter>0) {
+                Flux = minusBack *
+                       ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
+                       c_b;
+                flux = Flux;
+            }
+
+            lftTime = fluxTime-fluxTimeCounter;
+
+            fluxTimeCounter++;
         }
 
-        if (fluxTimeCounter>0) {
-            Flux = minusBack *
-                   ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
-                   c_b;
-            flux = Flux;
-        }
-
-        lftTime = fluxTime-fluxTimeCounter;
 
         if (fluxTimeCounter == fluxTime) {
             QString s(0x00B1);
@@ -227,14 +278,18 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
             isBack = true;
+            isPulse = false;
             fluxTimeCounter = 0;
             backVal = 0;
-            backVec.clear();
+//            backVec.clear();
             temp = 0;
             minusBack = 0;
             Flux = 0;
             lftTime = fluxTime;
+            plsD = 0;
+            secondPulseCounter = false;
         }
+
     }
 
     if (data.at(0).size()>0 && constFluxTr > 0)

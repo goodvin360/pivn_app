@@ -21,7 +21,7 @@ public:
     std::vector<std::vector<double>> getData(std::string str, int counter, int cnt1, int cnt2, int cnt3, int cnt4);
     void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
-                      int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime);
+                      int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime, int multiPulseTrig);
 
     double backVal = 0;
     std::vector<double> backVec;
@@ -32,6 +32,11 @@ public:
     double fluxTime = 100;
     double fluxTimeCounter = 0;
     bool isBack = true;
+    bool isPulse = false;
+    bool isSecondPulse = false;
+    bool secondPulseCounter = false;
+    double plsD = 0;
+    double prePulse = 0;
     double peakVal = 0;
     double peakValClean = 0;
     double backLastVal = 0;
@@ -45,7 +50,10 @@ public:
     bool fileTrigger = false;
     double trigDelta = 0;
     double backConstWindow = 50;
-    double resTime[4] = {5e-6, 5e-6, 5e-6, 5e-6};
+    double resTime[4] = {5e-4, 5e-4, 6.05e-4, 5e-4};
+    double lmd116 = log(2)/14.1;
+    double lmd116m = log(2)/3240;
+    double lmd114 = log(2)/72;
 
     bool isBackForConst = false;
 
