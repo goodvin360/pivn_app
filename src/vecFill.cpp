@@ -272,7 +272,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
 
-        if (fluxTimeCounter == fluxTime) {
+        if (fluxTimeCounter == fluxTime+1) {
             QString s(0x00B1);
             double error = 0.09*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
@@ -281,7 +281,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             isPulse = false;
             fluxTimeCounter = 0;
             backVal = 0;
-//            backVec.clear();
+            backVec.clear();
             temp = 0;
             minusBack = 0;
             Flux = 0;

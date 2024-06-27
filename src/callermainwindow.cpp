@@ -113,27 +113,39 @@ void CallerMainWindow::startByTimer() {
     {
         if (m_timer->isActive())
             m_timer->stop();
-    }
-
-    if (!m_timer->isActive()) {
 
         FileWriter writer;
         writer.fileWriteVec(vecData->resultsDb, "full");
 
         textBrowser->setText(textBrowser->toPlainText()
                              + "results stored in the file" + '\n');
+
+        if (vecData->Flux>0) {
+            QString s(0x00B1);
+            double error = 0.09 * vecData->Flux;
+            printMsg(QString::number(vecData->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+            printMsg(QString::number(vecData->totalCntClean)+"   "+QString::number(vecData->totalCnt)+"   "+QString::number(vecData->minusBack),2);
+        }
+
         vecData->resultsDb.clear();
         vecData->resultsDbTotal.clear();
+        vecData->backVec.clear();
+        vecData->backVal = 0;
+        vecData->isBack = true;
+        vecData->isPulse = false;
+        vecData->fluxTimeCounter = 0;
+        vecData->temp = 0;
+        vecData->minusBack = 0;
+        vecData->Flux = 0;
+        vecData->plsD = 0;
+        vecData->secondPulseCounter = false;
+
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
 
         delete esp32;
 
-        vecData->backVec.clear();
-        vecData->backVal = 0;
-
         onFlag = false;
-        QApplication::processEvents();
     }
 }
 
@@ -359,14 +371,35 @@ void CallerMainWindow::addStartFile() {
                 QTest::qWait(readDelay);
             }
         }
+
+        if (!onFlag)
+        {
+            if (vecDataFile->Flux>0) {
+                QString s(0x00B1);
+                double error = 0.09 * vecDataFile->Flux;
+                printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+                printMsg(QString::number(vecDataFile->totalCntClean)+"   "+QString::number(vecDataFile->totalCnt)+"   "+QString::number(vecDataFile->minusBack),2);
+            }
+
+        }
+
+        onFlag = false;
         textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
         vecDataFile->resultsDb.clear();
         vecDataFile->resultsDbTotal.clear();
-        fluxCalc->backVal = 0;
-        fluxCalc->backCounter = 1;
-        onFlag = false;
         vecDataFile->backVec.clear();
         vecDataFile->backVal = 0;
+        vecDataFile->isBack = true;
+        vecDataFile->isPulse = false;
+        vecDataFile->fluxTimeCounter = 0;
+        vecDataFile->temp = 0;
+        vecDataFile->minusBack = 0;
+        vecDataFile->Flux = 0;
+        vecDataFile->plsD = 0;
+        vecDataFile->secondPulseCounter = false;
+
+        fluxCalc->backVal = 0;
+        fluxCalc->backCounter = 1;
     }
 }
 
