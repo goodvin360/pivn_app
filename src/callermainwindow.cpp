@@ -139,6 +139,7 @@ void CallerMainWindow::startByTimer() {
         vecData->Flux = 0;
         vecData->plsD = 0;
         vecData->secondPulseCounter = false;
+        vecData->pulseCounter = 0;
 
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
@@ -397,6 +398,7 @@ void CallerMainWindow::addStartFile() {
         vecDataFile->Flux = 0;
         vecDataFile->plsD = 0;
         vecDataFile->secondPulseCounter = false;
+        vecDataFile->pulseCounter = 0;
 
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;

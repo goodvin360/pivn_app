@@ -54,6 +54,7 @@ public:
     double lmd116 = log(2)/14.1;
     double lmd116m = log(2)/3240;
     double lmd114 = log(2)/72;
+    int pulseCounter = 0;
 
     bool isBackForConst = false;
 
