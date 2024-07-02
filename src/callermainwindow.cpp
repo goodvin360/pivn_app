@@ -127,19 +127,9 @@ void CallerMainWindow::startByTimer() {
             printMsg(QString::number(vecData->totalCntClean)+"   "+QString::number(vecData->totalCnt)+"   "+QString::number(vecData->minusBack),2);
         }
 
-        vecData->resultsDb.clear();
-        vecData->resultsDbTotal.clear();
-        vecData->backVec.clear();
-        vecData->backVal = 0;
-        vecData->isBack = true;
-        vecData->isPulse = false;
-        vecData->fluxTimeCounter = 0;
-        vecData->temp = 0;
-        vecData->minusBack = 0;
-        vecData->Flux = 0;
-        vecData->plsD = 0;
-        vecData->secondPulseCounter = false;
-        vecData->pulseCounter = 0;
+        vecData->cleanUp();
+        edgePointTrig = 0;
+        tempTime=0;
 
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
@@ -343,6 +333,7 @@ void CallerMainWindow::addStartFile() {
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
                                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
                     lineEdit_10->setText(QString::number(leftTime));
+                    lineEdit_7->setText(QString::number(tempTime));
                     if (plotState > 0)
                         makePlot->PlotGraph(rescaleTrigger);
                     if (plotTotalState > 0)
@@ -382,23 +373,19 @@ void CallerMainWindow::addStartFile() {
                 printMsg(QString::number(vecDataFile->totalCntClean)+"   "+QString::number(vecDataFile->totalCnt)+"   "+QString::number(vecDataFile->minusBack),2);
             }
 
+            textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
+            vecDataFile->cleanUp();
+            edgePointTrig = 0;
+            tempTime=0;
         }
 
-        onFlag = false;
-        textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
-        vecDataFile->resultsDb.clear();
-        vecDataFile->resultsDbTotal.clear();
-        vecDataFile->backVec.clear();
-        vecDataFile->backVal = 0;
-        vecDataFile->isBack = true;
-        vecDataFile->isPulse = false;
-        vecDataFile->fluxTimeCounter = 0;
-        vecDataFile->temp = 0;
-        vecDataFile->minusBack = 0;
-        vecDataFile->Flux = 0;
-        vecDataFile->plsD = 0;
-        vecDataFile->secondPulseCounter = false;
-        vecDataFile->pulseCounter = 0;
+        if (onFlag) {
+            onFlag = false;
+            textBrowser->setText(textBrowser->toPlainText() + "Finished" + '\n');
+            vecDataFile->cleanUp();
+            edgePointTrig = 0;
+            tempTime=0;
+        }
 
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
@@ -449,14 +436,14 @@ void CallerMainWindow::setFiniteTime(int stTime) {
     timeState = stTime;
     QApplication::processEvents();
     if (timeState == 0)
-    {   measTime = 1e10;
+    {   measTime = 1e9;
         lineEdit->setText("- - -");
-        lineEdit->setReadOnly(1);
+        lineEdit->setReadOnly(true);
     }
     else
     {
         measTime = 5;
-        lineEdit->setReadOnly(0);
+        lineEdit->setReadOnly(false);
         lineEdit->setText(QString::number(measTime));
     }
 }
@@ -466,13 +453,13 @@ void CallerMainWindow::coefTrigger(int trig) {
     QApplication::processEvents();
     if (coefState == 0)
     {
-        lineEdit_2->setReadOnly(1);
-        lineEdit_3->setReadOnly(1);
+        lineEdit_2->setReadOnly(true);
+        lineEdit_3->setReadOnly(true);
     }
     else
     {
-        lineEdit_2->setReadOnly(0);
-        lineEdit_3->setReadOnly(0);
+        lineEdit_2->setReadOnly(false);
+        lineEdit_3->setReadOnly(false);
     }
 }
 
@@ -492,12 +479,12 @@ void CallerMainWindow::autoTrigger(int st) {
     if (st>0)
     {
         trigMode = 0;
-        checkBox_7->setChecked(0);
+        checkBox_7->setChecked(false);
     }
     else
     {
         trigMode = 1;
-        checkBox_7->setChecked(1);
+        checkBox_7->setChecked(true);
     }
 }
 
@@ -505,12 +492,12 @@ void CallerMainWindow::manualTrigger(int st) {
     if (st>0)
     {
         trigMode = 1;
-        checkBox_6->setChecked(0);
+        checkBox_6->setChecked(false);
     }
     else
     {
         trigMode = 0;
-        checkBox_6->setChecked(1);
+        checkBox_6->setChecked(true);
     }
 }
 

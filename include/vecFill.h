@@ -23,9 +23,12 @@ public:
                       bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
                       int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime, int multiPulseTrig);
 
+    void cleanUp();
+
     double backVal = 0;
     std::vector<double> backVec;
     std::vector<double> backVecConst;
+    std::vector<double> derivativeVec;
     double fluxTrig = 4;
     double fluxTrigConst = 0;
     double temp = 0;
@@ -55,7 +58,9 @@ public:
     double lmd116m = log(2)/3240;
     double lmd114 = log(2)/72;
     int pulseCounter = 0;
-
+    double startPoint = 0;
+    bool derivativeSearch = false;
+    double last_tPoint = 0;
     bool isBackForConst = false;
 
     void printMessage(QString msg, int num);

@@ -98,9 +98,6 @@ void Plotter::PlotGraph(int rescaleTrig) {
                         points[l+m+1] = QPointF(l+1, vecData.at(2+i)[l]);
                     }
                 }
-
-//                points[l] = QPointF(l, vecData.at(2+i)[l]/(1-vecData.at(2+i)[l]*7e-4));
-
             }
             lsVector.at(i)->replace(points);
         }
@@ -123,7 +120,7 @@ void Plotter::PlotGraph(int rescaleTrig) {
             max_y = *max_element(maxValVec.begin(), maxValVec.end());
             m_axisX->setRange(vecData.at(0).back()-200, vecData.at(0).back());
         }
-        m_axisY->setRange(-1, 1.2*max_y);
+        m_axisY->setRange(0, 1.2*max_y);
     }
     else {
         maxValVec.clear();
@@ -133,7 +130,7 @@ void Plotter::PlotGraph(int rescaleTrig) {
         }
         max_y = *max_element(maxValVec.begin(), maxValVec.end());
         m_axisX->setRange(0, vecData.at(0).size());
-        m_axisY->setRange(-1, 1.2*max_y);
+        m_axisY->setRange(0, 1.2*max_y);
     }
 
     chartView->setVisible(1);
@@ -160,9 +157,22 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
         }
         if (i==2)
             for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1).size(); ++l) {
-                points[l] = QPointF(l, 0);
-                if (l == int(ePoint))
-                    points[l] = QPointF(l, max_y_tot);
+//                points[l] = QPointF(l, 0);
+//                if (l == int(ePoint))
+//                    points[l] = QPointF(l, max_y_tot);
+
+                for (int m=0; m<=l;m++)
+                {
+                    if (l==m) {
+                        points[l+m] = QPointF(l, 0);
+                        points[l+m+1] = QPointF(l+1, 0);
+                        if (l == int(ePoint))
+                        {
+                            points[l+m] = QPointF(l, max_y_tot);
+                            points[l+m+1] = QPointF(l+1, max_y_tot);
+                        }
+                    }
+                }
             }
         lsVectorTot.at(i)->replace(points);
     }
@@ -178,13 +188,13 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
         max_y_tot = *max_element(vecDataTot.at(1).end()-200, vecDataTot.at(1).end());
         m_axisX_Tot->setRange(vecDataTot.at(0).back()-200, vecDataTot.at(0).back());
         }
-        m_axisY_Tot->setRange(-1,1.2*max_y_tot);
+        m_axisY_Tot->setRange(0,1.2*max_y_tot);
     }
     else
     {
         max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
         m_axisX_Tot->setRange(0,vecDataTot.at(0).size());
-        m_axisY_Tot->setRange(-1,1.2*max_y_tot);
+        m_axisY_Tot->setRange(0,1.2*max_y_tot);
     }
 
     chartViewTot->setVisible(1);

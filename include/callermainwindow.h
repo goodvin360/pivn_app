@@ -120,6 +120,7 @@ public:
 
     std::pair<std::string, int> dotsFind (std::string str, std::string delim);
     std::vector<std::string> fileRead (std::string str);
+    void inputProcessing(double &var, std::string inp);
 
 public slots:
 
@@ -141,7 +142,6 @@ public slots:
     void setFiniteTime(int stTime);
     void setCountIntTime(QString intTime);
     void startByTimer();
-    void inputProcessing(double &var, std::string inp);
     void addGoTrigger();
     void autoTrigger(int st);
     void manualTrigger(int st);

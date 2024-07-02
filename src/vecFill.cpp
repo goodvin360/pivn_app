@@ -218,15 +218,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         if (!isBack && fluxTimeCounter>0) {
 
-//            backVal = backLastVal + (0.008*exp(-(log(2)*fluxTimeCounter/3240)) + 0.0213*exp(-(log(2)*fluxTimeCounter/72))) *
-//                                             (peakVal - backLastVal)/(1 + 0.008*exp(-(log(2)*fluxTimeCounter/3240)) +
-//                                                         0.0213*exp(-(log(2)*fluxTimeCounter/72)));
-
             if (!secondPulseCounter && pulseCounter==0)
             backVal = backLastVal*1+
-                    (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
-                                    (peakVal - backLastVal)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
-                    0.002643049*exp(-(log(2)*fluxTimeCounter/72)));
+                    (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                                    (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                    0.002643049*exp(-lmd114*fluxTimeCounter));
 
             if (!secondPulseCounter && pulseCounter>0)
                 backVal = backLastVal*0+
@@ -236,9 +232,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                           backLastVal*exp(-lmd116m*fluxTimeCounter)+
                           (0.002643049*exp(-lmd114*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
                           backLastVal*exp(-lmd114*fluxTimeCounter)+
-                          (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
-                          (peakVal - backLastVal)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
-                                                   0.002643049*exp(-(log(2)*fluxTimeCounter/72)));
+                          (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                          (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                                                 0.002643049*exp(-lmd114*fluxTimeCounter));
 
             if (secondPulseCounter)
                 backVal = backLastVal*0 +
@@ -248,19 +244,15 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
                                 backLastVal*exp(-lmd116m*fluxTimeCounter)+
                         (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
                                 backLastVal*exp(-lmd114*fluxTimeCounter)+
-                        (0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) + 0.002643049*exp(-(log(2)*fluxTimeCounter/72))) *
-                                        (peakVal-prePulse)/(1 + 0.002027726*exp(-(log(2)*fluxTimeCounter/3240)) +
-                                                                 0.002643049*exp(-(log(2)*fluxTimeCounter/72)))+
+                        (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                        (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                                                 0.002643049*exp(-lmd114*fluxTimeCounter))+
                         (exp(-lmd116*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
                         prePulse*exp(-lmd116*fluxTimeCounter)+
                         (0.002027726*exp(-lmd116m*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
                         prePulse*exp(-lmd116m*fluxTimeCounter)+
                         (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
                         prePulse*exp(-lmd114*fluxTimeCounter);
-
-//            backVal = backLastVal + (0.005 + 0.00313) *
-//                                    (resultsDbTotal.at(1).back() - backLastVal)/(1 + 0.005 +
-//                                                             0.00313);
 
 //            backVal = backLastVal;
 
@@ -309,6 +301,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
     if (data.at(0).size()>0 && constFluxTr > 0)
     {
+        backConstWindow = window;
         resultsDbTotal.at(0).push_back(data.at(0).back());
         ePoint = resultsDbTotal.at(0).back();
         double sum = 0;
@@ -332,26 +325,40 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
 
         temp = constTrig;
 
-        if (!isBackForConst && fluxTimeCounter == 0 && temp > fluxTrigConst) {
-            peakVal = resultsDbTotal.at(1).back();
-            peakValClean = resultsDbTotal.at(3).back();
-            totalCnt=peakVal;
-            totalCntClean=peakValClean;
-            fluxTimeCounter++;
+        if (!isBackForConst && !derivativeSearch && temp > fluxTrigConst) {
+            fluxTrigConst = temp;
+            startPoint = resultsDbTotal.at(0).back();
+            derivativeSearch = true;
         }
 
-        if (!isBackForConst && fluxTimeCounter > 0 && fluxTimeCounter <= fluxTime+backConstWindow) {
+        if (!isBackForConst && derivativeSearch && fluxTimeCounter <= fluxTime+backConstWindow) {
 
-            if (fluxTimeCounter>1 && fluxTimeCounter < fluxTime) {
+            if (fluxTimeCounter>0 && fluxTimeCounter < fluxTime+0 && fluxTimeCounter > 0) {
                 totalCnt += resultsDbTotal.at(1).back();
                 totalCntClean += resultsDbTotal.at(3).back();
             }
-            fluxTimeCounter++;
-        }
+            lftTime = fluxTime-fluxTimeCounter;
 
+            double der = 0;
+            if (resultsDbTotal.at(1).size()>2)
+                der = abs(resultsDbTotal.at(1).back()-resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2));
+            derivativeVec.push_back(der);
+            if (!derivativeVec.empty())
+                tPoint = 0+startPoint+distance(derivativeVec.begin(), max_element(derivativeVec.begin(), derivativeVec.end()));
+            fluxTimeCounter++;
+            if (last_tPoint==tPoint && fluxTimeCounter==fluxTime)
+                derivativeSearch = false;
+            if (last_tPoint!= tPoint) {
+                totalCnt = 0;
+                totalCntClean = 0;
+                fluxTimeCounter = 0;
+                last_tPoint = tPoint;
+            }
+        }
 
         if (fluxTimeCounter >= fluxTime) {
             isBackForConst = true;
+            lftTime = 0;
         }
 
         if (fluxTimeCounter > fluxTime+backConstWindow) {
@@ -359,17 +366,34 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
         }
 
         if (isBackForConst) {
+
+            if (backVecConst.size()>backConstWindow)
+            {
+                for (int i=0; i<backVecConst.size()-backConstWindow;i++)
+                    backVecConst.erase(backVecConst.begin());
+            }
+
             backVecConst.push_back(resultsDbTotal.at(1).back());
-//            if (!backVecConst.empty())
-                backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
+            backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
             resultsDbTotal.at(2).push_back(backVal);
+            for (int i=0; i<fluxTimeCounter; i++)
+            {
+//                double bv = backVal*0.1;
+//                double et = fluxTimeCounter;
+//                resultsDbTotal.at(2).at(tPoint+i)=backVal*0+(exp(-lmd116*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
+//                        bv*exp(lmd116*(fluxTimeCounter-i))+
+//                        (0.002027726*exp(-lmd116m*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
+//                        bv*exp(lmd116m*(fluxTimeCounter-i))+
+//                        (0.002643049*exp(-lmd114*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
+//                        bv*exp(lmd114*(fluxTimeCounter-i));
+
+                resultsDbTotal.at(2).at(tPoint+i)=backVal;
+            }
             fluxTimeCounter++;
         }
 
         if (!isBackForConst && (fluxTimeCounter < fluxTime || fluxTimeCounter > fluxTime+backConstWindow))
             resultsDbTotal.at(2).push_back(0);
-
-        fluxTrigConst = temp;
 
         if (fluxTimeCounter == fluxTime+backConstWindow) {
             minusBack = totalCnt-backVal*fluxTime;
@@ -377,8 +401,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             Flux = minusBack * c_a + c_b;
             flux = Flux;
         }
-
-        lftTime = fluxTime-fluxTimeCounter;
 
         if (fluxTimeCounter == fluxTime+backConstWindow) {
             QString s(0x00B1);
@@ -393,6 +415,27 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> data, double totTime
             minusBack = 0;
             Flux = 0;
             lftTime = fluxTime;
+            derivativeVec.clear();
         }
     }
+}
+
+void vecFill::cleanUp() {
+    resultsDb.clear();
+    resultsDbTotal.clear();
+    backVec.clear();
+    backVal = 0;
+    isBack = true;
+    isPulse = false;
+    fluxTimeCounter = 0;
+    temp = 0;
+    minusBack = 0;
+    Flux = 0;
+    plsD = 0;
+    secondPulseCounter = false;
+    pulseCounter = 0;
+    derivativeVec.clear();
+    derivativeSearch= false;
+    fluxTrigConst=0;
+    isBackForConst=false;
 }
