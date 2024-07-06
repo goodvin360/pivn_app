@@ -18,9 +18,9 @@ public:
 
     std::vector<std::vector<double>> resultsDbTotal;
 
-    std::vector<std::vector<double>> getData(std::string str, int counter, int cnt1, int cnt2, int cnt3, int cnt4);
-    void getDataTotal(std::vector<std::vector<double>> data, double totTime, double&flux, double&coef_a, double&coef_b,
-                      bool fileParting, int trMode, int trVal, double &ePoint, int constFluxTr, double &tPoint, int constTrig,
+    std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4);
+    void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
+                      bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime, int multiPulseTrig);
 
     void cleanUp();
@@ -61,6 +61,7 @@ public:
     double startPoint = 0;
     bool derivativeSearch = false;
     double last_tPoint = 0;
+    double last_edgePointShift = 0;
     bool isBackForConst = false;
 
     void printMessage(QString msg, int num);

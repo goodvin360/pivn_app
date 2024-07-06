@@ -121,6 +121,8 @@ void Plotter::PlotGraph(int rescaleTrig) {
             m_axisX->setRange(vecData.at(0).back()-200, vecData.at(0).back());
         }
         m_axisY->setRange(0, 1.2*max_y);
+        if (max_y==0)
+            m_axisY->setRange(0, 1);
     }
     else {
         maxValVec.clear();
@@ -131,13 +133,15 @@ void Plotter::PlotGraph(int rescaleTrig) {
         max_y = *max_element(maxValVec.begin(), maxValVec.end());
         m_axisX->setRange(0, vecData.at(0).size());
         m_axisY->setRange(0, 1.2*max_y);
+        if (max_y==0)
+            m_axisY->setRange(0, 1);
     }
 
     chartView->setVisible(1);
     chartView->setRenderHint(QPainter::Antialiasing);
 }
 
-void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
+void Plotter::PlotGraphTotal(int rescaleTrig, double &ePoint) {
 
     std::vector<std::vector<double>> vecDataTot = Data->resultsDbTotal;
 
@@ -156,7 +160,7 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
             }
         }
         if (i==2)
-            for(std::vector<int>::size_type l = 0; l != vecDataTot.at(1).size(); ++l) {
+            for(int l = 0; l != vecDataTot.at(0).size(); ++l) {
 //                points[l] = QPointF(l, 0);
 //                if (l == int(ePoint))
 //                    points[l] = QPointF(l, max_y_tot);
@@ -166,8 +170,10 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
                     if (l==m) {
                         points[l+m] = QPointF(l, 0);
                         points[l+m+1] = QPointF(l+1, 0);
-                        if (l == int(ePoint))
+                        if (l == ePoint)
                         {
+                            if (max_y_tot==0)
+                                max_y_tot=1;
                             points[l+m] = QPointF(l, max_y_tot);
                             points[l+m+1] = QPointF(l+1, max_y_tot);
                         }
@@ -189,12 +195,16 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double ePoint) {
         m_axisX_Tot->setRange(vecDataTot.at(0).back()-200, vecDataTot.at(0).back());
         }
         m_axisY_Tot->setRange(0,1.2*max_y_tot);
+        if (max_y_tot==0)
+            m_axisY_Tot->setRange(0, 1);
     }
     else
     {
         max_y_tot = *max_element(vecDataTot.at(1).begin(), vecDataTot.at(1).end());
         m_axisX_Tot->setRange(0,vecDataTot.at(0).size());
         m_axisY_Tot->setRange(0,1.2*max_y_tot);
+        if (max_y_tot==0)
+            m_axisY_Tot->setRange(0, 1);
     }
 
     chartViewTot->setVisible(1);

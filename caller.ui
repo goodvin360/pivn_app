@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
-    <height>817</height>
+    <width>545</width>
+    <height>851</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -338,7 +338,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="2" rowspan="2" colspan="2">
+    <item row="7" column="2" rowspan="2">
      <widget class="QCheckBox" name="checkBox_13">
       <property name="text">
        <string>multi pulses</string>
@@ -389,6 +389,27 @@
     <item row="10" column="0" colspan="4">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_8">
+         <property name="text">
+          <string>Go</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_7">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="pushButton_10">
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QCheckBox" name="checkBox_8">
          <property name="text">
@@ -403,24 +424,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_8">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="pushButton_11">
          <property name="text">
-          <string>Go</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_7">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_9">
-         <property name="text">
-          <string>Set</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
@@ -509,6 +516,22 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Message window:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QTextBrowser" name="textBrowser">
          <property name="sizePolicy">
@@ -528,22 +551,6 @@
          </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Message window:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -569,7 +576,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>511</width>
+     <width>545</width>
      <height>21</height>
     </rect>
    </property>
@@ -740,12 +747,12 @@
    <slot>addButton()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>501</x>
-     <y>787</y>
+     <x>528</x>
+     <y>821</y>
     </hint>
     <hint type="destinationlabel">
-     <x>381</x>
-     <y>748</y>
+     <x>400</x>
+     <y>782</y>
     </hint>
    </hints>
   </connection>
@@ -804,8 +811,8 @@
    <slot>setCountIntTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>469</y>
+     <x>123</x>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -932,44 +939,12 @@
    <slot>addConstFluxGo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
+     <x>92</x>
      <y>415</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
      <y>332</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_7</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setEdgePoint(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>208</x>
-     <y>413</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>355</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_9</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>addSetEdgePoint()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>289</x>
-     <y>415</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>246</x>
-     <y>419</y>
     </hint>
    </hints>
   </connection>
@@ -1044,8 +1019,8 @@
    <slot>setReadDelay(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>148</y>
+     <x>316</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>223</x>
@@ -1076,12 +1051,44 @@
    <slot>multiPulseTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>247</y>
+     <x>316</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel">
      <x>207</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_11</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edgePointMinus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>429</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>293</x>
+     <y>509</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edgePointPlus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>254</x>
+     <y>516</y>
     </hint>
    </hints>
   </connection>
@@ -1108,8 +1115,6 @@
   <slot>manualTrigger(int)</slot>
   <slot>addConstFluxGo()</slot>
   <slot>addConstFluxTrig(int)</slot>
-  <slot>setEdgePoint(QString)</slot>
-  <slot>addSetEdgePoint()</slot>
   <slot>cnt1(int)</slot>
   <slot>cnt2(int)</slot>
   <slot>cnt3(int)</slot>
@@ -1117,5 +1122,7 @@
   <slot>setReadDelay(QString)</slot>
   <slot>setAverageWindow(QString)</slot>
   <slot>multiPulseTrigger(int)</slot>
+  <slot>edgePointPlus()</slot>
+  <slot>edgePointMinus()</slot>
  </slots>
 </ui>

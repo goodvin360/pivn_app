@@ -60,6 +60,8 @@ public:
     QPushButton*pushButton_3 = new QPushButton();
     QPushButton*pushButton_4 = new QPushButton();
     QPushButton*pushButton_5 = new QPushButton();
+    QPushButton*pushButton_10 = new QPushButton();
+    QPushButton*pushButton_11 = new QPushButton();
     QCheckBox*checkBox = new QCheckBox();
     QCheckBox*checkBox_2 = new QCheckBox();
     QCheckBox*checkBox_6 = new QCheckBox();
@@ -92,6 +94,7 @@ public:
     int trigVal = 0;
     double edgePoint = 0;
     double tempTime = 0;
+    double tempTimeShift = 0;
     double tempTimeSet = 0;
     int constFluxTrig = 0;
     int edgePointTrig = 0;
@@ -148,10 +151,10 @@ public slots:
     void multiPulseTrigger(int st);
     void addConstFluxGo();
     void addConstFluxTrig(int st);
-    void setEdgePoint(QString ePoint);
     void setReadDelay(QString delay);
     void setAverageWindow(QString window);
-    void addSetEdgePoint();
+    void edgePointPlus();
+    void edgePointMinus();
     void cnt1(int val);
     void cnt2(int val);
     void cnt3(int val);

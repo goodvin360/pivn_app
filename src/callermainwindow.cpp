@@ -82,9 +82,10 @@ void CallerMainWindow::startByTimer() {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
-                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
+                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
         lineEdit_10->setText(QString::number(leftTime));
+        lineEdit_7->setText(QString::number(tempTime));
         if (plotState>0)
             makePlot->PlotGraph(rescaleTrigger);
         if (plotTotalState>0)
@@ -93,15 +94,15 @@ void CallerMainWindow::startByTimer() {
         QString showLine = QString::fromStdString(res_out.str());
         lineEdit_6->setText(QString::number(nFlux,'g',3));
         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-        QApplication::processEvents();
+//        QApplication::processEvents();
         QScrollBar*sb = textBrowser->verticalScrollBar();
         sb->setValue(sb->maximum());
-        QApplication::processEvents();
+//        QApplication::processEvents();
         flushCounter+=1;
         if (flushCounter>150)
         {
             textBrowser->clear();
-            QApplication::processEvents();
+//            QApplication::processEvents();
             flushCounter = 0;
         }
     }
@@ -130,6 +131,7 @@ void CallerMainWindow::startByTimer() {
         vecData->cleanUp();
         edgePointTrig = 0;
         tempTime=0;
+        tempTimeShift = 0;
 
         fluxCalc->backVal = 0;
         fluxCalc->backCounter = 1;
@@ -179,7 +181,7 @@ void CallerMainWindow::connectCOM() {
     if (esp32.isConnected())
     {
         textBrowser->setText(textBrowser->toPlainText()+"connected to "+pName+'\n');
-        QApplication::processEvents();
+//        QApplication::processEvents();
     }
     else
     {
@@ -189,7 +191,7 @@ void CallerMainWindow::connectCOM() {
 
 void CallerMainWindow::addStop() {
     onFlag = false;
-    QApplication::processEvents();
+//    QApplication::processEvents();
 }
 
 void CallerMainWindow::addStart() {
@@ -200,7 +202,7 @@ void CallerMainWindow::addStart() {
     flushCounter = 0;
     shotCounter = 0;
     textBrowser->clear();
-    QApplication::processEvents();
+//    QApplication::processEvents();
 
     resultsNew.clear();
     esp32 = new SerialPort(pName.toStdString());
@@ -330,7 +332,7 @@ void CallerMainWindow::addStartFile() {
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
-                                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, edgePointTrig,
+                                              trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
@@ -377,6 +379,7 @@ void CallerMainWindow::addStartFile() {
             vecDataFile->cleanUp();
             edgePointTrig = 0;
             tempTime=0;
+            tempTimeShift = 0;
         }
 
         if (onFlag) {
@@ -385,6 +388,7 @@ void CallerMainWindow::addStartFile() {
             vecDataFile->cleanUp();
             edgePointTrig = 0;
             tempTime=0;
+            tempTimeShift = 0;
         }
 
         fluxCalc->backVal = 0;
@@ -502,22 +506,14 @@ void CallerMainWindow::manualTrigger(int st) {
 }
 
 void CallerMainWindow::addConstFluxGo() {
-    if (constFluxTrig>0)
-    {
-        tempTime = edgePoint;
-        lineEdit_7->setText(QString::number(tempTime));
         edgePointTrig++;
-    }
+//        QApplication::processEvents();
 }
 
 void CallerMainWindow::addConstFluxTrig(int st) {
     constFluxTrig = st;
 }
 
-void CallerMainWindow::setEdgePoint(QString ePoint) {
-    inputProcessing(edgePoint, ePoint.toStdString());
-    tempTimeSet = edgePoint;
-}
 
 void CallerMainWindow::setReadDelay(QString delay) {
     inputProcessing(readDelay, delay.toStdString());
@@ -525,10 +521,6 @@ void CallerMainWindow::setReadDelay(QString delay) {
 
 void CallerMainWindow::setAverageWindow(QString window) {
     inputProcessing(avWindow, window.toStdString());
-}
-
-void CallerMainWindow::addSetEdgePoint() {
-    tempTime = tempTimeSet;
 }
 
 void CallerMainWindow::cnt1(int val) {
@@ -549,4 +541,14 @@ void CallerMainWindow::cnt4(int val) {
 
 void CallerMainWindow::multiPulseTrigger(int st) {
     multiPulse = st;
+}
+
+void CallerMainWindow::edgePointPlus() {
+    tempTimeShift++;
+    lineEdit_7->setText(QString::number(tempTime));
+}
+
+void CallerMainWindow::edgePointMinus() {
+    tempTimeShift--;
+    lineEdit_7->setText(QString::number(tempTime));
 }

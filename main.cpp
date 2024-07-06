@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_6->setText(QString::number(window->totalCounts));
     caller.lineEdit_8->setText(QString::number(window->readDelay));
     caller.lineEdit_6->setReadOnly(1);
+    caller.lineEdit_7->setReadOnly(1);
     caller.lineEdit_10->setReadOnly(1);
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
           {caller.comboBox->addItem(serialPortInfo.portName());}
