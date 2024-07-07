@@ -40,6 +40,8 @@ public:
     bool secondPulseCounter = false;
     double plsD = 0;
     double prePulse = 0;
+    std::vector<double>prePulsesData;
+    std::vector<double> pulsesTime;
     double peakVal = 0;
     double peakValClean = 0;
     double backLastVal = 0;

@@ -134,13 +134,124 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         else
             temp = trVal;
 
-        if (multiPulseTrig==0)
+        if (temp>fluxTrig)
+        {
+            trigDelta = temp-fluxTrig;
+            isBack = false;
+            fluxTrig=temp;
+            pulsesTime.push_back(resultsDbTotal.at(0).back());
+            prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-1)-resultsDbTotal.at(1).at(resultsDbTotal.at(2).size()-2)-0*trigDelta;
+            prePulsesData.push_back(prePulse);
+            pulseCounter++;
+
+            if (isPulse)
+                isSecondPulse = true;
+
+            if (secondPulseCounter)
+                isSecondPulse = true;
+
+            isPulse = true;
+        }
+
+        secondPulseCounter = false;
+
+        if (isBack) {
+            if (backVec.size()>window && !backVec.empty())
+            {
+                for (int i=0; i<backVec.size()-window;i++)
+                    backVec.erase(backVec.begin());
+            }
+
+            backVec.push_back(resultsDbTotal.at(1).back());
+            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+            resultsDbTotal.at(2).pop_back();
+            resultsDbTotal.at(2).push_back(backVal);
+            backLastVal = backVal;
+        }
+
+        if (!isBack && !isSecondPulse)
+        {
+            double backFromPulses = 0;
+
+            if (!prePulsesData.empty() && !pulsesTime.empty())
+            {
+                for (int i=0; i<pulseCounter-1; i++)
+                {
+                    double t = resultsDbTotal.at(0).back()-pulsesTime.at(i);
+                    backFromPulses += prePulsesData.at(i)*exp(-lmd116*t)+
+                                        0.002027726*prePulsesData.at(i)*exp(-lmd116m*t)+
+                                        0.002643049*prePulsesData.at(i)*exp(-lmd114*t);
+                }
+                backFromPulses+=(0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                                        (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                                             0.002643049*exp(-lmd114*fluxTimeCounter));
+            }
+
+            if (pulseCounter>=2)
+            {
+                if (resultsDbTotal.at(0).back()-pulsesTime.at(pulsesTime.size()-2)>=84)
+                    backVal = backLastVal+backFromPulses;
+                else
+                    backVal = backFromPulses;
+            } else if (pulseCounter==1)
+                backVal = backLastVal+  (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                                        (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                                             0.002643049*exp(-lmd114*fluxTimeCounter));
+
+
+            resultsDbTotal.at(2).pop_back();
+            resultsDbTotal.at(2).push_back(backVal);
+
+
+            totalCnt += resultsDbTotal.at(1).back();
+            totalCntClean += resultsDbTotal.at(3).back();
+
+            minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
+
+            Flux = minusBack *
+                       ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
+                       c_b;
+            flux = Flux;
+
+            lftTime = fluxTime-fluxTimeCounter;
+
+            fluxTimeCounter++;
+        }
+
+        if (fluxTimeCounter == fluxTime || isSecondPulse) {
+            QString s(0x00B1);
+            double error = 0.09*Flux;
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
+            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
+            isBack = true;
+            fluxTimeCounter = 0;
+            backVal = resultsDbTotal.at(2).back();
+            backLastVal = 0;
+            backVec.clear();
+            minusBack = 0;
+            totalCnt = 0;
+            totalCntClean = 0;
+            Flux = 0;
+            lftTime = fluxTime;
+            isPulse = false;
+            if (fluxTimeCounter==fluxTime)
+                secondPulseCounter = true;
+            if (isSecondPulse) {
+                isPulse = true;
+                isSecondPulse = false;
+                isBack = false;
+            }
+
+        }
+
+       /* if (multiPulseTrig==0)
             isSecondPulse = false;
 
         if (isPulse && temp>fluxTrig)
         {
             if (multiPulseTrig>0)
                 isSecondPulse = true;
+            t_last_pulse = resultsDbTotal.at(0).back();
         }
 
         if (fluxTimeCounter == fluxTime+1)
@@ -164,7 +275,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             Flux = 0;
             isSecondPulse = false;
             secondPulseCounter = true;
-            prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2)-0*resultsDbTotal.at(2).at(resultsDbTotal.at(2).size()-2);
+            prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2)-1*resultsDbTotal.at(2).at(resultsDbTotal.at(2).size()-2);
+            pulseCounter++;
         }
 
         if (temp > fluxTrig && !isPulse) {
@@ -172,6 +284,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             isBack = false;
             isPulse = true;
             fileTrigger = true;
+            t_last_pulse = resultsDbTotal.at(0).back();
         }
 
         fluxTrig = temp;
@@ -224,7 +337,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             totalCntClean=peakValClean;
             fluxTimeCounter++;
         }
-        double t = resultsDbTotal.at(0).back();
+        double t = resultsDbTotal.at(0).back()-t_last_pulse;
 
         if (!isBack && fluxTimeCounter>0) {
 
@@ -306,7 +419,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             plsD = 0;
             secondPulseCounter = false;
             pulseCounter++;
-        }
+        }*/
 
     }
 
@@ -446,6 +559,7 @@ void vecFill::cleanUp() {
     resultsDbTotal.clear();
     backVec.clear();
     backVal = 0;
+    backLastVal = 0;
     isBack = true;
     isPulse = false;
     fluxTimeCounter = 0;
@@ -460,4 +574,6 @@ void vecFill::cleanUp() {
     fluxTrigConst=0;
     isBackForConst=false;
     last_edgePointShift = 0;
+    prePulsesData.clear();
+    pulsesTime.clear();
 }
