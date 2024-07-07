@@ -64,6 +64,8 @@ public:
     QPushButton*pushButton_11 = new QPushButton();
     QCheckBox*checkBox = new QCheckBox();
     QCheckBox*checkBox_2 = new QCheckBox();
+    QCheckBox*checkBox_3 = new QCheckBox();
+    QCheckBox*checkBox_4 = new QCheckBox();
     QCheckBox*checkBox_6 = new QCheckBox();
     QCheckBox*checkBox_7 = new QCheckBox();
     QCheckBox*checkBox_8 = new QCheckBox();
@@ -106,6 +108,10 @@ public:
     int counter = 0;
     double readDelay = 10;
     double avWindow = 5;
+    int xp1tot = 500, xp2tot = 999, yp1tot = 500, yp2tot = 999;
+    int xp1dif = 500, xp2dif = 999, yp1dif = 500, yp2dif = 999;
+    bool isActive = true;
+    bool isActiveTotal = true;
 
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();

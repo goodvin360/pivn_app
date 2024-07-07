@@ -86,11 +86,18 @@ void CallerMainWindow::startByTimer() {
                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
-        if (plotState>0)
-            makePlot->PlotGraph(rescaleTrigger);
-        if (plotTotalState>0)
-            makePlot->PlotGraphTotal(rescaleTrigger,tempTime);
-
+        if (plotState>0 && isActive)
+            makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
+        if (!isActive) {
+            plotState=0;
+            checkBox_3->setChecked(0);
+        }
+        if (plotTotalState>0 && isActiveTotal)
+            makePlot->PlotGraphTotal(rescaleTrigger,tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
+        if (!isActiveTotal) {
+            plotTotalState=0;
+            checkBox_4->setChecked(0);
+        }
         QString showLine = QString::fromStdString(res_out.str());
         lineEdit_6->setText(QString::number(nFlux,'g',3));
         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
@@ -195,7 +202,7 @@ void CallerMainWindow::addStop() {
 }
 
 void CallerMainWindow::addStart() {
-    makePlot = new Plotter(vecData);
+    makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
     plotObjVec.push_back(makePlot);
     onFlag = true;
     counter = 0;
@@ -272,7 +279,7 @@ void CallerMainWindow::addStartFile() {
     if (fileName!= nullptr)
     {
         shotCounter = 0;
-        makePlot = new Plotter(vecDataFile);
+        makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
         plotObjVec.push_back(makePlot);
         textBrowser->setText("\n");
         QApplication::processEvents();
@@ -336,11 +343,18 @@ void CallerMainWindow::addStartFile() {
                                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
-                    if (plotState > 0)
-                        makePlot->PlotGraph(rescaleTrigger);
-                    if (plotTotalState > 0)
-                        makePlot->PlotGraphTotal(rescaleTrigger, tempTime);
-
+                    if (plotState > 0 && isActive)
+                        makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
+                    if (!isActive) {
+                        plotState=0;
+                        checkBox_3->setChecked(0);
+                    }
+                    if (plotTotalState > 0 && isActiveTotal)
+                        makePlot->PlotGraphTotal(rescaleTrigger, tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
+                    if (!isActiveTotal) {
+                        plotTotalState=0;
+                        checkBox_4->setChecked(0);
+                    }
                     std::stringstream res_out;
                     for (int k = 0; k < vecDataFile->resultsDb.size(); k++) {
                         res_out << vecDataFile->resultsDb.at(k).back() << " ";}
@@ -423,12 +437,30 @@ std::pair<std::string, int> CallerMainWindow::dotsFind(std::string str, std::str
 
 void CallerMainWindow::plotTrigger(int st) {
     plotState = st;
+    if (!plotObjVec.empty())
+        plotObjVec.back()->chartView->isOn=true;
     QApplication::processEvents();
+    if (!isActive && st >0)
+        isActive = true;
+    if (st == 0) {
+        isActive = false;
+        plotObjVec.back()->chartView->close();
+        plotObjVec.back()->chartView->isOn=true;
+    }
 }
 
 void CallerMainWindow::plotTriggerTotal(int stTot) {
     plotTotalState = stTot;
+    if (!plotObjVec.empty())
+        plotObjVec.back()->chartViewTot->isOn=true;
     QApplication::processEvents();
+    if (!isActiveTotal && stTot>0)
+        isActiveTotal = true;
+    if (stTot == 0) {
+        isActiveTotal = false;
+        plotObjVec.back()->chartViewTot->close();
+        plotObjVec.back()->chartViewTot->isOn=true;
+    }
 }
 
 void CallerMainWindow::rescalePlotTrigger(int stRescale) {

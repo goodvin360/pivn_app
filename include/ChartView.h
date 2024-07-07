@@ -11,6 +11,7 @@ class ChartView : public QChartView
 public:
     ChartView(QChart *chart, QWidget *parent = 0);
 
+    bool isOn = true;
 protected:
     bool viewportEvent(QEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -20,6 +21,7 @@ protected:
 
 private:
     bool m_isTouching;
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif //PIVN_APP_CHARTVIEW_H

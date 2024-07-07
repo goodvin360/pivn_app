@@ -22,6 +22,9 @@ int main(int argc, char *argv[]) {
     window->lineEdit_8 = caller.lineEdit_8;
     window->lineEdit_9 = caller.lineEdit_9;
     window->lineEdit_10 = caller.lineEdit_10;
+    window->checkBox_2 = caller.checkBox_2;
+    window->checkBox_3 = caller.checkBox_3;
+    window->checkBox_4 = caller.checkBox_4;
     window->checkBox_6 = caller.checkBox_6;
     window->checkBox_7 = caller.checkBox_7;
     window->checkBox_9 = caller.checkBox_9;
@@ -35,6 +38,8 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_10->setText(QString::number(window->leftTime));
     caller.checkBox->setChecked(1);
     caller.checkBox_2->setChecked(1);
+    caller.checkBox_3->setChecked(0);
+    caller.checkBox_4->setChecked(0);
     caller.checkBox_6->setChecked(1);
     caller.checkBox_9->setChecked(1);
     caller.checkBox_10->setChecked(1);

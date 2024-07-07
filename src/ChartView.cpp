@@ -1,5 +1,6 @@
 #include "chartview.h"
 #include <QtGui/QMouseEvent>
+#include <iostream>
 
 ChartView::ChartView(QChart *chart, QWidget *parent) :
         QChartView(chart, parent),
@@ -77,4 +78,9 @@ void ChartView::keyPressEvent(QKeyEvent *event)
             QGraphicsView::keyPressEvent(event);
             break;
     }
+}
+
+void ChartView::closeEvent(QCloseEvent *event) {
+    isOn = false;
+    QWidget::closeEvent(event);
 }
