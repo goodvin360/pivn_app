@@ -167,6 +167,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
             backLastVal = backVal;
+            if (pulseCounter==0)
+                firstBackVal = backLastVal;
         }
 
         if (!isBack && !isSecondPulse)
@@ -192,7 +194,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 if (resultsDbTotal.at(0).back()-pulsesTime.at(pulsesTime.size()-2)>=84)
                     backVal = backLastVal+backFromPulses;
                 else
-                    backVal = backFromPulses;
+                    backVal = firstBackVal+backFromPulses;
             } else if (pulseCounter==1)
                 backVal = backLastVal+  (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
                                         (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
@@ -226,7 +228,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             isBack = true;
             fluxTimeCounter = 0;
             backVal = resultsDbTotal.at(2).back();
-            backLastVal = 0;
+            backLastVal = firstBackVal;
             backVec.clear();
             minusBack = 0;
             totalCnt = 0;

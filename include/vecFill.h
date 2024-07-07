@@ -45,6 +45,7 @@ public:
     double peakVal = 0;
     double peakValClean = 0;
     double backLastVal = 0;
+    double firstBackVal = 0;
     double cnt = 0;
     double totalCnt = 0;
     double totalCntClean = 0;
