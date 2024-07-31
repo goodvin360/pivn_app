@@ -30,6 +30,10 @@
 #include "Plotter.h"
 #include "FluxCalc.h"
 #include "QTimer"
+#include "Counters.h"
+#include "Coefficients.h"
+#include "../ui_counters.h"
+#include "../ui_coefficients.h"
 
 #pragma region Docs
 
@@ -43,6 +47,13 @@ public:
 
     ~CallerMainWindow();
 
+    Ui::Form_1 counters;
+    Ui::Form_2 coefficients;
+
+
+    Counters*cntSettings;
+    Coefficients*coefSettings;
+
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
     QLineEdit*lineEdit_3 = nullptr;
@@ -53,6 +64,10 @@ public:
     QLineEdit*lineEdit_8 = nullptr;
     QLineEdit*lineEdit_9 = nullptr;
     QLineEdit*lineEdit_10 = nullptr;
+    QLineEdit*lineEdit_11 = nullptr;
+    QLineEdit*lineEdit_12 = nullptr;
+    QLineEdit*lineEdit_13 = nullptr;
+    QLineEdit*lineEdit_14 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
@@ -76,8 +91,12 @@ public:
     QCheckBox*checkBox_13 = new QCheckBox();
     QString pName;
     QString fileName;
-    double coeff_a = 2671;
-    double coeff_b = -450245;
+//    double coeff_a = 2671;
+//    double coeff_a = 2876;
+    double coeff_a = 2840;
+//    double coeff_b = -450245;
+//    double coeff_b = -82143;
+    double coeff_b = 13354;
     double distance = 24;
     int measTime = 5;
     double fluxTrig = 0;
@@ -112,6 +131,8 @@ public:
     int xp1dif = 500, xp2dif = 999, yp1dif = 500, yp2dif = 999;
     bool isActive = true;
     bool isActiveTotal = true;
+    double resTime[4] {500, 500, 605, 500};
+    size_t count = std::size(resTime);
 
     vecFill*vecData = new vecFill();
     vecFill*vecDataFile = new vecFill();
@@ -132,7 +153,6 @@ public:
     void inputProcessing(double &var, std::string inp);
 
 public slots:
-
     void printMsg(QString msg, int num);
     void addStop();
     void connectCOM();
@@ -165,6 +185,8 @@ public slots:
     void cnt2(int val);
     void cnt3(int val);
     void cnt4(int val);
+    void on_actioncounters_triggered();
+    void on_actioncoefficients_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

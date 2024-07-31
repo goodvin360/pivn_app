@@ -14,8 +14,12 @@ void vecFill::printMessage(QString msg, int num) {
     emit sentMessage(msg, num);
 }
 
-std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4) {
+std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t counters) {
     cnt = counter;
+    for (size_t i{}; i < counters; i++)
+    {
+        resTime[i] = resT[i]*1e-6;
+    }
     if (counter==0)
     {
         for (int i=0; i<6; i++)
@@ -88,8 +92,10 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
         double sum = 0;
         double sum_clean = 0;
         for (int i = 2; i < resultsDb.size(); i++) {
+            double var = 0;
             if (resultsDb.at(i).back() >= 1 / resTime[i - 2])
-                resultsDb.at(i).back() = 1 / resTime[i - 2] - 1;
+                var = 1 / resTime[i - 2] - 1;
+            else var = resultsDb.at(i).back();
             if (cnt1 == 0)
                 resultsDb.at(2).back() = 0;
             if (cnt2 == 0)
@@ -98,8 +104,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
                 resultsDb.at(4).back() = 0;
             if (cnt4 == 0)
                 resultsDb.at(5).back() = 0;
-            sum += resultsDb.at(i).back() / (1 - resultsDb.at(i).back() * resTime[i - 2]);
-            sum_clean += resultsDb.at(i).back();
+            sum += var / (1 - var * resTime[i - 2]);
+            sum_clean += var;
         }
         resultsDbTotal.at(1).push_back(sum);
         resultsDbTotal.at(2).push_back(0);
@@ -119,7 +125,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int multiPulseTrig) {
-    fluxTime = totTime;
+    fluxTime = totTime+countStartTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
             fluxTrig = data.at(1).back();
@@ -136,13 +142,34 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
         if (temp>fluxTrig)
         {
+            currentTrigTime = resultsDbTotal.at(0).back();
+            if (currentTrigTime>lastTrigTime+2)
+            {
+                lastTrigTime = currentTrigTime;
+            }
+            truePulse = true;
+            fluxTrig = temp;
+        }
+
+        if (truePulse && lastTrigTime==currentTrigTime)
+        {
             trigDelta = temp-fluxTrig;
             isBack = false;
             fluxTrig=temp;
+            truePulse = false;
             pulsesTime.push_back(resultsDbTotal.at(0).back());
             prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-1)-resultsDbTotal.at(1).at(resultsDbTotal.at(2).size()-2)-0*trigDelta;
             prePulsesData.push_back(prePulse);
             pulseCounter++;
+
+            if (data.at(2).back()>=nCritical)
+                countStartFlag = false;
+
+            if (!countStartFlag)
+            {
+                prePulsesData.pop_back();
+                prePulsesData.push_back(0);
+            }
 
             if (isPulse)
                 isSecondPulse = true;
@@ -170,6 +197,18 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             if (pulseCounter==0)
                 firstBackVal = backLastVal;
         }
+
+        if (!countStartFlag)
+        {
+            fluxTime+=fluxTimeCounter;
+            if (data.at(4).back()<nCritical)
+            {
+                countStartFlag = true;
+                countStartTime = fluxTimeCounter;
+                fluxTime = totTime+countStartTime;
+            }
+        }
+
 
         if (!isBack && !isSecondPulse)
         {
@@ -204,18 +243,21 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
 
+            if (countStartFlag) {
+                totalCnt += resultsDbTotal.at(1).back();
+                totalCntClean += resultsDbTotal.at(3).back();
 
-            totalCnt += resultsDbTotal.at(1).back();
-            totalCntClean += resultsDbTotal.at(3).back();
+                minusBack += (resultsDbTotal.at(1).back() - resultsDbTotal.at(2).back());
 
-            minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
-
-            Flux = minusBack *
-                       ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
+                Flux = minusBack *
+                       ((1 - exp(-(log(2) * 100 / 14.1))) /
+                        (exp(-(log(2) * countStartTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1)))) * c_a +
                        c_b;
-            flux = Flux;
+                flux = Flux;
 
-            lftTime = fluxTime-fluxTimeCounter;
+                lftTime = fluxTime-fluxTimeCounter;
+            }
+
 
             fluxTimeCounter++;
         }
@@ -227,6 +269,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
             isBack = true;
             fluxTimeCounter = 0;
+            countStartTime = 0;
+            countStartFlag = true;
             backVal = resultsDbTotal.at(2).back();
             backLastVal = firstBackVal;
             backVec.clear();
@@ -234,7 +278,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             totalCnt = 0;
             totalCntClean = 0;
             Flux = 0;
-            lftTime = fluxTime;
+            lftTime = totTime;
             isPulse = false;
             if (fluxTimeCounter==fluxTime)
                 secondPulseCounter = true;
@@ -565,6 +609,8 @@ void vecFill::cleanUp() {
     isBack = true;
     isPulse = false;
     fluxTimeCounter = 0;
+    countStartTime = 0;
+    countStartFlag = true;
     temp = 0;
     minusBack = 0;
     Flux = 0;
@@ -578,4 +624,5 @@ void vecFill::cleanUp() {
     last_edgePointShift = 0;
     prePulsesData.clear();
     pulsesTime.clear();
+    lastTrigTime = currentTrigTime = 0;
 }

@@ -21,7 +21,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h)
 
-add_executable(pivn_app main.cpp caller.ui ${sources} ${headers} include/Chart.h include/ChartView.h src/ChartView.cpp src/Chart.cpp)
+add_executable(pivn_app main.cpp caller.ui ${sources} ${headers} include/Chart.h include/ChartView.h src/ChartView.cpp src/Chart.cpp include/Counters.h src/Counters.cpp include/Coefficients.h src/Coefficients.cpp)
 target_link_libraries(pivn_app
         Qt5::Core
         Qt5::Gui

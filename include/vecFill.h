@@ -18,7 +18,7 @@ public:
 
     std::vector<std::vector<double>> resultsDbTotal;
 
-    std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4);
+    std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t);
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime, int multiPulseTrig);
@@ -66,6 +66,11 @@ public:
     double last_tPoint = 0;
     double last_edgePointShift = 0;
     bool isBackForConst = false;
+    bool countStartFlag = true;
+    double countStartTime = 0;
+    double nCritical = 0.25/resTime[2];
+    double currentTrigTime = 0, lastTrigTime = 0;
+    bool truePulse = false;
 
     void printMessage(QString msg, int num);
 

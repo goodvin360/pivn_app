@@ -4,6 +4,16 @@
 
 CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     parent = nullptr;
+    cntSettings = new Counters();
+    counters.setupUi(cntSettings);
+    counters.checkBox->setChecked(1);
+    counters.checkBox_2->setChecked(1);
+    counters.checkBox_3->setChecked(1);
+    counters.checkBox_4->setChecked(1);
+
+    coefSettings = new Coefficients();
+    coefficients.setupUi(coefSettings);
+
     this->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
     QObject::connect(vecData, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
@@ -18,6 +28,8 @@ CallerMainWindow::~CallerMainWindow() {
 //    delete makePlot;
     for (int i=0; i<plotObjVec.size(); i++)
         delete plotObjVec.at(i);
+    cntSettings->close();
+    coefSettings->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -47,7 +59,7 @@ void CallerMainWindow::startByTimer() {
                 tempVar2 = resultsNew.size();
                 if (tempVar2>tempVar1)
                 {
-                    vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                    vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                     counter+=1;
                     fluxCalc->calculateFlux(*vecData, fluxTrig);
                 }
@@ -68,7 +80,7 @@ void CallerMainWindow::startByTimer() {
             tempVar2 = resultsNew.size();
             if (tempVar2>tempVar1)
             {
-                vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                 fluxCalc->calculateFlux(*vecData, fluxTrig);
                 counter+=1;
             }
@@ -208,6 +220,11 @@ void CallerMainWindow::addStart() {
     counter = 0;
     flushCounter = 0;
     shotCounter = 0;
+    resTime[0]=std::stod(lineEdit_11->text().toStdString());
+    resTime[1]=std::stod(lineEdit_12->text().toStdString());
+    resTime[2]=std::stod(lineEdit_13->text().toStdString());
+    resTime[3]=std::stod(lineEdit_14->text().toStdString());
+
     textBrowser->clear();
 //    QApplication::processEvents();
 
@@ -284,6 +301,11 @@ void CallerMainWindow::addStartFile() {
         textBrowser->setText("\n");
         QApplication::processEvents();
 
+        resTime[0]=std::stod(lineEdit_11->text().toStdString());
+        resTime[1]=std::stod(lineEdit_12->text().toStdString());
+        resTime[2]=std::stod(lineEdit_13->text().toStdString());
+        resTime[3]=std::stod(lineEdit_14->text().toStdString());
+
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
         onFlag = true;
@@ -295,6 +317,11 @@ void CallerMainWindow::addStartFile() {
         for (int i=0; i<fileData.size(); i++)
         {
             if (onFlag) {
+                cnt1_trig = cntSettings->cnt1_trig;
+                cnt2_trig = cntSettings->cnt2_trig;
+                cnt3_trig = cntSettings->cnt3_trig;
+                cnt4_trig = cntSettings->cnt4_trig;
+
                 tempVar1 = resultsNew.size();
                 std::string inputValStr = fileData.at(i);
                 std::string delimiter = "\n";
@@ -312,7 +339,7 @@ void CallerMainWindow::addStartFile() {
                             }
                             tempVar2 = resultsNew.size();
                             if (tempVar2 > tempVar1) {
-                                vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                                vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                                 fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                                 counter += 1;
                             }
@@ -331,7 +358,7 @@ void CallerMainWindow::addStartFile() {
                         }
                         tempVar2 = resultsNew.size();
                         if (tempVar2 > tempVar1) {
-                            vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig);
+                            vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                             fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                             counter += 1;
                         }
@@ -444,8 +471,10 @@ void CallerMainWindow::plotTrigger(int st) {
         isActive = true;
     if (st == 0) {
         isActive = false;
-        plotObjVec.back()->chartView->close();
-        plotObjVec.back()->chartView->isOn=true;
+        if (!plotObjVec.empty()) {
+            plotObjVec.back()->chartView->close();
+            plotObjVec.back()->chartView->isOn = true;
+        }
     }
 }
 
@@ -458,8 +487,10 @@ void CallerMainWindow::plotTriggerTotal(int stTot) {
         isActiveTotal = true;
     if (stTot == 0) {
         isActiveTotal = false;
-        plotObjVec.back()->chartViewTot->close();
-        plotObjVec.back()->chartViewTot->isOn=true;
+        if (!plotObjVec.empty()) {
+            plotObjVec.back()->chartViewTot->close();
+            plotObjVec.back()->chartViewTot->isOn = true;
+        }
     }
 }
 
@@ -556,19 +587,19 @@ void CallerMainWindow::setAverageWindow(QString window) {
 }
 
 void CallerMainWindow::cnt1(int val) {
-    cnt1_trig = val;
+//    cnt1_trig = val;
 }
 
 void CallerMainWindow::cnt2(int val) {
-    cnt2_trig = val;
+//    cnt2_trig = val;
 }
 
 void CallerMainWindow::cnt3(int val) {
-    cnt3_trig = val;
+//    cnt3_trig = val;
 }
 
 void CallerMainWindow::cnt4(int val) {
-    cnt4_trig = val;
+//    cnt4_trig = val;
 }
 
 void CallerMainWindow::multiPulseTrigger(int st) {
@@ -583,4 +614,16 @@ void CallerMainWindow::edgePointPlus() {
 void CallerMainWindow::edgePointMinus() {
     tempTimeShift--;
     lineEdit_7->setText(QString::number(tempTime));
+}
+
+void CallerMainWindow::on_actioncounters_triggered()
+{
+        std::cout << "pey" << std::endl;
+    cntSettings->show();
+}
+
+void CallerMainWindow::on_actioncoefficients_triggered()
+{
+    std::cout << "pey pey" << std::endl;
+    coefSettings->show();
 }
