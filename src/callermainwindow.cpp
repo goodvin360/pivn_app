@@ -4,15 +4,43 @@
 
 CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     parent = nullptr;
+
     cntSettings = new Counters();
     counters.setupUi(cntSettings);
+
+    cntSettings->lineEdit = counters.lineEdit;
+    cntSettings->lineEdit_2 = counters.lineEdit_2;
+    cntSettings->lineEdit_3 = counters.lineEdit_3;
+    cntSettings->lineEdit_4 = counters.lineEdit_4;
+    cntSettings->checkBox = counters.checkBox;
+    cntSettings->checkBox_2 = counters.checkBox_2;
+    cntSettings->checkBox_3 = counters.checkBox_3;
+    cntSettings->checkBox_4 = counters.checkBox_4;
+
     counters.checkBox->setChecked(1);
     counters.checkBox_2->setChecked(1);
     counters.checkBox_3->setChecked(1);
     counters.checkBox_4->setChecked(1);
+    counters.lineEdit->setText(QString::number(resTime[0]));
+    counters.lineEdit_2->setText(QString::number(resTime[1]));
+    counters.lineEdit_3->setText(QString::number(resTime[2]));
+    counters.lineEdit_4->setText(QString::number(resTime[3]));
 
     coefSettings = new Coefficients();
     coefficients.setupUi(coefSettings);
+
+    coefSettings->lineEdit = coefficients.lineEdit;
+    coefSettings->lineEdit_2 = coefficients.lineEdit_2;
+    coefSettings->lineEdit_3 = coefficients.lineEdit_3;
+    coefSettings->checkBox = coefficients.checkBox;
+    coefSettings->checkBox_2 = coefficients.checkBox_2;
+    coefSettings->checkBox_3 = coefficients.checkBox_3;
+
+    coefficients.checkBox->setChecked(1);
+    coefficients.checkBox_3->setChecked(1);
+    coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
+    coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
+    coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
@@ -93,6 +121,7 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
+
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
@@ -220,10 +249,13 @@ void CallerMainWindow::addStart() {
     counter = 0;
     flushCounter = 0;
     shotCounter = 0;
-    resTime[0]=std::stod(lineEdit_11->text().toStdString());
-    resTime[1]=std::stod(lineEdit_12->text().toStdString());
-    resTime[2]=std::stod(lineEdit_13->text().toStdString());
-    resTime[3]=std::stod(lineEdit_14->text().toStdString());
+    resTime[0]=std::stod(cntSettings->lineEdit->text().toStdString());
+    resTime[1]=std::stod(cntSettings->lineEdit_2->text().toStdString());
+    resTime[2]=std::stod(cntSettings->lineEdit_3->text().toStdString());
+    resTime[3]=std::stod(cntSettings->lineEdit_4->text().toStdString());
+
+    coeff_a=coefSettings->coeff_a;
+    coeff_b=coefSettings->coeff_b;
 
     textBrowser->clear();
 //    QApplication::processEvents();
@@ -301,10 +333,13 @@ void CallerMainWindow::addStartFile() {
         textBrowser->setText("\n");
         QApplication::processEvents();
 
-        resTime[0]=std::stod(lineEdit_11->text().toStdString());
-        resTime[1]=std::stod(lineEdit_12->text().toStdString());
-        resTime[2]=std::stod(lineEdit_13->text().toStdString());
-        resTime[3]=std::stod(lineEdit_14->text().toStdString());
+        resTime[0]=std::stod(counters.lineEdit->text().toStdString());
+        resTime[1]=std::stod(counters.lineEdit_2->text().toStdString());
+        resTime[2]=std::stod(counters.lineEdit_3->text().toStdString());
+        resTime[3]=std::stod(counters.lineEdit_4->text().toStdString());
+
+        coeff_a=coefSettings->coeff_a;
+        coeff_b=coefSettings->coeff_b;
 
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
@@ -517,7 +552,7 @@ void CallerMainWindow::setFiniteTime(int stTime) {
 
 void CallerMainWindow::coefTrigger(int trig) {
     coefState = trig;
-    QApplication::processEvents();
+
     if (coefState == 0)
     {
         lineEdit_2->setReadOnly(true);
@@ -584,22 +619,6 @@ void CallerMainWindow::setReadDelay(QString delay) {
 
 void CallerMainWindow::setAverageWindow(QString window) {
     inputProcessing(avWindow, window.toStdString());
-}
-
-void CallerMainWindow::cnt1(int val) {
-//    cnt1_trig = val;
-}
-
-void CallerMainWindow::cnt2(int val) {
-//    cnt2_trig = val;
-}
-
-void CallerMainWindow::cnt3(int val) {
-//    cnt3_trig = val;
-}
-
-void CallerMainWindow::cnt4(int val) {
-//    cnt4_trig = val;
 }
 
 void CallerMainWindow::multiPulseTrigger(int st) {

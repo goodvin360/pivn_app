@@ -6,7 +6,7 @@
 #include "QWidget"
 #include "QCheckBox"
 #include "QtWidgets/QCheckBox"
-
+#include "QtWidgets/QLineEdit"
 
 #pragma region Docs
 
@@ -21,6 +21,11 @@ public: Counters(QWidget* parent = nullptr);
     QCheckBox*checkBox_2 = new QCheckBox();
     QCheckBox*checkBox_3 = new QCheckBox();
     QCheckBox*checkBox_4 = new QCheckBox();
+
+    QLineEdit*lineEdit = nullptr;
+    QLineEdit*lineEdit_2 = nullptr;
+    QLineEdit*lineEdit_3 = nullptr;
+    QLineEdit*lineEdit_4 = nullptr;
 
     int cnt1_trig = 0;
     int cnt2_trig = 0;
