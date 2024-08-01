@@ -89,7 +89,6 @@ void CallerMainWindow::startByTimer() {
                 {
                     vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                     counter+=1;
-                    fluxCalc->calculateFlux(*vecData, fluxTrig);
                 }
             }
         }
@@ -109,7 +108,6 @@ void CallerMainWindow::startByTimer() {
             if (tempVar2>tempVar1)
             {
                 vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
-                fluxCalc->calculateFlux(*vecData, fluxTrig);
                 counter+=1;
             }
         };
@@ -142,15 +140,12 @@ void CallerMainWindow::startByTimer() {
         QString showLine = QString::fromStdString(res_out.str());
         lineEdit_6->setText(QString::number(nFlux,'g',3));
         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-//        QApplication::processEvents();
         QScrollBar*sb = textBrowser->verticalScrollBar();
         sb->setValue(sb->maximum());
-//        QApplication::processEvents();
         flushCounter+=1;
         if (flushCounter>150)
         {
             textBrowser->clear();
-//            QApplication::processEvents();
             flushCounter = 0;
         }
     }
@@ -180,9 +175,6 @@ void CallerMainWindow::startByTimer() {
         edgePointTrig = 0;
         tempTime=0;
         tempTimeShift = 0;
-
-        fluxCalc->backVal = 0;
-        fluxCalc->backCounter = 1;
 
         delete esp32;
 
@@ -229,7 +221,6 @@ void CallerMainWindow::connectCOM() {
     if (esp32.isConnected())
     {
         textBrowser->setText(textBrowser->toPlainText()+"connected to "+pName+'\n');
-//        QApplication::processEvents();
     }
     else
     {
@@ -239,7 +230,6 @@ void CallerMainWindow::connectCOM() {
 
 void CallerMainWindow::addStop() {
     onFlag = false;
-//    QApplication::processEvents();
 }
 
 void CallerMainWindow::addStart() {
@@ -258,7 +248,6 @@ void CallerMainWindow::addStart() {
     coeff_b=coefSettings->coeff_b;
 
     textBrowser->clear();
-//    QApplication::processEvents();
 
     resultsNew.clear();
     esp32 = new SerialPort(pName.toStdString());
@@ -331,7 +320,6 @@ void CallerMainWindow::addStartFile() {
         makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
         plotObjVec.push_back(makePlot);
         textBrowser->setText("\n");
-        QApplication::processEvents();
 
         resTime[0]=std::stod(counters.lineEdit->text().toStdString());
         resTime[1]=std::stod(counters.lineEdit_2->text().toStdString());
@@ -375,7 +363,6 @@ void CallerMainWindow::addStartFile() {
                             tempVar2 = resultsNew.size();
                             if (tempVar2 > tempVar1) {
                                 vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
-                                fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                                 counter += 1;
                             }
                         }
@@ -394,7 +381,6 @@ void CallerMainWindow::addStartFile() {
                         tempVar2 = resultsNew.size();
                         if (tempVar2 > tempVar1) {
                             vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
-                            fluxCalc->calculateFlux(*vecDataFile, fluxTrig);
                             counter += 1;
                         }
                     };
@@ -425,15 +411,12 @@ void CallerMainWindow::addStartFile() {
                         totalCounts = vecDataFile->totalCnt;
                         lineEdit_6->setText(QString::number(nFlux,'g',3));
                         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
-                        QApplication::processEvents();
                         QScrollBar*sb = textBrowser->verticalScrollBar();
                         sb->setValue(sb->maximum());
-                        QApplication::processEvents();
                         flushCounter+=1;
                         if (flushCounter>150)
                         {
                             textBrowser->clear();
-                            QApplication::processEvents();
                             flushCounter = 0;
                         }
                     res_out.clear();
@@ -466,9 +449,6 @@ void CallerMainWindow::addStartFile() {
             tempTime=0;
             tempTimeShift = 0;
         }
-
-        fluxCalc->backVal = 0;
-        fluxCalc->backCounter = 1;
     }
 }
 
@@ -501,7 +481,6 @@ void CallerMainWindow::plotTrigger(int st) {
     plotState = st;
     if (!plotObjVec.empty())
         plotObjVec.back()->chartView->isOn=true;
-    QApplication::processEvents();
     if (!isActive && st >0)
         isActive = true;
     if (st == 0) {
@@ -517,7 +496,6 @@ void CallerMainWindow::plotTriggerTotal(int stTot) {
     plotTotalState = stTot;
     if (!plotObjVec.empty())
         plotObjVec.back()->chartViewTot->isOn=true;
-    QApplication::processEvents();
     if (!isActiveTotal && stTot>0)
         isActiveTotal = true;
     if (stTot == 0) {
@@ -531,12 +509,10 @@ void CallerMainWindow::plotTriggerTotal(int stTot) {
 
 void CallerMainWindow::rescalePlotTrigger(int stRescale) {
     rescaleTrigger = stRescale;
-    QApplication::processEvents();
 }
 
 void CallerMainWindow::setFiniteTime(int stTime) {
     timeState = stTime;
-    QApplication::processEvents();
     if (timeState == 0)
     {   measTime = 1e9;
         lineEdit->setText("- - -");
@@ -605,7 +581,6 @@ void CallerMainWindow::manualTrigger(int st) {
 
 void CallerMainWindow::addConstFluxGo() {
         edgePointTrig++;
-//        QApplication::processEvents();
 }
 
 void CallerMainWindow::addConstFluxTrig(int st) {

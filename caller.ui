@@ -423,13 +423,6 @@
       </property>
      </widget>
     </item>
-    <item row="18" column="5">
-     <widget class="QPushButton" name="pushButton_6">
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
-    </item>
     <item row="17" column="0" colspan="6">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
@@ -475,11 +468,6 @@
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="testWidget" name="widget" native="true">
-         <layout class="QGridLayout" name="gridLayout_2"/>
         </widget>
        </item>
       </layout>
@@ -572,17 +560,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>testWidget</class>
-   <extends>QWidget</extends>
-   <header>testwidget.h</header>
-   <container>1</container>
-   <slots>
-    <slot>addButton()</slot>
-   </slots>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -624,7 +601,7 @@
    <slot>setTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>467</x>
+     <x>236</x>
      <y>99</y>
     </hint>
     <hint type="destinationlabel">
@@ -672,7 +649,7 @@
    <slot>setCoefA(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1172</x>
+     <x>401</x>
      <y>72</y>
     </hint>
     <hint type="destinationlabel">
@@ -688,7 +665,7 @@
    <slot>addLoadFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>410</x>
+     <x>179</x>
      <y>130</y>
     </hint>
     <hint type="destinationlabel">
@@ -704,7 +681,7 @@
    <slot>addStartFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>410</x>
+     <x>179</x>
      <y>159</y>
     </hint>
     <hint type="destinationlabel">
@@ -721,27 +698,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>64</x>
-     <y>242</y>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
      <x>229</x>
      <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_6</sender>
-   <signal>clicked()</signal>
-   <receiver>widget</receiver>
-   <slot>addButton()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1277</x>
-     <y>1406</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>400</x>
-     <y>1157</y>
     </hint>
    </hints>
   </connection>
@@ -752,7 +713,7 @@
    <slot>setFiniteTime(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>411</x>
+     <x>180</x>
      <y>38</y>
     </hint>
     <hint type="destinationlabel">
@@ -768,7 +729,7 @@
    <slot>setCoefB(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1172</x>
+     <x>401</x>
      <y>101</y>
     </hint>
     <hint type="destinationlabel">
@@ -784,7 +745,7 @@
    <slot>setDist(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1172</x>
+     <x>401</x>
      <y>128</y>
     </hint>
     <hint type="destinationlabel">
@@ -801,7 +762,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>123</x>
-     <y>498</y>
+     <y>483</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -816,8 +777,8 @@
    <slot>plotTriggerTotal(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>410</x>
-     <y>242</y>
+     <x>179</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
      <x>283</x>
@@ -832,7 +793,7 @@
    <slot>coefTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1172</x>
+     <x>401</x>
      <y>46</y>
     </hint>
     <hint type="destinationlabel">
@@ -849,7 +810,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>179</x>
-     <y>265</y>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -864,8 +825,8 @@
    <slot>addGoTrigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>401</x>
-     <y>322</y>
+     <x>141</x>
+     <y>307</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
@@ -881,7 +842,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>319</y>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
      <x>272</x>
@@ -897,7 +858,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>50</x>
-     <y>345</y>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>275</x>
@@ -913,7 +874,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>74</x>
-     <y>386</y>
+     <y>371</y>
     </hint>
     <hint type="destinationlabel">
      <x>235</x>
@@ -929,7 +890,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
-     <y>415</y>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
@@ -944,7 +905,7 @@
    <slot>setReadDelay(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>750</x>
+     <x>230</x>
      <y>157</y>
     </hint>
     <hint type="destinationlabel">
@@ -960,8 +921,8 @@
    <slot>setAverageWindow(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>750</x>
-     <y>210</y>
+     <x>230</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
      <x>203</x>
@@ -976,8 +937,8 @@
    <slot>multiPulseTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>750</x>
-     <y>253</y>
+     <x>230</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>207</x>
@@ -992,8 +953,8 @@
    <slot>edgePointMinus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>382</x>
-     <y>429</y>
+     <x>125</x>
+     <y>414</y>
     </hint>
     <hint type="destinationlabel">
      <x>293</x>
@@ -1008,8 +969,8 @@
    <slot>edgePointPlus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>747</x>
-     <y>444</y>
+     <x>233</x>
+     <y>429</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
