@@ -18,8 +18,8 @@ Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d
     {
         chart->addSeries(lsVector.at(i));
     }
-    chart->legend()->setVisible(1);
-    chart->setVisible(1);
+    chart->legend()->setVisible(true);
+    chart->setVisible(true);
     chart->addAxis(m_axisX, Qt::AlignBottom);
     chart->addAxis(m_axisY, Qt::AlignLeft);
     for (int i=0; i<lsVector.size(); i++)
@@ -58,8 +58,8 @@ Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d
     {
         chartTot->addSeries(lsVectorTot.at(i));
     }
-    chartTot->legend()->setVisible(1);
-    chartTot->setVisible(1);
+    chartTot->legend()->setVisible(true);
+    chartTot->setVisible(true);
     chartTot->addAxis(m_axisX_Tot, Qt::AlignBottom);
     chartTot->addAxis(m_axisY_Tot, Qt::AlignLeft);
     for (int i=0; i<lsVectorTot.size(); i++)
@@ -138,7 +138,7 @@ void Plotter::PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2,
                     m_axisY->setRange(0, 1);
             }
 
-            chartView->setVisible(1);
+            chartView->setVisible(true);
             chartView->setRenderHint(QPainter::Antialiasing);
         }
     if(!chartView->isOn && !isActive) {
@@ -208,7 +208,7 @@ void Plotter::PlotGraphTotal(int rescaleTrig, double &ePoint, int &xp1, int &xp2
                 m_axisY_Tot->setRange(0, 1);
         }
 
-        chartViewTot->setVisible(1);
+        chartViewTot->setVisible(true);
         chartViewTot->setRenderHint(QPainter::Antialiasing);
     }
     if(!chartViewTot->isOn && !isActiveTot) {

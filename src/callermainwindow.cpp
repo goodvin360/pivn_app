@@ -8,39 +8,10 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     cntSettings = new Counters();
     counters.setupUi(cntSettings);
 
-    cntSettings->lineEdit = counters.lineEdit;
-    cntSettings->lineEdit_2 = counters.lineEdit_2;
-    cntSettings->lineEdit_3 = counters.lineEdit_3;
-    cntSettings->lineEdit_4 = counters.lineEdit_4;
-    cntSettings->checkBox = counters.checkBox;
-    cntSettings->checkBox_2 = counters.checkBox_2;
-    cntSettings->checkBox_3 = counters.checkBox_3;
-    cntSettings->checkBox_4 = counters.checkBox_4;
-
-    counters.checkBox->setChecked(1);
-    counters.checkBox_2->setChecked(1);
-    counters.checkBox_3->setChecked(1);
-    counters.checkBox_4->setChecked(1);
-    counters.lineEdit->setText(QString::number(resTime[0]));
-    counters.lineEdit_2->setText(QString::number(resTime[1]));
-    counters.lineEdit_3->setText(QString::number(resTime[2]));
-    counters.lineEdit_4->setText(QString::number(resTime[3]));
-
     coefSettings = new Coefficients();
     coefficients.setupUi(coefSettings);
 
-    coefSettings->lineEdit = coefficients.lineEdit;
-    coefSettings->lineEdit_2 = coefficients.lineEdit_2;
-    coefSettings->lineEdit_3 = coefficients.lineEdit_3;
-    coefSettings->checkBox = coefficients.checkBox;
-    coefSettings->checkBox_2 = coefficients.checkBox_2;
-    coefSettings->checkBox_3 = coefficients.checkBox_3;
-
-    coefficients.checkBox->setChecked(1);
-    coefficients.checkBox_3->setChecked(1);
-    coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
-    coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
-    coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
+    startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
@@ -52,8 +23,6 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 CallerMainWindow::~CallerMainWindow() {
-    std::cout << "destructor is called" << std::endl;
-//    delete makePlot;
     for (int i=0; i<plotObjVec.size(); i++)
         delete plotObjVec.at(i);
     cntSettings->close();
@@ -80,10 +49,6 @@ void CallerMainWindow::startByTimer() {
             if (dotsFind(token,":").second == 5)
             {
                 resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
-                if (vecData->resultsDb.size()>0)
-                {
-                    fluxTrig = vecData->resultsDb.at(1).back();
-                }
                 tempVar2 = resultsNew.size();
                 if (tempVar2>tempVar1)
                 {
@@ -101,16 +66,13 @@ void CallerMainWindow::startByTimer() {
         if (dotsFind(inputValStr,":").second == 5)
         {
             resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
-            {
-                fluxTrig = vecData->resultsDb.at(1).back();
-            }
             tempVar2 = resultsNew.size();
             if (tempVar2>tempVar1)
             {
                 vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
                 counter+=1;
             }
-        };
+        }
     }
 
     if (vecData->resultsDb.size()>0)
@@ -122,7 +84,7 @@ void CallerMainWindow::startByTimer() {
 
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
         if (plotState>0 && isActive)
@@ -260,21 +222,6 @@ void CallerMainWindow::setTime(QString dataEntered) {
         measTime = std::stoi(dataEntered.toStdString());
 }
 
-void CallerMainWindow::setCoefA(QString coef_a)
-{
-    inputProcessing(coeff_a,coef_a.toStdString());
-}
-
-void CallerMainWindow::setCoefB(QString coef_b)
-{
-    inputProcessing(coeff_b,coef_b.toStdString());
-}
-
-void CallerMainWindow::setDist(QString dist)
-{
-    inputProcessing(distance,dist.toStdString());
-}
-
 void CallerMainWindow::inputProcessing(double &var, std::string inp) {
     std::string str = inp;
     for (int i = 0; i < str.size(); i++) {
@@ -357,9 +304,6 @@ void CallerMainWindow::addStartFile() {
                         if (dotsFind(token, ":").second == 5) {
                             resultsNew.insert(
                                     std::pair<double, std::string>(std::stod(dotsFind(token, ":").first), token));
-                            if (vecDataFile->resultsDb.size() > 0) {
-                                fluxTrig = vecDataFile->resultsDb.at(1).back();
-                            }
                             tempVar2 = resultsNew.size();
                             if (tempVar2 > tempVar1) {
                                 vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
@@ -375,9 +319,6 @@ void CallerMainWindow::addStartFile() {
                     if (dotsFind(inputValStr, ":").second == 5) {
                         resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr, ":").first),
                                                                          inputValStr));
-                        if (vecDataFile->resultsDb.size() > 0) {
-                            fluxTrig = vecDataFile->resultsDb.at(1).back();
-                        }
                         tempVar2 = resultsNew.size();
                         if (tempVar2 > tempVar1) {
                             vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
@@ -388,7 +329,7 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, multiPulse);
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
                     if (plotState > 0 && isActive)
@@ -526,21 +467,6 @@ void CallerMainWindow::setFiniteTime(int stTime) {
     }
 }
 
-void CallerMainWindow::coefTrigger(int trig) {
-    coefState = trig;
-
-    if (coefState == 0)
-    {
-        lineEdit_2->setReadOnly(true);
-        lineEdit_3->setReadOnly(true);
-    }
-    else
-    {
-        lineEdit_2->setReadOnly(false);
-        lineEdit_3->setReadOnly(false);
-    }
-}
-
 void CallerMainWindow::setCountIntTime(QString intTime) {
     if (intTime.length()>0) {
         integrationTime = std::stod(intTime.toStdString());
@@ -587,17 +513,12 @@ void CallerMainWindow::addConstFluxTrig(int st) {
     constFluxTrig = st;
 }
 
-
 void CallerMainWindow::setReadDelay(QString delay) {
     inputProcessing(readDelay, delay.toStdString());
 }
 
 void CallerMainWindow::setAverageWindow(QString window) {
     inputProcessing(avWindow, window.toStdString());
-}
-
-void CallerMainWindow::multiPulseTrigger(int st) {
-    multiPulse = st;
 }
 
 void CallerMainWindow::edgePointPlus() {
@@ -612,12 +533,43 @@ void CallerMainWindow::edgePointMinus() {
 
 void CallerMainWindow::on_actioncounters_triggered()
 {
-        std::cout << "pey" << std::endl;
     cntSettings->show();
 }
 
 void CallerMainWindow::on_actioncoefficients_triggered()
 {
-    std::cout << "pey pey" << std::endl;
     coefSettings->show();
+}
+
+void CallerMainWindow::startUpFunc() {
+    cntSettings->lineEdit = counters.lineEdit;
+    cntSettings->lineEdit_2 = counters.lineEdit_2;
+    cntSettings->lineEdit_3 = counters.lineEdit_3;
+    cntSettings->lineEdit_4 = counters.lineEdit_4;
+    cntSettings->checkBox = counters.checkBox;
+    cntSettings->checkBox_2 = counters.checkBox_2;
+    cntSettings->checkBox_3 = counters.checkBox_3;
+    cntSettings->checkBox_4 = counters.checkBox_4;
+
+    counters.checkBox->setChecked(true);
+    counters.checkBox_2->setChecked(true);
+    counters.checkBox_3->setChecked(true);
+    counters.checkBox_4->setChecked(true);
+    counters.lineEdit->setText(QString::number(resTime[0]));
+    counters.lineEdit_2->setText(QString::number(resTime[1]));
+    counters.lineEdit_3->setText(QString::number(resTime[2]));
+    counters.lineEdit_4->setText(QString::number(resTime[3]));
+
+    coefSettings->lineEdit = coefficients.lineEdit;
+    coefSettings->lineEdit_2 = coefficients.lineEdit_2;
+    coefSettings->lineEdit_3 = coefficients.lineEdit_3;
+    coefSettings->checkBox = coefficients.checkBox;
+    coefSettings->checkBox_2 = coefficients.checkBox_2;
+    coefSettings->checkBox_3 = coefficients.checkBox_3;
+
+    coefficients.checkBox->setChecked(true);
+    coefficients.checkBox_3->setChecked(true);
+    coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
+    coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
+    coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
 }

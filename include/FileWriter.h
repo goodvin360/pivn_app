@@ -14,8 +14,6 @@ public:
 
     ~FileWriter();
 
-    void fileWrite(std::map<std::string, int> &res);
-
     void fileWriteVec(std::vector<std::vector<double>> &res, std::string marker);
 };
 

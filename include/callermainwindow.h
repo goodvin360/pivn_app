@@ -55,9 +55,6 @@ public:
     Coefficients*coefSettings;
 
     QLineEdit*lineEdit = nullptr;
-    QLineEdit*lineEdit_2 = nullptr;
-    QLineEdit*lineEdit_3 = nullptr;
-    QLineEdit*lineEdit_4 = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
     QLineEdit*lineEdit_7 = nullptr;
@@ -73,30 +70,24 @@ public:
     QPushButton*pushButton_5 = new QPushButton();
     QPushButton*pushButton_10 = new QPushButton();
     QPushButton*pushButton_11 = new QPushButton();
+
     QCheckBox*checkBox = new QCheckBox();
-    QCheckBox*checkBox_2 = new QCheckBox();
     QCheckBox*checkBox_3 = new QCheckBox();
     QCheckBox*checkBox_4 = new QCheckBox();
+    QCheckBox*checkBox_5 = new QCheckBox();
     QCheckBox*checkBox_6 = new QCheckBox();
     QCheckBox*checkBox_7 = new QCheckBox();
     QCheckBox*checkBox_8 = new QCheckBox();
-    QCheckBox*checkBox_13 = new QCheckBox();
+
     QString pName;
     QString fileName;
-    double coeff_a = 2671;
-//    double coeff_a = 2876;
-//    double coeff_a = 2840;
-    double coeff_b = -450245;
-//    double coeff_b = -82143;
-//    double coeff_b = 13354;
-    double distance = 24;
+    double coeff_a;
+    double coeff_b;
     int measTime = 5;
-    double fluxTrig = 0;
     bool onFlag = false;
     int plotState = 0;
     int plotTotalState = 0;
     int rescaleTrigger = 0;
-    int coefState = 0;
     int timeState = 0;
     double integrationTime = 100;
     double leftTime = integrationTime;
@@ -108,10 +99,8 @@ public:
     double edgePoint = 0;
     double tempTime = 0;
     double tempTimeShift = 0;
-    double tempTimeSet = 0;
     int constFluxTrig = 0;
     int edgePointTrig = 0;
-    int multiPulse = 0;
     int cnt1_trig = 0;
     int cnt2_trig = 0;
     int cnt3_trig = 0;
@@ -143,6 +132,7 @@ public:
     std::pair<std::string, int> dotsFind (std::string str, std::string delim);
     std::vector<std::string> fileRead (std::string str);
     void inputProcessing(double &var, std::string inp);
+    void startUpFunc();
 
 public slots:
     void printMsg(QString msg, int num);
@@ -151,22 +141,17 @@ public slots:
     void addStart();
     void setTime(QString dataEntered);
     void getCOM(QString itemName);
-    void setCoefA(QString coef_a);
-    void setCoefB(QString coef_b);
-    void setDist(QString dist);
     void addStartFile();
     void addLoadFile();
     void plotTrigger(int st);
     void plotTriggerTotal(int stTot);
     void rescalePlotTrigger(int stRescale);
-    void coefTrigger(int trig);
     void setFiniteTime(int stTime);
     void setCountIntTime(QString intTime);
     void startByTimer();
     void addGoTrigger();
     void autoTrigger(int st);
     void manualTrigger(int st);
-    void multiPulseTrigger(int st);
     void addConstFluxGo();
     void addConstFluxTrig(int st);
     void setReadDelay(QString delay);

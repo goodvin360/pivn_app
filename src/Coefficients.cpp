@@ -10,11 +10,11 @@ Coefficients::~Coefficients() {}
 void Coefficients::trig14(int trig) {
     coef14 = trig;
     if (trig>0) {
-        checkBox_3->setChecked(0);
+        checkBox_3->setChecked(false);
         coef2_5 = 0;
     }
     else {
-        checkBox_3->setChecked(1);
+        checkBox_3->setChecked(true);
         coef2_5 = 1;
     }
     setDist(QString::number(distance));
@@ -23,11 +23,11 @@ void Coefficients::trig14(int trig) {
 void Coefficients::trig2_5(int trig) {
     coef2_5 = trig;
     if (trig>0) {
-        checkBox_2->setChecked(0);
+        checkBox_2->setChecked(false);
         coef14 = 0;
     }
     else {
-        checkBox_2->setChecked(1);
+        checkBox_2->setChecked(true);
         coef14 = 1;
     }
     setDist(QString::number(distance));

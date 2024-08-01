@@ -124,7 +124,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int multiPulseTrig) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
     fluxTime = totTime+countStartTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
