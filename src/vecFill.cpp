@@ -126,6 +126,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
     fluxTime = totTime+countStartTime;
+    nCritical = 0.2/resTime[2];
     if (data.at(0).size()==1) {
         if (trMode==0)
             fluxTrig = data.at(1).back();

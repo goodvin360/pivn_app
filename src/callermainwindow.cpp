@@ -40,6 +40,12 @@ void CallerMainWindow::startByTimer() {
     size_t pos = 0;
     std::string token;
     std::string timeStr;
+
+    cnt1_trig = cntSettings->cnt1_trig;
+    cnt2_trig = cntSettings->cnt2_trig;
+    cnt3_trig = cntSettings->cnt3_trig;
+    cnt4_trig = cntSettings->cnt4_trig;
+
     resultsNew.clear();
     while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
         tempVar1 = resultsNew.size();

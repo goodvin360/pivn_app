@@ -23,12 +23,12 @@ public: Coefficients(QWidget* parent = nullptr);
     QLineEdit*lineEdit_2 = nullptr; //coeff "b" line
     QLineEdit*lineEdit_3 = nullptr; //distance line
 
-    double coeff_a = 2671;
+//    double coeff_a = 2671;
 //    double coeff_a = 2876;
-//    double coeff_a = 2840;
-    double coeff_b = -450245;
+    double coeff_a = 2840;
+//    double coeff_b = -450245;
 //    double coeff_b = -82143;
-//    double coeff_b = 13354;
+    double coeff_b = 13354;
     double distance = 24;
     int coefState = 0;
     int coef14 = 0;
