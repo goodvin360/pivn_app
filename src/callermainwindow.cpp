@@ -154,9 +154,14 @@ void CallerMainWindow::printMsg(QString msg, int num) {
     if (num == 1) {
         shotCounter+=1;
         textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_2->verticalScrollBar();
+        sb->setValue(sb->maximum());
     }
-    if (num == 2)
-        textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg +'\n');
+    if (num == 2) {
+        textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_3->verticalScrollBar();
+        sb->setValue(sb->maximum());
+    }
 
 }
 
@@ -578,4 +583,18 @@ void CallerMainWindow::startUpFunc() {
     coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
     coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
     coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
+}
+
+void CallerMainWindow::clearNeutrons() {
+    textBrowser_2->clear();
+}
+
+void CallerMainWindow::clearCounts() {
+    textBrowser_3->clear();
+    lineEdit_6->setText("0");
+    lineEdit_10->setText(QString::number(integrationTime));
+}
+
+void CallerMainWindow::clearMessage() {
+    textBrowser->clear();
 }

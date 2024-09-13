@@ -267,6 +267,39 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_6">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QTextBrowser" name="textBrowser_2">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="sizePolicy">
@@ -280,16 +313,6 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QTextBrowser" name="textBrowser_2">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
          </property>
         </widget>
        </item>
@@ -344,91 +367,6 @@
       </layout>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QFrame" name="frame_6">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_8">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Integration time, s:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>Time left, s:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_8">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Approx. neutrons/imp.:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="lineEdit_5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_10">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="lineEdit_6">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Count integrals:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="3">
-        <widget class="QTextBrowser" name="textBrowser_3"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="6" column="0" colspan="2">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
@@ -438,23 +376,7 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Message window:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
+       <item row="2" column="0" colspan="3">
         <widget class="QTextBrowser" name="textBrowser">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -473,6 +395,134 @@
          </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_9">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Message window:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QFrame" name="frame_6">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="lineEdit_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Integration time, s:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Time left, s:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLineEdit" name="lineEdit_10">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_8">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Approx. neutrons/imp.:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Count integrals:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="4">
+        <widget class="QTextBrowser" name="textBrowser_3"/>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="lineEdit_6">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QPushButton" name="pushButton_12">
+         <property name="text">
+          <string>Clear</string>
          </property>
         </widget>
        </item>
@@ -612,8 +662,8 @@
    <slot>addLoadFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>130</y>
+     <x>460</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>
@@ -628,8 +678,8 @@
    <slot>addStartFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>159</y>
+     <x>460</x>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>24</x>
@@ -644,8 +694,8 @@
    <slot>plotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>227</y>
+     <x>345</x>
+     <y>183</y>
     </hint>
     <hint type="destinationlabel">
      <x>229</x>
@@ -660,8 +710,8 @@
    <slot>setFiniteTime(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>180</x>
-     <y>38</y>
+     <x>254</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>113</x>
@@ -676,8 +726,8 @@
    <slot>setCountIntTime(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>483</y>
+     <x>142</x>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -692,8 +742,8 @@
    <slot>plotTriggerTotal(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>227</y>
+     <x>484</x>
+     <y>183</y>
     </hint>
     <hint type="destinationlabel">
      <x>283</x>
@@ -708,8 +758,8 @@
    <slot>rescalePlotTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>250</y>
+     <x>460</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>381</x>
@@ -724,8 +774,8 @@
    <slot>addGoTrigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>307</y>
+     <x>255</x>
+     <y>237</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
@@ -740,8 +790,8 @@
    <slot>manualTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>304</y>
+     <x>75</x>
+     <y>234</y>
     </hint>
     <hint type="destinationlabel">
      <x>272</x>
@@ -756,8 +806,8 @@
    <slot>autoTrigger(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>330</y>
+     <x>68</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
      <x>275</x>
@@ -772,8 +822,8 @@
    <slot>addConstFluxTrig(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>371</y>
+     <x>92</x>
+     <y>301</y>
     </hint>
     <hint type="destinationlabel">
      <x>235</x>
@@ -788,8 +838,8 @@
    <slot>addConstFluxGo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>92</x>
-     <y>400</y>
+     <x>93</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>280</x>
@@ -804,8 +854,8 @@
    <slot>setReadDelay(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>157</y>
+     <x>484</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
      <x>223</x>
@@ -820,8 +870,8 @@
    <slot>setAverageWindow(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>195</y>
+     <x>254</x>
+     <y>167</y>
     </hint>
     <hint type="destinationlabel">
      <x>203</x>
@@ -836,8 +886,8 @@
    <slot>edgePointMinus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>125</x>
-     <y>414</y>
+     <x>174</x>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>293</x>
@@ -852,12 +902,60 @@
    <slot>edgePointPlus()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>233</x>
-     <y>429</y>
+     <x>255</x>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
      <y>516</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearNeutrons()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>500</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_12</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearCounts()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>388</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_9</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>603</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>574</y>
     </hint>
    </hints>
   </connection>
@@ -885,5 +983,8 @@
   <slot>multiPulseTrigger(int)</slot>
   <slot>edgePointPlus()</slot>
   <slot>edgePointMinus()</slot>
+  <slot>clearNeutrons()</slot>
+  <slot>clearCounts()</slot>
+  <slot>clearMessage()</slot>
  </slots>
 </ui>

@@ -158,6 +158,9 @@ public slots:
     void setAverageWindow(QString window);
     void edgePointPlus();
     void edgePointMinus();
+    void clearNeutrons();
+    void clearCounts();
+    void clearMessage();
     void on_actioncounters_triggered();
     void on_actioncoefficients_triggered();
 };
