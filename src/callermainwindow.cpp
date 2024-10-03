@@ -121,6 +121,17 @@ void CallerMainWindow::startByTimer() {
     inputValStr.clear();
     memset(inputData, 0, sizeof inputData);
 
+    if (counter==1)
+    {
+        FileWriter writerLog;
+        writerLog.fileWriteVec(vecData->resultsDb, "log first row");
+    }
+    if (counter>1)
+    {
+        FileWriter writerLog;
+        writerLog.fileWriteVec(vecData->resultsDb, "log");
+    }
+
     if (counter>=measTime || !onFlag)
     {
         if (m_timer->isActive())
