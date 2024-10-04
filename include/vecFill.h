@@ -49,7 +49,9 @@ public:
     double cnt = 0;
     double totalCnt = 0;
     double totalCntClean = 0;
+    double totalCntFullTime = 0;
     double minusBack = 0;
+    double minusBackTrue = 0;
     double Flux = 0;
     FileWriter*fileWriter;
     int fileTimer = 0;
@@ -66,8 +68,11 @@ public:
     double last_tPoint = 0;
     double last_edgePointShift = 0;
     bool isBackForConst = false;
-    bool countStartFlag = true;
+    bool countStartFlag = false;
     double countStartTime = 0;
+    bool countStartFlagConst = true;
+    double criticalTime = 0;
+    bool criticalChange = false;
     double nCritical = 0.25/resTime[2];
     double currentTrigTime = 0, lastTrigTime = 0;
     bool truePulse = false;

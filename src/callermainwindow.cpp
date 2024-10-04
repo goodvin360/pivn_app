@@ -150,6 +150,9 @@ void CallerMainWindow::startByTimer() {
         delete esp32;
 
         onFlag = false;
+        pushButton->setEnabled(1);
+        pushButton_4->setEnabled(1);
+        pushButton_5->setEnabled(1);
     }
 }
 
@@ -197,18 +200,30 @@ void CallerMainWindow::connectCOM() {
     if (esp32.isConnected())
     {
         textBrowser->setText(textBrowser->toPlainText()+"connected to "+pName+'\n');
+        trigCOM = 1;
+        pushButton->setEnabled(1);
+        pushButton_2->setEnabled(0);
     }
     else
     {
+        trigCOM = 0;
         return;
     }
 }
 
 void CallerMainWindow::addStop() {
     onFlag = false;
+    if (trigCOM==1)
+        pushButton->setEnabled(1);
+    pushButton_4->setEnabled(1);
+    pushButton_5->setEnabled(1);
 }
 
 void CallerMainWindow::addStart() {
+    pushButton->setEnabled(0);
+    pushButton_4->setEnabled(0);
+    pushButton_5->setEnabled(0);
+
     makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
     plotObjVec.push_back(makePlot);
     onFlag = true;
@@ -275,6 +290,11 @@ std::vector<std::string> CallerMainWindow::fileRead(std::string str) {
 
 void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
+    pushButton->setEnabled(0);
+    pushButton_2->setEnabled(0);
+    pushButton_4->setEnabled(0);
+    pushButton_5->setEnabled(0);
+
     if (fileName!= nullptr)
     {
         shotCounter = 0;
@@ -394,6 +414,11 @@ void CallerMainWindow::addStartFile() {
             edgePointTrig = 0;
             tempTime=0;
             tempTimeShift = 0;
+            pushButton->setEnabled(1);
+            if (trigCOM==0)
+                pushButton_2->setEnabled(1);
+            pushButton_4->setEnabled(1);
+            pushButton_5->setEnabled(1);
         }
 
         if (onFlag) {
@@ -403,6 +428,11 @@ void CallerMainWindow::addStartFile() {
             edgePointTrig = 0;
             tempTime=0;
             tempTimeShift = 0;
+            pushButton->setEnabled(1);
+            if (trigCOM==0)
+                pushButton_2->setEnabled(1);
+            pushButton_4->setEnabled(1);
+            pushButton_5->setEnabled(1);
         }
     }
 }
@@ -498,11 +528,13 @@ void CallerMainWindow::autoTrigger(int st) {
     {
         trigMode = 0;
         checkBox_7->setChecked(false);
+        pushButton_7->setEnabled(0);
     }
     else
     {
         trigMode = 1;
         checkBox_7->setChecked(true);
+        pushButton_7->setEnabled(1);
     }
 }
 
@@ -511,11 +543,13 @@ void CallerMainWindow::manualTrigger(int st) {
     {
         trigMode = 1;
         checkBox_6->setChecked(false);
+        pushButton_7->setEnabled(1);
     }
     else
     {
         trigMode = 0;
         checkBox_6->setChecked(true);
+        pushButton_7->setEnabled(0);
     }
 }
 
@@ -525,6 +559,16 @@ void CallerMainWindow::addConstFluxGo() {
 
 void CallerMainWindow::addConstFluxTrig(int st) {
     constFluxTrig = st;
+    if (st>0) {
+        pushButton_8->setEnabled(1);
+        pushButton_10->setEnabled(1);
+        pushButton_11->setEnabled(1);
+    }
+    else {
+        pushButton_8->setEnabled(0);
+        pushButton_10->setEnabled(0);
+        pushButton_11->setEnabled(0);
+    }
 }
 
 void CallerMainWindow::setReadDelay(QString delay) {

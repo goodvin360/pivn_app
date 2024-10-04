@@ -65,11 +65,16 @@ public:
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
     QComboBox*comboBox = new QComboBox();
-    QPushButton*pushButton_3 = new QPushButton();
-    QPushButton*pushButton_4 = new QPushButton();
-    QPushButton*pushButton_5 = new QPushButton();
-    QPushButton*pushButton_10 = new QPushButton();
-    QPushButton*pushButton_11 = new QPushButton();
+    QPushButton*pushButton = new QPushButton();         //start
+    QPushButton*pushButton_2 = new QPushButton();       //connect to COM
+    QPushButton*pushButton_3 = new QPushButton();       //stop
+    QPushButton*pushButton_4 = new QPushButton();       //loadFile
+    QPushButton*pushButton_5 = new QPushButton();       //start from file
+    QPushButton*pushButton_7 = new QPushButton();       //Go for manual trigger mode
+    QPushButton*pushButton_8 = new QPushButton();       //Go for const. flux
+    QPushButton*pushButton_10 = new QPushButton();      //Edge point plus
+    QPushButton*pushButton_11 = new QPushButton();      //Edge point minus
+    //pushButtons 6,9,12 - clear buttons
 
     QCheckBox*checkBox = new QCheckBox();
     QCheckBox*checkBox_3 = new QCheckBox();
@@ -81,6 +86,7 @@ public:
 
     QString pName;
     QString fileName;
+    int trigCOM = 0;
     double coeff_a;
     double coeff_b;
     int measTime = 5;
