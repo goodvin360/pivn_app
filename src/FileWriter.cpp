@@ -10,7 +10,7 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
     auto tme = std::time(nullptr);
     auto tm = *std::localtime(&tme);
 
-    if (res.size() > 0 && marker!="log" && marker!= "log first row") {
+    if (res.size() > 0 && marker!="log") {
 
         std::stringstream res_out;
         res_out << "../outDataVec " << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << " " << marker << ".txt";
@@ -26,12 +26,14 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
         }
     };
 
-    if (res.size() > 0 && marker=="log first row") {
+    if (res.size() > 0 && marker=="log") {
 
         std::stringstream res_out;
         res_out << "../outDataVec " << " " << "log" << ".txt";
         std::ofstream myFile(res_out.str(), std::ios::app);
-        myFile << " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " << std::endl;
+
+        if (res.at(0).back()==0)
+            myFile << " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " << std::endl;
         for (int j = 0; j < res.size(); j++) {
             if (j==0)
                 myFile << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << '\t';
@@ -41,21 +43,5 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
                 myFile << res.at(j).back();
         }
         myFile << std::endl;
-    };
-
-    if (res.size() > 0 && marker=="log") {
-
-        std::stringstream res_out;
-        res_out << "../outDataVec " << " " << marker << ".txt";
-        std::ofstream myFile(res_out.str(), std::ios::app);
-            for (int j = 0; j < res.size(); j++) {
-                if (j==0)
-                    myFile << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << '\t';
-                if (j>0 && j<5)
-                    myFile << res.at(j).back() << '\t';
-                if (j==5)
-                    myFile << res.at(j).back();
-            }
-            myFile << std::endl;
     };
 }

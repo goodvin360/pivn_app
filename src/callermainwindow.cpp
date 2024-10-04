@@ -121,7 +121,7 @@ void CallerMainWindow::startByTimer() {
     inputValStr.clear();
     memset(inputData, 0, sizeof inputData);
 
-    if (counter==1)
+    /*if (counter==1)
     {
         FileWriter writerLog;
         writerLog.fileWriteVec(vecData->resultsDb, "log first row");
@@ -130,7 +130,10 @@ void CallerMainWindow::startByTimer() {
     {
         FileWriter writerLog;
         writerLog.fileWriteVec(vecData->resultsDb, "log");
-    }
+    }*/
+
+    FileWriter writerLog;
+    writerLog.fileWriteVec(vecData->resultsDb, "log");
 
     if (counter>=measTime || !onFlag)
     {
