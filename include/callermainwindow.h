@@ -118,7 +118,7 @@ public:
     int xp1dif = 500, xp2dif = 999, yp1dif = 500, yp2dif = 999;
     bool isActive = true;
     bool isActiveTotal = true;
-    double resTime[4] {500, 500, 605, 500};
+    double resTime[4] {500, 500, 500, 500};
     size_t count = std::size(resTime);
 
     vecFill*vecData = new vecFill();

@@ -19,6 +19,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
     for (size_t i{}; i < counters; i++)
     {
         resTime[i] = resT[i]*1e-6;
+        if (resTime[i]>maxResTime)
+            maxResTime = resTime[i];
     }
     if (counter==0)
     {
@@ -106,6 +108,8 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
                 resultsDb.at(5).back() = 0;
             sum += var / (1 - var * resTime[i - 2]);
             sum_clean += var;
+            if (resultsDb.at(i).back()>maxCountRate)
+                maxCountRate = resultsDb.at(i).back();
         }
         resultsDbTotal.at(1).push_back(sum);
         resultsDbTotal.at(2).push_back(0);
@@ -126,7 +130,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
     fluxTime = totTime+countStartTime;
-    nCritical = 0.2/resTime[2];
+    nCritical = 0.2/maxResTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
             fluxTrig = data.at(1).back();
@@ -163,7 +167,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             prePulsesData.push_back(prePulse);
             pulseCounter++;
 
-            if (data.at(2).back()>=nCritical)
+            if (maxCountRate>=nCritical)
                 countStartFlag = false;
 
             if (!countStartFlag)
@@ -181,7 +185,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             isPulse = true;
         }
 
-        if (data.at(2).back()>=nCritical)
+        if (maxCountRate>=nCritical)
             countStartFlag = false;
 
         secondPulseCounter = false;
@@ -205,7 +209,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         if (!countStartFlag)
         {
             fluxTime+=fluxTimeCounter;
-            if (data.at(2).back()<nCritical && resultsDbTotal.at(0).back()-currentTrigTime>0)
+            if (maxCountRate<nCritical && resultsDbTotal.at(0).back()-currentTrigTime>0)
             {
                 countStartFlag = true;
                 countStartTime = fluxTimeCounter;
@@ -218,7 +222,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         {
             double backFromPulses = 0;
 
-            if (!prePulsesData.empty() && !pulsesTime.empty())
+            /*if (!prePulsesData.empty() && !pulsesTime.empty())
             {
                 for (int i=0; i<pulseCounter-1; i++)
                 {
@@ -230,7 +234,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 backFromPulses+=(0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
                                         (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
                                              0.002643049*exp(-lmd114*fluxTimeCounter));
-            }
+            }*/
 
             if (pulseCounter>=2)
             {
@@ -292,6 +296,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             Flux = 0;
             lftTime = totTime;
             isPulse = false;
+            maxCountRate = 0;
+            maxResTime = 0;
             if (fluxTimeCounter==fluxTime)
                 secondPulseCounter = true;
             if (isSecondPulse) {
@@ -527,13 +533,13 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 last_edgePointShift = 0;
             }
 
-            if (data.at(2).back()>=nCritical && !criticalChange) {
+            if (maxCountRate>=nCritical && !criticalChange) {
                 countStartFlagConst = false;
                 fluxTimeCounter = 0;
                 criticalTime = 0;
             }
 
-            if (data.at(2).back()<nCritical) {
+            if (maxCountRate<nCritical) {
                 if (!countStartFlagConst) {
                     criticalTime = resultsDbTotal.at(0).back()-tPoint;
                     criticalChange = true;
@@ -631,8 +637,12 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             countStartFlagConst = false;
             criticalTime = 0;
             criticalChange = false;
+            maxCountRate = 0;
+            maxResTime = 0;
         }
     }
+
+    maxCountRate = 0;
 }
 
 void vecFill::cleanUp() {
@@ -663,4 +673,6 @@ void vecFill::cleanUp() {
     countStartFlagConst = false;
     criticalTime = 0;
     criticalChange = false;
+    maxCountRate = 0;
+    maxResTime = 0;
 }

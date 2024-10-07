@@ -58,7 +58,7 @@ public:
     bool fileTrigger = false;
     double trigDelta = 0;
     double backConstWindow = 50;
-    double resTime[4] = {5e-4, 5e-4, 6.05e-4, 5e-4};
+    double resTime[4] = {5e-4, 5e-4, 5e-4, 5e-4};
     double lmd116 = log(2)/14.1;
     double lmd116m = log(2)/3240;
     double lmd114 = log(2)/72;
@@ -73,7 +73,9 @@ public:
     bool countStartFlagConst = true;
     double criticalTime = 0;
     bool criticalChange = false;
-    double nCritical = 0.25/resTime[2];
+    double nCritical = 0;
+    double maxCountRate = 0;
+    double maxResTime = 0;
     double currentTrigTime = 0, lastTrigTime = 0;
     bool truePulse = false;
 
