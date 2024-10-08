@@ -128,7 +128,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int mPulses, int clearTrig) {
     fluxTime = totTime+countStartTime;
     nCritical = 0.2/maxResTime;
     if (data.at(0).size()==1) {
@@ -185,6 +185,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             isPulse = true;
         }
 
+        /*if (!prePulsesData.empty() && resultsDbTotal.at(1).back()>prePulsesData.back()){
+            prePulsesData.pop_back();
+            prePulsesData.push_back(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
+        }*/
+
         if (maxCountRate>=nCritical)
             countStartFlag = false;
 
@@ -222,19 +227,25 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         {
             double backFromPulses = 0;
 
-            /*if (!prePulsesData.empty() && !pulsesTime.empty())
+            if (mPulses>0)
             {
-                for (int i=0; i<pulseCounter-1; i++)
+                if (!prePulsesData.empty() && !pulsesTime.empty())
                 {
-                    double t = resultsDbTotal.at(0).back()-pulsesTime.at(i);
-                    backFromPulses += prePulsesData.at(i)*exp(-lmd116*t)+
-                                        0.002027726*prePulsesData.at(i)*exp(-lmd116m*t)+
-                                        0.002643049*prePulsesData.at(i)*exp(-lmd114*t);
+                    for (int i=0; i<pulseCounter-1; i++)
+                    {
+                        double t = resultsDbTotal.at(0).back()-pulsesTime.at(i);
+                        /*backFromPulses += prePulsesData.at(i)*exp(-lmd116*t)+
+                                            0.002027726*prePulsesData.at(i)*exp(-lmd116m*t)+
+                                            0.002643049*prePulsesData.at(i)*exp(-lmd114*t);*/
+                        backFromPulses += prePulsesData.at(i)*exp(-lmd116*t);
+                    }
+                    backFromPulses+=(0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
+                                            (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
+                                                 0.002643049*exp(-lmd114*fluxTimeCounter));
                 }
-                backFromPulses+=(0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                                        (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                                             0.002643049*exp(-lmd114*fluxTimeCounter));
-            }*/
+            }
+            if (mPulses==0)
+                backFromPulses=0;
 
             if (pulseCounter>=2)
             {
@@ -272,7 +283,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 lftTime = fluxTime-fluxTimeCounter;
             }
 
-
             fluxTimeCounter++;
         }
 
@@ -288,7 +298,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             countStartFlag = false;
             backVal = resultsDbTotal.at(2).back();
             backLastVal = firstBackVal;
-            backVec.clear();
             minusBack = 0;
             totalCnt = 0;
             totalCntClean = 0;
@@ -305,6 +314,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 isSecondPulse = false;
                 isBack = false;
             }
+            if (clearTrig>0)
+                backVec.clear();
+
+            std::cout << "pulse time:" << pulsesTime.back() << " pulse high: " << prePulsesData.back() << std::endl;
 
         }
 

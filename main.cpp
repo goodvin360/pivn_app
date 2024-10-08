@@ -2,9 +2,11 @@
 #include "ui_caller.h"
 #include "ui_counters.h"
 #include "ui_coefficients.h"
+#include "ui_processing.h"
 #include "callermainwindow.h"
 #include "Counters.h"
 #include "Coefficients.h"
+#include "Processing.h"
 #include "QScrollBar"
 #include  <locale.h>
 
@@ -14,14 +16,17 @@ int main(int argc, char *argv[]) {
     CallerMainWindow *window = new CallerMainWindow(nullptr);
     Counters *countersWin = new Counters(nullptr);
     Coefficients * coefWin = new Coefficients(nullptr);
+    Processing * procWin = new Processing(nullptr);
 
     Ui::MainWindow caller;
     Ui::Form_1 counters;
     Ui::Form_2 coefficients;
+    Ui::Form_3 processing;
 
     caller.setupUi(window);
     counters.setupUi(countersWin);
     coefficients.setupUi(coefWin);
+    processing.setupUi(procWin);
 
     window->textBrowser = caller.textBrowser;
     window->textBrowser_2 = caller.textBrowser_2;

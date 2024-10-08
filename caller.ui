@@ -550,6 +550,7 @@
      </property>
      <addaction name="actioncounters"/>
      <addaction name="actioncoefficients"/>
+     <addaction name="actionProcessing"/>
     </widget>
     <addaction name="menusettings"/>
    </widget>
@@ -570,6 +571,11 @@
    </property>
    <property name="text">
     <string>Coefficients</string>
+   </property>
+  </action>
+  <action name="actionProcessing">
+   <property name="text">
+    <string>Processing</string>
    </property>
   </action>
  </widget>

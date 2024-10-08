@@ -11,6 +11,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     coefSettings = new Coefficients();
     coefficients.setupUi(coefSettings);
 
+    procSetting = new Processing();
+    processing.setupUi(procSetting);
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -90,7 +93,7 @@ void CallerMainWindow::startByTimer() {
 
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig);
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
         if (plotState>0 && isActive)
@@ -363,7 +366,7 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime);
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig);
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
                     if (plotState > 0 && isActive)
@@ -599,6 +602,10 @@ void CallerMainWindow::on_actioncoefficients_triggered()
     coefSettings->show();
 }
 
+void CallerMainWindow::on_actionProcessing_triggered() {
+    procSetting->show();
+}
+
 void CallerMainWindow::startUpFunc() {
     cntSettings->lineEdit = counters.lineEdit;
     cntSettings->lineEdit_2 = counters.lineEdit_2;
@@ -630,6 +637,9 @@ void CallerMainWindow::startUpFunc() {
     coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
     coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
     coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
+
+    procSetting->checkBox = processing.checkBox;
+    procSetting->checkBox_2 = processing.checkBox_2;
 }
 
 void CallerMainWindow::clearNeutrons() {

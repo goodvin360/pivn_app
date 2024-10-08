@@ -32,8 +32,10 @@
 #include "QTimer"
 #include "Counters.h"
 #include "Coefficients.h"
+#include "Processing.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
+#include "../ui_processing.h"
 
 #pragma region Docs
 
@@ -49,10 +51,12 @@ public:
 
     Ui::Form_1 counters;
     Ui::Form_2 coefficients;
+    Ui::Form_3 processing;
 
 
     Counters*cntSettings;
     Coefficients*coefSettings;
+    Processing*procSetting;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
@@ -169,6 +173,7 @@ public slots:
     void clearMessage();
     void on_actioncounters_triggered();
     void on_actioncoefficients_triggered();
+    void on_actionProcessing_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H
