@@ -67,8 +67,8 @@ void Coefficients::setDist(QString dist) {
         }
         if (coef2_5>0)
         {
-            coeff_a = distance * 10;
-            coeff_b = distance;
+            coeff_a = -497 + distance*82 + pow(distance,2)*1.857;
+            coeff_b = distance*4922-53842;
         }
     }
     lineEdit->setText(QString::number(coeff_a));

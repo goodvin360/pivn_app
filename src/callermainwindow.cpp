@@ -142,7 +142,8 @@ void CallerMainWindow::startByTimer() {
             QString s(0x00B1);
             double error = 0.09 * vecData->Flux;
             printMsg(QString::number(vecData->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
-            printMsg(QString::number(vecData->totalCntClean)+"   "+QString::number(vecData->totalCnt)+"   "+QString::number(vecData->minusBack),2);
+            printMsg(QString::number(vecData->totalCntClean)+"   "+QString::number(vecData->totalCnt)+"   "+QString::number(vecData->totalCntFullTime)
+                     +"    "+QString::number(vecData->minusBackTrue),2);
         }
 
         vecData->cleanUp();
@@ -367,6 +368,7 @@ void CallerMainWindow::addStartFile() {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig);
+
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
                     if (plotState > 0 && isActive)
@@ -409,7 +411,8 @@ void CallerMainWindow::addStartFile() {
                 QString s(0x00B1);
                 double error = 0.09 * vecDataFile->Flux;
                 printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
-                printMsg(QString::number(vecDataFile->totalCntClean)+"   "+QString::number(vecDataFile->totalCnt)+"   "+QString::number(vecDataFile->minusBack),2);
+                printMsg(QString::number(vecDataFile->totalCntClean)+"   "+QString::number(vecDataFile->totalCnt)+"   "+QString::number(vecDataFile->totalCntFullTime)
+                         +"    "+QString::number(vecDataFile->minusBackTrue),2);
             }
 
             textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');

@@ -317,7 +317,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             if (clearTrig>0)
                 backVec.clear();
 
-            std::cout << "pulse time:" << pulsesTime.back() << " pulse high: " << prePulsesData.back() << std::endl;
+//            std::cout << "pulse time:" << pulsesTime.back() << " pulse high: " << prePulsesData.back() << std::endl;
 
         }
 
@@ -666,6 +666,7 @@ void vecFill::cleanUp() {
     backLastVal = 0;
     isBack = true;
     isPulse = false;
+    truePulse = false;
     fluxTimeCounter = 0;
     countStartTime = 0;
     countStartFlag = false;
