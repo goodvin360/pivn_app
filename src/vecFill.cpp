@@ -128,9 +128,10 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int mPulses, int clearTrig) {
+                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int mPulses, int clearTrig,
+                           double critLvl, double intTime) {
     fluxTime = totTime+countStartTime;
-    nCritical = 0.2/maxResTime;
+    nCritical = (critLvl/100)/maxResTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
             fluxTrig = data.at(1).back();
@@ -268,10 +269,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
                 minusBack += (resultsDbTotal.at(1).back() - resultsDbTotal.at(2).back());
 
-                minusBackTrue = minusBack*((1 - exp(-(log(2) * 100 / 14.1))) /
+                minusBackTrue = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                            (exp(-(log(2) * countStartTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
 
-                totalCntFullTime = totalCnt*((1 - exp(-(log(2) * 100 / 14.1))) /
+                totalCntFullTime = totalCnt*((1 - exp(-(log(2) * intTime / 14.1))) /
                                              (exp(-(log(2) * countStartTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
 
                 Flux = minusBack *
@@ -619,7 +620,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         }
 
         if (fluxTimeCounter == fluxTime+backConstWindow) {
-            totalCntFullTime = totalCnt*((1 - exp(-(log(2) * 100 / 14.1))) /
+            totalCntFullTime = totalCnt*((1 - exp(-(log(2) * intTime / 14.1))) /
                                          (exp(-(log(2) * criticalTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
             minusBack = totalCntFullTime-backVal*fluxTime;
             Flux = minusBack *c_a + c_b;

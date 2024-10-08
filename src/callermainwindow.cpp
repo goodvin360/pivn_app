@@ -93,7 +93,8 @@ void CallerMainWindow::startByTimer() {
 
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig);
+                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
+                              procSetting->critVal, procSetting->intTime);
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
         if (plotState>0 && isActive)
@@ -367,7 +368,8 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig);
+                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
+                                              procSetting->critVal, procSetting->intTime);
 
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
@@ -643,6 +645,10 @@ void CallerMainWindow::startUpFunc() {
 
     procSetting->checkBox = processing.checkBox;
     procSetting->checkBox_2 = processing.checkBox_2;
+    procSetting->lineEdit = processing.lineEdit;
+    procSetting->lineEdit_2 = processing.lineEdit_2;
+    processing.lineEdit->setText(QString::number(procSetting->critVal));
+    processing.lineEdit_2->setText(QString::number(procSetting->intTime));
 }
 
 void CallerMainWindow::clearNeutrons() {
