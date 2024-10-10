@@ -89,6 +89,7 @@ public:
     QCheckBox*checkBox_8 = new QCheckBox();
 
     bool portIsMissing = false;
+    bool portHasBeenCrashed = false;
     QString pName;
     std::string portName;
     std::vector <std::string> portNames;

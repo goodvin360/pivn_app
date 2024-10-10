@@ -91,7 +91,7 @@ void CallerMainWindow::startByTimer() {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
 
-        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, true,
+        vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime);
@@ -142,6 +142,7 @@ void CallerMainWindow::startByTimer() {
             delete esp32;
             esp32 = new SerialPort(pName.toStdString());
             portIsMissing = false;
+            portHasBeenCrashed = true;
         }
     }
     else
@@ -398,7 +399,7 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, false,
+                    vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime);

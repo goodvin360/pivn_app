@@ -127,7 +127,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 }
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
-                           bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
+                           bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int mPulses, int clearTrig,
                            double critLvl, double intTime) {
     fluxTime = totTime+countStartTime;
@@ -145,6 +145,15 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             temp = data.at(1).back();
         else
             temp = trVal;
+
+        currentVecSize=data.at(1).size();
+        if (currentVecSize>previousVecSize && !offTrigger)
+            previousVecSize = currentVecSize;
+        if (currentVecSize>previousVecSize && offTrigger){
+            previousVecSize = currentVecSize;
+            offTrigger = false;
+            temp = fluxTrig+1;
+        }
 
         if (temp>fluxTrig)
         {

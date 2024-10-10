@@ -20,7 +20,7 @@ public:
 
     std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t);
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
-                      bool fileParting, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
+                      bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       int cnt1, int cnt2, int cnt3, int cnt4, int window, double&lftTime, int mPulses, int clearTrig,
                       double critLvl, double intTime);
 
@@ -30,6 +30,8 @@ public:
     std::vector<double> backVec;
     std::vector<double> backVecConst;
     std::vector<double> derivativeVec;
+    int currentVecSize = 0;
+    int previousVecSize = 0;
     double fluxTrig = 4;
     double fluxTrigConst = 0;
     double temp = 0;
