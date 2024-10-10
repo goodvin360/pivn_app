@@ -88,7 +88,10 @@ public:
     QCheckBox*checkBox_7 = new QCheckBox();
     QCheckBox*checkBox_8 = new QCheckBox();
 
+    bool portIsMissing = false;
     QString pName;
+    std::string portName;
+    std::vector <std::string> portNames;
     QString fileName;
     int trigCOM = 0;
     double coeff_a;

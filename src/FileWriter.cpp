@@ -10,7 +10,7 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
     auto tme = std::time(nullptr);
     auto tm = *std::localtime(&tme);
 
-    if (res.size() > 0 && marker!="log") {
+    if (res.size() > 0 && marker!="log" && marker!="log portIsMissing") {
 
         std::stringstream res_out;
         res_out << "../outDataVec " << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << " " << marker << ".txt";
@@ -26,7 +26,7 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
         }
     };
 
-    if (res.size() > 0 && marker=="log") {
+    if (res.size() > 0 && (marker=="log" || marker=="log portIsMissing")) {
 
         std::stringstream res_out;
         res_out << "../outDataVec " << " " << "log " << std::put_time(&tm, "%d-%m-%Y") << " .txt";
@@ -37,10 +37,14 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
         for (int j = 0; j < res.size(); j++) {
             if (j==0)
                 myFile << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << '\t';
-            if (j>0 && j<5)
+            if (j>0 && j<5 && marker=="log")
                 myFile << res.at(j).back() << '\t';
-            if (j==5)
+            if (j==5 && marker=="log")
                 myFile << res.at(j).back();
+            if (j>0 && j<5 && marker=="log portIsMissing")
+                myFile << "null" << '\t';
+            if (j==5 && marker=="log portIsMissing")
+                myFile << "null";
         }
         myFile << std::endl;
     };

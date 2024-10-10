@@ -125,8 +125,37 @@ void CallerMainWindow::startByTimer() {
     inputValStr.clear();
     memset(inputData, 0, sizeof inputData);
 
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+        std::cout << serialPortInfo.portName().toStdString() << std::endl;
+    }
+
+    portNames.clear();
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+                portNames.push_back(serialPortInfo.portName().toStdString());}
+
+    auto it = std::find(portNames.begin(), portNames.end(), portName);
+    if (it!=portNames.end())
+    {
+        std::cout << "port is on" << std::endl;
+        if (portIsMissing)
+        {
+            delete esp32;
+            esp32 = new SerialPort(pName.toStdString());
+            portIsMissing = false;
+        }
+    }
+    else
+    {
+        std::cout << "port is missing" << std::endl;
+        portIsMissing = true;
+    }
+
+
     FileWriter writerLog;
-    writerLog.fileWriteVec(vecData->resultsDb, "log");
+    if (!portIsMissing)
+        writerLog.fileWriteVec(vecData->resultsDb, "log");
+    else
+        writerLog.fileWriteVec(vecData->resultsDb, "log portIsMissing");
 
     if (counter>=measTime || !onFlag)
     {
@@ -195,6 +224,9 @@ void CallerMainWindow::getCOM(QString itemName) {
     {
         portString << "\\\\.\\COM" << portNum;
     }
+    std::stringstream portNameString;
+    portNameString << "COM" << portNum;
+    portName = portNameString.str();
 
     pName = QString::fromStdString(portString.str());
 }
