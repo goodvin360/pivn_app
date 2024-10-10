@@ -29,7 +29,7 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
     if (res.size() > 0 && marker=="log") {
 
         std::stringstream res_out;
-        res_out << "../outDataVec " << " " << "log" << ".txt";
+        res_out << "../outDataVec " << " " << "log " << std::put_time(&tm, "%d-%m-%Y") << " .txt";
         std::ofstream myFile(res_out.str(), std::ios::app);
 
         if (res.at(0).back()==0)
