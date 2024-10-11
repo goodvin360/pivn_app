@@ -103,7 +103,7 @@ public:
     int plotTotalState = 0;
     int rescaleTrigger = 0;
     int timeState = 0;
-    double integrationTime = 100;
+    double integrationTime = 30;
     double leftTime = integrationTime;
     double totalCounts = 0;
     double nFlux = 0;
@@ -126,7 +126,7 @@ public:
     int xp1dif = 500, xp2dif = 999, yp1dif = 500, yp2dif = 999;
     bool isActive = true;
     bool isActiveTotal = true;
-    double resTime[4] {500, 500, 500, 500};
+    double resTime[4] {200, 300, 400, 350};
     size_t count = std::size(resTime);
 
     vecFill*vecData = new vecFill();

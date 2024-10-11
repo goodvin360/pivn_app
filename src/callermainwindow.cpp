@@ -30,6 +30,7 @@ CallerMainWindow::~CallerMainWindow() {
         delete plotObjVec.at(i);
     cntSettings->close();
     coefSettings->close();
+    procSetting->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -93,7 +94,7 @@ void CallerMainWindow::startByTimer() {
 
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
+                              procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime);
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
@@ -402,7 +403,7 @@ void CallerMainWindow::addStartFile() {
                 if (vecDataFile->resultsDb.size() > 0) {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
-                                              cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
+                                              procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime);
 
                     lineEdit_10->setText(QString::number(leftTime));
@@ -683,6 +684,7 @@ void CallerMainWindow::startUpFunc() {
     procSetting->lineEdit_2 = processing.lineEdit_2;
     processing.lineEdit->setText(QString::number(procSetting->critVal));
     processing.lineEdit_2->setText(QString::number(procSetting->intTime));
+    processing.lineEdit_3->setText(QString::number(procSetting->backDelay));
 }
 
 void CallerMainWindow::clearNeutrons() {

@@ -23,6 +23,10 @@ void Processing::addIntTime(QString val) {
     inputProcessing(intTime, val.toStdString());
 }
 
+void Processing::addBackDelay(QString val) {
+    inputProcessing(backDelay, val.toStdString());
+}
+
 void Processing::inputProcessing(double &var, std::string inp) {
     std::string str = inp;
     for (int i = 0; i < str.size(); i++) {

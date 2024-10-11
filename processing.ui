@@ -23,6 +23,13 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBox_2">
+        <property name="text">
+         <string>Multi pulses processing (test)</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -30,32 +37,35 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-      <item row="2" column="0" colspan="2">
+      <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBox">
         <property name="text">
          <string>Clear back vector</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="checkBox_2">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Multi pulses processing (test)</string>
+         <string>back delay, s</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_2"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>intTime</string>
+         <string>intTime, s</string>
         </property>
        </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_3"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_2"/>
       </item>
      </layout>
     </widget>
@@ -72,7 +82,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>35</x>
-     <y>182</y>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
      <x>21</x>
@@ -88,7 +98,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>24</x>
-     <y>238</y>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -103,8 +113,8 @@
    <slot>addCriticalVal(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>129</x>
-     <y>123</y>
+     <x>151</x>
+     <y>103</y>
     </hint>
     <hint type="destinationlabel">
      <x>396</x>
@@ -128,11 +138,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lineEdit_3</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>Form_3</receiver>
+   <slot>addBackDelay(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>397</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clearBack(int)</slot>
   <slot>multiPulses(int)</slot>
   <slot>addCriticalVal(QString)</slot>
   <slot>addIntTime(QString)</slot>
+  <slot>addBackDelay(QString)</slot>
  </slots>
 </ui>

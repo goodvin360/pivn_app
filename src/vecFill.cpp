@@ -128,7 +128,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
-                           int cnt1, int cnt2, int cnt3, int cnt4, int window, double &lftTime, int mPulses, int clearTrig,
+                           double backDelayTime, int window, double &lftTime, int mPulses, int clearTrig,
                            double critLvl, double intTime) {
     fluxTime = totTime+countStartTime;
     nCritical = (critLvl/100)/maxResTime;
@@ -205,7 +205,17 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
         secondPulseCounter = false;
 
-        if (isBack) {
+        double lastPulseTime = 0;
+        if (!pulsesTime.empty())
+            lastPulseTime = pulsesTime.back();
+
+        bool cndOne;
+        if (pulsesTime.empty())
+            cndOne = isBack;
+        else
+            cndOne = isBack && resultsDbTotal.at(0).back()-fluxTime-lastPulseTime-countStartTime>backDelayTime;
+
+        if (cndOne) {
             if (backVec.size()>window && !backVec.empty())
             {
                 for (int i=0; i<backVec.size()-window;i++)
@@ -591,11 +601,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         }
 
 
-        if (fluxTimeCounter == fluxTime+backConstWindow) {
+        if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
             isBackForConst = false;
         }
 
-        if (isBackForConst) {
+        if (isBackForConst && resultsDbTotal.at(0).back()-fluxTime-last_tPoint>backDelayTime) {
 
             if (backVecConst.size()>backConstWindow)
             {
@@ -607,7 +617,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
-            for (int i=0; i<=fluxTimeCounter; i++)
+            for (int i=0; i<=fluxTimeCounter+backDelayTime; i++)
             {
 //                double bv = backVal*0.1;
 //                double et = fluxTimeCounter;
