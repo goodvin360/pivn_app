@@ -143,6 +143,7 @@ void CallerMainWindow::startByTimer() {
             esp32 = new SerialPort(pName.toStdString());
             portIsMissing = false;
             portHasBeenCrashed = true;
+            vecData->fluxTrig=0;
         }
     }
     else
