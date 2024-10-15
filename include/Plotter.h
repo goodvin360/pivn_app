@@ -8,6 +8,7 @@
 #include "ChartView.h"
 #include "vecFill.h"
 #include "vector"
+#include "cmath"
 
 class Plotter
 {
@@ -34,6 +35,8 @@ private:
     double max_y_tot = 10;
     vecFill*Data;
     std::vector<double> maxValVec;
+    int rescaleSize = 200;
+
 };
 
 #endif //PIVN_APP_PLOTTER_H
