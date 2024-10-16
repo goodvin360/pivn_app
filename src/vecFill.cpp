@@ -200,7 +200,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             prePulsesData.push_back(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
         }*/
 
-        if (maxCountRate>=nCritical)
+        if (maxCountRate>=nCritical && !criticalChange)
             countStartFlag = false;
 
         secondPulseCounter = false;
@@ -239,6 +239,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 countStartFlag = true;
                 countStartTime = fluxTimeCounter;
                 fluxTime = totTime+countStartTime;
+                criticalChange = true;
             }
         }
 
@@ -309,6 +310,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             fluxTimeCounter++;
         }
 
+
         if (fluxTimeCounter == fluxTime || isSecondPulse) {
             QString s(0x00B1);
             double error = 0.09*Flux;
@@ -330,6 +332,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             isPulse = false;
             maxCountRate = 0;
             maxResTime = 0;
+            criticalChange = false;
             if (fluxTimeCounter==fluxTime)
                 secondPulseCounter = true;
             if (isSecondPulse) {
@@ -550,7 +553,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             if (!derivativeVec.empty())
                 tPoint = tPointShift+startPoint+distance(derivativeVec.begin(), max_element(derivativeVec.begin(), derivativeVec.end()))+criticalTime;
 
-            if (last_tPoint==tPoint && fluxTimeCounter==fluxTime) {
+            if (last_tPoint==tPoint && fluxTimeCounter==fluxTime+backDelayTime) {
                 derivativeSearch = false;
                 isBackForConst = true;
                 lftTime = 0;
@@ -607,7 +610,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
         }
 
-
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
             isBackForConst = false;
         }
@@ -624,7 +626,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
-            for (int i=0; i<=fluxTimeCounter+backDelayTime; i++)
+            for (int i=0; i<=fluxTimeCounter; i++)
             {
 //                double bv = backVal*0.1;
 //                double et = fluxTimeCounter;
@@ -640,20 +642,20 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             fluxTimeCounter++;
         }
 
-        if (!isBackForConst && (fluxTimeCounter <= fluxTime || fluxTimeCounter >= fluxTime+backConstWindow)) {
+        if (!isBackForConst && (fluxTimeCounter <= fluxTime || fluxTimeCounter >= fluxTime+backConstWindow+backDelayTime)) {
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(0);
         }
 
-        if (fluxTimeCounter == fluxTime+backConstWindow) {
+        if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
             totalCntFullTime = totalCnt*((1 - exp(-(log(2) * intTime / 14.1))) /
                                          (exp(-(log(2) * criticalTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
             minusBack = totalCntFullTime-backVal*fluxTime;
             Flux = minusBack *c_a + c_b;
             flux = Flux;
         }
-
-        if (fluxTimeCounter == fluxTime+backConstWindow) {
+        std::cout << fluxTimeCounter << std::endl;
+        if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
 
             for (auto it=derivativeAllVec.begin(); it!=derivativeAllVec.end(); it++) {
                 if (it.operator*()>derMax) {
