@@ -242,6 +242,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
         }
 
+        if (!pulsesTime.empty())
+            countStartTimeReal = pulsesTime.back()+countStartTime;
+
 
         if (!isBack && !isSecondPulse)
         {
@@ -311,7 +314,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             double error = 0.09*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(totalCntFullTime)
-            +"   "+QString::number(minusBackTrue),2);
+            +"   "+QString::number(minusBackTrue)+"   "+QString::number(pulsesTime.back())+"   "+QString::number(countStartTimeReal),2);
             isBack = true;
             fluxTimeCounter = 0;
             countStartTime = 0;
@@ -336,9 +339,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
             if (clearTrig>0)
                 backVec.clear();
-
-//            std::cout << "pulse time:" << pulsesTime.back() << " pulse high: " << prePulsesData.back() << std::endl;
-
         }
 
        /* if (multiPulseTrig==0)
@@ -532,6 +532,13 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             derivativeSearch = true;
         }
 
+        if (resultsDbTotal.at(1).size()>1) {
+            double der = 0;
+            der = resultsDbTotal.at(1).back() - resultsDbTotal.at(1).at(resultsDbTotal.at(1).size() - 2);
+            derivativeAllVec.push_back(der);
+            derivativeAllTime.push_back(resultsDbTotal.at(0).back());
+        }
+
         if (!isBackForConst && derivativeSearch) {
 
             lftTime = fluxTime-fluxTimeCounter;
@@ -647,11 +654,24 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         }
 
         if (fluxTimeCounter == fluxTime+backConstWindow) {
+
+            for (auto it=derivativeAllVec.begin(); it!=derivativeAllVec.end(); it++) {
+                if (it.operator*()>derMax) {
+                    derMax = it.operator*();
+                    derMaxTime = derivativeAllTime.at(it-derivativeAllVec.begin());
+                }
+                if (it.operator*()<derMin) {
+                    derMin = it.operator*();
+                    derMinTime = derivativeAllTime.at(it-derivativeAllVec.begin());
+                }
+            }
+            countStartTimeConst = resultsDbTotal.at(0).back()-backDelayTime-fluxTime-backConstWindow;
             QString s(0x00B1);
             double error = 0.09*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(totalCntFullTime)+
-            "   "+QString::number(minusBack),2);
+            "   "+QString::number(minusBack)+"   "+QString::number(derMaxTime)+"   "+QString::number(derMinTime)
+            +"   "+QString::number(countStartTimeConst),2);
             isBackForConst = false;
             fluxTimeCounter = 0;
             backVal = 0;
@@ -665,6 +685,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             totalCntFullTime = 0;
             lftTime = fluxTime;
             derivativeVec.clear();
+            derivativeAllVec.clear();
+            derivativeAllTime.clear();
+            derMax=derMin=derMaxTime=derMinTime=0;
             fluxTrigConst=temp;
             derivativeSearch = false;
             countStartFlagConst = false;
@@ -697,6 +720,9 @@ void vecFill::cleanUp() {
     secondPulseCounter = false;
     pulseCounter = 0;
     derivativeVec.clear();
+    derivativeAllVec.clear();
+    derivativeAllTime.clear();
+    derMax=derMin=derMaxTime=derMinTime=0;
     derivativeSearch= false;
     fluxTrigConst=0;
     isBackForConst=false;

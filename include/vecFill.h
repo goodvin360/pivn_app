@@ -30,6 +30,8 @@ public:
     std::vector<double> backVec;
     std::vector<double> backVecConst;
     std::vector<double> derivativeVec;
+    std::vector<double>derivativeAllVec;
+    std::vector<double>derivativeAllTime;
     int currentVecSize = 0;
     int previousVecSize = 0;
     double fluxTrig = 4;
@@ -68,11 +70,17 @@ public:
     int pulseCounter = 0;
     double startPoint = 0;
     bool derivativeSearch = false;
+    double derMax = 0;
+    double derMin = 0;
+    int derMaxTime = 0;
+    int derMinTime = 0;
     double last_tPoint = 0;
     double last_edgePointShift = 0;
     bool isBackForConst = false;
     bool countStartFlag = false;
     double countStartTime = 0;
+    double countStartTimeReal = 0;
+    double countStartTimeConst = 0;
     bool countStartFlagConst = true;
     double criticalTime = 0;
     bool criticalChange = false;
