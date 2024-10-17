@@ -83,6 +83,7 @@ public:
     double countStartTimeConst = 0;
     bool countStartFlagConst = true;
     double criticalTime = 0;
+    double critTimeActual = 0;
     bool criticalChange = false;
     double nCritical = 0;
     double maxCountRate = 0;
