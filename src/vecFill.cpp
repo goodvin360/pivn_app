@@ -291,7 +291,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 totalCntClean += resultsDbTotal.at(3).back();
 
                 minusBack += (resultsDbTotal.at(1).back() - resultsDbTotal.at(2).back());
-
+                backOut = backLastVal*backVec.size();
                 minusBackTrue = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                            (exp(-(log(2) * countStartTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
 
@@ -300,7 +300,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
                 Flux = minusBackTrue * c_a + c_b;
                 flux = Flux;
-
+                statErr = sqrt(totalCnt+backOut*pow(totTime/backVec.size(),2))/minusBack;
+                if (statErr<0)
+                    statErr = 0;
                 lftTime = fluxTime-fluxTimeCounter;
             }
 
@@ -311,11 +313,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         if (fluxTimeCounter == fluxTime || isSecondPulse) {
             std::cout << fluxTimeCounter << " " << countStartTime <<std::endl;
             QString s(0x00B1);
-            double error = 0.09*Flux;
+            double error = statErr*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
-            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack)+
-            "   "+QString::number(minusBackTrue)+
-            "   "+QString::number(pulsesTime.back())+"   "+QString::number(countStartTimeReal),2);
+            msgFillUp();
+            printMessage(pulseDataMsg,2);
             isBack = true;
             fluxTimeCounter = 0;
             countStartTime = 0;
@@ -333,6 +334,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             maxCountRate = 0;
             maxResTime = 0;
             criticalChange = false;
+            pulseDataMsg.clear();
+            backOut = 0;
+            statErr = 0;
             if (fluxTimeCounter==fluxTime)
                 secondPulseCounter = true;
             if (isSecondPulse) {
@@ -652,13 +656,16 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
             minusBack = totalCnt-backVal*fluxTime;
-
+            backOut = backVal*backVecConst.size();
             totalCntFullTime = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                          (exp(-(log(2) * criticalTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
             minusBackTrue = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                        (exp(-(log(2) * criticalTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));;
             Flux = minusBackTrue *c_a + c_b;
             flux = Flux;
+            statErr = sqrt(totalCnt+backOut*pow(fluxTime/backVecConst.size(),2))/minusBack;
+            if (statErr<0)
+                statErr = 0;
         }
 
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
@@ -677,11 +684,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             countStartTimeConst = resultsDbTotal.at(0).back()-backDelayTime-backConstWindow-fluxTime;
 
             QString s(0x00B1);
-            double error = 0.09*Flux;
+            double error = statErr*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
-            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack)+
-            "   "+QString::number(minusBackTrue)+
-            "   "+QString::number(derMaxTime)+"   "+QString::number(derMinTime)+"   "+QString::number(countStartTimeConst),2);
+            msgFillUp();
+            printMessage(constDataMsg,3);
             isBackForConst = false;
             fluxTimeCounter = 0;
             backVal = 0;
@@ -706,6 +712,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             maxCountRate = 0;
             maxResTime = 0;
             critTimeActual = 0;
+            constDataMsg.clear();
+            backOut = 0;
+            statErr = 0;
         }
     }
 
@@ -751,4 +760,21 @@ void vecFill::cleanUp() {
     totalCntClean = 0;
     totalCntFullTime = 0;
     critTimeActual = 0;
+    constDataMsg.clear();
+    pulseDataMsg.clear();
+    backOut = 0;
+    statErr = 0;
+}
+
+void vecFill::msgFillUp() {
+
+    statErr = 100*statErr;
+
+    pulseDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
+                    '\t'+QString::number(backOut)+ '\t'+QString::number(statErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
+                   '\t'+QString::number(pulsesTime.back())+'\t'+QString::number(countStartTimeReal);
+
+    constDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
+                    '\t'+QString::number(backOut)+ '\t'+QString::number(statErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
+                   '\t'+QString::number(derMaxTime)+'\t'+QString::number(derMinTime)+'\t'+QString::number(countStartTimeConst);
 }

@@ -90,8 +90,13 @@ public:
     double maxResTime = 0;
     double currentTrigTime = 0, lastTrigTime = 0;
     bool truePulse = false;
+    double backOut = 0;
+    double statErr = 0;
+    QString constDataMsg;
+    QString pulseDataMsg;
 
     void printMessage(QString msg, int num);
+    void msgFillUp();
 
 signals:
     void sentMessage(QString, int);

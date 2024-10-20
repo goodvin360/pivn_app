@@ -173,10 +173,13 @@ void CallerMainWindow::startByTimer() {
 
         if (vecData->Flux>0) {
             QString s(0x00B1);
-            double error = 0.09 * vecData->Flux;
+            double error = vecData->statErr * vecData->Flux;
             printMsg(QString::number(vecData->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
-            printMsg(QString::number(vecData->totalCntClean)+"   "+QString::number(vecData->totalCnt)+"   "+QString::number(vecData->totalCntFullTime)
-                     +"    "+QString::number(vecData->minusBackTrue),2);
+            vecData->msgFillUp();
+            if (constFluxTrig==0)
+                printMsg(vecData->pulseDataMsg,2);
+            if (constFluxTrig>0)
+                printMsg(vecData->constDataMsg,3);
         }
 
         vecData->cleanUp();
@@ -194,6 +197,12 @@ void CallerMainWindow::startByTimer() {
 }
 
 void CallerMainWindow::printMsg(QString msg, int num) {
+
+/*    const int tabStop = 10;
+    QFont font;
+    QFontMetrics metrics(font);
+    textBrowser_3->setTabStopWidth(tabStop * metrics.width(' '));*/
+
     if (num == 1) {
         shotCounter+=1;
         textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
@@ -201,6 +210,20 @@ void CallerMainWindow::printMsg(QString msg, int num) {
         sb->setValue(sb->maximum());
     }
     if (num == 2) {
+        if (shotCounter==1)
+            textBrowser_3->setText(textBrowser_3->toPlainText()
+            + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
+            + "Error" + '\t'+ "Extrapolated" + '\t' + "Pulse time" + '\t' + "Start" + '\n');
+        textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_3->verticalScrollBar();
+        sb->setValue(sb->maximum());
+    }
+
+    if (num == 3) {
+        if (shotCounter==1)
+            textBrowser_3->setText(textBrowser_3->toPlainText()
+            + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
+            + "Error" + '\t'+ "Extrapolated" + '\t' + "irStart" + '\t' + "irEnd" + '\t' + "Start" + '\n');
         textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
         QScrollBar*sb = textBrowser_3->verticalScrollBar();
         sb->setValue(sb->maximum());
@@ -446,10 +469,13 @@ void CallerMainWindow::addStartFile() {
         {
             if (vecDataFile->Flux>0) {
                 QString s(0x00B1);
-                double error = 0.09 * vecDataFile->Flux;
+                double error = vecDataFile->statErr * vecDataFile->Flux;
                 printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
-                printMsg(QString::number(vecDataFile->totalCntClean)+"   "+QString::number(vecDataFile->totalCnt)+"   "+QString::number(vecDataFile->totalCntFullTime)
-                         +"    "+QString::number(vecDataFile->minusBackTrue),2);
+                vecDataFile->msgFillUp();
+                if (constFluxTrig==0)
+                    printMsg(vecDataFile->pulseDataMsg,2);
+                if (constFluxTrig>0)
+                    printMsg(vecDataFile->constDataMsg,3);
             }
 
             textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
