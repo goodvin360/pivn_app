@@ -18,6 +18,8 @@ public:
 
     std::vector<std::vector<double>> resultsDbTotal;
 
+    std::vector<std::vector<double>> resultsDbSeparated;
+
     std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t);
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
@@ -92,6 +94,10 @@ public:
     bool truePulse = false;
     double backOut = 0;
     double statErr = 0;
+    double tempErr1 = 0;
+    double tempErr2 = 0;
+    double countErr = 0;
+    double deltaResTime = 0.05;
     QString constDataMsg;
     QString pulseDataMsg;
 
