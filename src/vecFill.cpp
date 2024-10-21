@@ -770,6 +770,7 @@ void vecFill::msgFillUp() {
 
     statErr = 100*statErr;
 
+    if(!pulsesTime.empty())
     pulseDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
                     '\t'+QString::number(backOut)+ '\t'+QString::number(statErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
                    '\t'+QString::number(pulsesTime.back())+'\t'+QString::number(countStartTimeReal);
