@@ -97,7 +97,7 @@ public:
     double tempErr1 = 0;
     double tempErr2 = 0;
     double countErr = 0;
-    double deltaResTime = 0.05;
+    double deltaResTime = 0.2;
     QString constDataMsg;
     QString pulseDataMsg;
 
