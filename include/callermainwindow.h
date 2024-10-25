@@ -59,6 +59,9 @@ public:
     Processing*procSetting;
 
     QLineEdit*lineEdit = nullptr;
+    QLineEdit*lineEdit_2 = nullptr;
+    QLineEdit*lineEdit_3 = nullptr;
+    QLineEdit*lineEdit_4 = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
     QLineEdit*lineEdit_7 = nullptr;

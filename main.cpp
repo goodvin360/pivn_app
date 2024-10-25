@@ -33,6 +33,9 @@ int main(int argc, char *argv[]) {
     window->textBrowser_3 = caller.textBrowser_3;
 
     window->lineEdit = caller.lineEdit;
+    window->lineEdit_2 = caller.lineEdit_2;
+    window->lineEdit_3 = caller.lineEdit_3;
+    window->lineEdit_4 = caller.lineEdit_4;
     window->lineEdit_5 = caller.lineEdit_5;
     window->lineEdit_6 = caller.lineEdit_6;
     window->lineEdit_7 = caller.lineEdit_7;
@@ -56,6 +59,9 @@ int main(int argc, char *argv[]) {
     window->pushButton_11 = caller.pushButton_11;
 
     caller.lineEdit->setText(QString::number(window->measTime));
+    caller.lineEdit_2->setText(QString::number(0));
+    caller.lineEdit_3->setText(QString::number(0));
+    caller.lineEdit_4->setText(QString::number(0));
     caller.lineEdit_7->setText(QString::number(window->edgePoint));
     caller.lineEdit_9->setText(QString::number(window->avWindow));
     caller.lineEdit_10->setText(QString::number(window->leftTime));
@@ -73,6 +79,9 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_5->setText(QString::number(window->integrationTime));
     caller.lineEdit_6->setText(QString::number(window->totalCounts));
     caller.lineEdit_8->setText(QString::number(window->readDelay));
+    caller.lineEdit_2->setReadOnly(1);
+    caller.lineEdit_3->setReadOnly(1);
+    caller.lineEdit_4->setReadOnly(1);
     caller.lineEdit_6->setReadOnly(1);
     caller.lineEdit_7->setReadOnly(1);
     caller.lineEdit_10->setReadOnly(1);

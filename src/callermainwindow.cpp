@@ -96,6 +96,10 @@ void CallerMainWindow::startByTimer() {
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime);
+
+        lineEdit_2->setText(QString::number(vecData->resultsDbTotal.at(1).back(),'f',2));
+        lineEdit_3->setText(QString::number(vecData->resultsDbTotal.at(2).back(),'f',2));
+        lineEdit_4->setText(QString::number(vecData->resultsDbTotal.at(3).back(),'f',2));
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
         if (plotState>0 && isActive)
@@ -193,6 +197,9 @@ void CallerMainWindow::startByTimer() {
         pushButton->setEnabled(1);
         pushButton_4->setEnabled(1);
         pushButton_5->setEnabled(1);
+        lineEdit_2->setText(QString::number(0));
+        lineEdit_3->setText(QString::number(0));
+        lineEdit_4->setText(QString::number(0));
     }
 }
 
@@ -428,7 +435,9 @@ void CallerMainWindow::addStartFile() {
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime);
-
+                    lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotal.at(1).back(),'f',2));
+                    lineEdit_3->setText(QString::number(vecDataFile->resultsDbTotal.at(2).back(),'f',2));
+                    lineEdit_4->setText(QString::number(vecDataFile->resultsDbTotal.at(3).back(),'f',2));
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
                     if (plotState > 0 && isActive)
@@ -488,6 +497,9 @@ void CallerMainWindow::addStartFile() {
                 pushButton_2->setEnabled(1);
             pushButton_4->setEnabled(1);
             pushButton_5->setEnabled(1);
+            lineEdit_2->setText(QString::number(0));
+            lineEdit_3->setText(QString::number(0));
+            lineEdit_4->setText(QString::number(0));
         }
 
         if (onFlag) {
@@ -502,6 +514,9 @@ void CallerMainWindow::addStartFile() {
                 pushButton_2->setEnabled(1);
             pushButton_4->setEnabled(1);
             pushButton_5->setEnabled(1);
+            lineEdit_2->setText(QString::number(0));
+            lineEdit_3->setText(QString::number(0));
+            lineEdit_4->setText(QString::number(0));
         }
     }
 }

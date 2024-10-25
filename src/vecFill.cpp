@@ -232,7 +232,12 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             backVec.push_back(resultsDbTotal.at(1).back());
-            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+            for (auto it=backVec.begin(); it!=backVec.end(); it++)
+            {
+                backVal+=it.operator*();
+            }
+            backVal = backVal/double(backVec.size());
+//            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
             backLastVal = backVal;
@@ -300,7 +305,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 totalCntClean += resultsDbTotal.at(3).back();
 
                 minusBack += (resultsDbTotal.at(1).back() - resultsDbTotal.at(2).back());
-                backOut = backLastVal*backVec.size();
+                backOut = backVal*backVec.size();
                 minusBackTrue = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                            (exp(-(log(2) * countStartTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
 
@@ -327,10 +332,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 tempErr2 = 0;
                 for (int i=1; i<5; i++)
                 {
-                    var1 = backLastVal/4+pow(deltaResTime*resTime[i-1],2)*pow(backLastVal/4,4);
-                    var2 = pow((resTime[i-1]*backLastVal/4-1),2);
-                    tempErr2+=backVec.size()*var1/var2;
+                    var1 = backLastVal/4+pow(deltaResTime*resTime[i-1],2)*pow(backVal/4,4);
+                    var2 = pow((resTime[i-1]*backVal/4-1),2);
+                    tempErr2+=var1/var2;
                 }
+                tempErr2=backVec.size()*tempErr2;
 
                 countErr = sqrt(tempErr1+tempErr2*pow(totTime/backVec.size(),2))/minusBack;
                 if (countErr<0)
@@ -342,7 +348,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         }
 
         if (fluxTimeCounter == fluxTime || isSecondPulse) {
-            std::cout << 100*countErr << std::endl;
             QString s(0x00B1);
             double error = statErr*Flux;
             printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
@@ -664,21 +669,17 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             backVecConst.push_back(resultsDbTotal.at(1).back());
-            backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
+            for (auto it=backVecConst.begin(); it!=backVecConst.end(); it++)
+            {
+                backVal+=it.operator*();
+            }
+            backVal = backVal/double(backVecConst.size());
+//            backVal = std::accumulate(backVecConst.begin(), backVecConst.end(), 0) / (double(backVecConst.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
-            for (int i=0; i<=fluxTimeCounter; i++)
+            for (int i=0; i<=fluxTimeCounter+1; i++)
             {
-//                double bv = backVal*0.1;
-//                double et = fluxTimeCounter;
-//                resultsDbTotal.at(2).at(tPoint+i)=backVal*0+(exp(-lmd116*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
-//                        bv*exp(lmd116*(fluxTimeCounter-i))+
-//                        (0.002027726*exp(-lmd116m*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
-//                        bv*exp(lmd116m*(fluxTimeCounter-i))+
-//                        (0.002643049*exp(-lmd114*et)/(exp(-lmd116*et)+0.002027726*exp(-lmd116m*et)+0.002643049*exp(-lmd114*et)))*
-//                        bv*exp(lmd114*(fluxTimeCounter-i));
-
-                resultsDbTotal.at(2).at(tPoint+i)=backVal;
+                resultsDbTotal.at(2).at(tPoint+i)=0.9*backVal*exp(lmd116m*(fluxTimeCounter-i))+0.0125*backVal*exp(lmd114*(fluxTimeCounter-i));
             }
             fluxTimeCounter++;
         }
@@ -689,8 +690,16 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         }
 
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
-            minusBack = totalCnt-backVal*fluxTime;
-            backOut = backVal*backVecConst.size();
+//            minusBack = totalCnt-backVal*fluxTime;
+//            backOut = backVal*backVecConst.size();
+            for (int i=0; i<fluxTime;i++)
+            {
+                minusBack+=resultsDbTotal.at(1).at(tPoint+i)-resultsDbTotal.at(2).at(tPoint+i);
+            }
+            for (int i=0; i<backVecConst.size();i++)
+            {
+                backOut+=resultsDbTotal.at(2).at(tPoint+fluxTime+backDelayTime+i);
+            }
             totalCntFullTime = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
                                          (exp(-(log(2) * criticalTime / 14.1)) - exp(-(log(2) * fluxTimeCounter / 14.1))));
             minusBackTrue = minusBack*((1 - exp(-(log(2) * intTime / 14.1))) /
@@ -728,7 +737,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
 
-            for (auto it=derivativeAllVec.size()-1; it!=derivativeAllVec.size()-400; it--) {
+            int tail = 400;
+            if (derivativeAllVec.size()<tail)
+                tail = 0;
+            for (auto it=derivativeAllVec.size()-1; it!=tail; it--) {
                 if (derivativeAllVec.at(it)>derMax) {
                     derMax = derivativeAllVec.at(it);
                     derMaxTime = derivativeAllTime.at(it);
@@ -836,13 +848,14 @@ void vecFill::cleanUp() {
 void vecFill::msgFillUp() {
 
     statErr = 100*statErr;
+    countErr = 100*countErr;
 
     if(!pulsesTime.empty())
     pulseDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
-                    '\t'+QString::number(backOut)+ '\t'+QString::number(statErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
+                    '\t'+QString::number(backOut)+ '\t'+QString::number(countErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
                    '\t'+QString::number(pulsesTime.back())+'\t'+QString::number(countStartTimeReal);
 
     constDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
-                    '\t'+QString::number(backOut)+ '\t'+QString::number(statErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
+                    '\t'+QString::number(backOut)+ '\t'+QString::number(countErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
                    '\t'+QString::number(derMaxTime)+'\t'+QString::number(derMinTime)+'\t'+QString::number(countStartTimeConst);
 }
