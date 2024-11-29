@@ -24,7 +24,7 @@ public:
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       double backDelayTime, int window, double&lftTime, int mPulses, int clearTrig,
-                      double critLvl, double intTime);
+                      double critLvl, double intTime, int nucleus);
 
     void cleanUp();
 
@@ -69,6 +69,8 @@ public:
     double lmd116 = log(2)/14.1;
     double lmd116m = log(2)/3240;
     double lmd114 = log(2)/72;
+    double lmdAg110 = log(2)/24.56;
+    double lmdAg108 = log(2)/(60*2.382);
     int pulseCounter = 0;
     double startPoint = 0;
     bool derivativeSearch = false;

@@ -27,6 +27,30 @@ void Processing::addBackDelay(QString val) {
     inputProcessing(backDelay, val.toStdString());
 }
 
+void Processing::addAgTrig(int val) {
+    if (val>0)
+    {
+        nucleusTrig = 0;
+        checkBox_4->setChecked(false);
+    }
+    else{
+        nucleusTrig = 1;
+        checkBox_4->setChecked(true);
+    }
+}
+
+void Processing::addInTrig(int val) {
+    if (val>0)
+    {
+        nucleusTrig = 1;
+        checkBox_3->setChecked(false);
+    }
+    else{
+        nucleusTrig = 0;
+        checkBox_3->setChecked(true);
+    }
+}
+
 void Processing::inputProcessing(double &var, std::string inp) {
     std::string str = inp;
     for (int i = 0; i < str.size(); i++) {

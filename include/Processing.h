@@ -18,10 +18,13 @@ public: Processing(QWidget* parent = nullptr);
 
     QCheckBox*checkBox = new QCheckBox();
     QCheckBox*checkBox_2 = new QCheckBox();
+    QCheckBox*checkBox_3 = new QCheckBox();
+    QCheckBox*checkBox_4 = new QCheckBox();
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
     int clearBackVecTrig = 0;
     int multiPulsesTrig = 0;
+    int nucleusTrig = 0;
     void inputProcessing(double &var, std::string inp);
     double critVal = 50;
     double intTime = 100;
@@ -33,6 +36,8 @@ public slots:
     void addCriticalVal(QString val);
     void addIntTime(QString val);
     void addBackDelay(QString val);
+    void addInTrig(int val);
+    void addAgTrig(int val);
 
 };
 

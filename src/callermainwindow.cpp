@@ -95,7 +95,7 @@ void CallerMainWindow::startByTimer() {
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                              procSetting->critVal, procSetting->intTime);
+                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig);
 
         lineEdit_2->setText(QString::number(vecData->resultsDbTotal.at(1).back(),'f',2));
         lineEdit_3->setText(QString::number(vecData->resultsDbTotal.at(2).back(),'f',2));
@@ -434,7 +434,7 @@ void CallerMainWindow::addStartFile() {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                                              procSetting->critVal, procSetting->intTime);
+                                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig);
                     lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotal.at(1).back(),'f',2));
                     lineEdit_3->setText(QString::number(vecDataFile->resultsDbTotal.at(2).back(),'f',2));
                     lineEdit_4->setText(QString::number(vecDataFile->resultsDbTotal.at(3).back(),'f',2));
@@ -721,6 +721,9 @@ void CallerMainWindow::startUpFunc() {
 
     procSetting->checkBox = processing.checkBox;
     procSetting->checkBox_2 = processing.checkBox_2;
+    procSetting->checkBox_3 = processing.checkBox_3;
+    procSetting->checkBox_4 = processing.checkBox_4;
+    processing.checkBox_4->setChecked(true);
     procSetting->lineEdit = processing.lineEdit;
     procSetting->lineEdit_2 = processing.lineEdit_2;
     processing.lineEdit->setText(QString::number(procSetting->critVal));
