@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form_TriggerMode</class>
+ <widget class="QWidget" name="Form_TriggerMode">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>267</width>
+    <height>118</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Trigger mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>For Manual mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>Manual</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Go</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="text">
+      <string>Auto</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form_TriggerMode</receiver>
+   <slot>addGoTrigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>214</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>261</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_TriggerMode</receiver>
+   <slot>manualTrigger(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>28</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>127</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_TriggerMode</receiver>
+   <slot>autoTrigger(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>13</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addGoTrigger()</slot>
+  <slot>autoTrigger(int)</slot>
+  <slot>manualTrigger(int)</slot>
+ </slots>
+</ui>
