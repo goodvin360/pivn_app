@@ -25,7 +25,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(vecDataFile, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
     QObject::connect(vecDataRough, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
     QObject::connect(vecDataFileRough, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
-    QObject::connect(readFileSettings, &ReadFromFile::sentMessage, this, &CallerMainWindow::addStartFile);
+    QObject::connect(readFileSettings, &ReadFromFile::sentReadAction, this, &CallerMainWindow::addStartFile);
+    QObject::connect(readFileSettings, &ReadFromFile::sentLoadAction, this, &CallerMainWindow::addLoadFile);
+    QObject::connect(readFileSettings, &ReadFromFile::sentDelayValue, this, &CallerMainWindow::setReadDelay);
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
     m_timer->setInterval(1000);
@@ -1029,6 +1031,9 @@ void CallerMainWindow::startUpFunc() {
     processing.lineEdit->setText(QString::number(procSetting->critVal));
     processing.lineEdit_2->setText(QString::number(procSetting->intTime));
     processing.lineEdit_3->setText(QString::number(procSetting->backDelay));
+
+    readFileSettings->lineEdit = readfile.lineEdit;
+    readfile.lineEdit->setText(QString::number(readDelay));
 }
 
 void CallerMainWindow::clearNeutrons() {

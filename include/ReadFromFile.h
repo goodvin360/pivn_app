@@ -18,13 +18,21 @@ public:
 
     ~ReadFromFile();
 
-    void printMessage();
+    void startReadFromFile();
+    void startLoadFile();
+    void editReadDelay(QString);
+
+    QLineEdit*lineEdit = nullptr;
 
 signals:
-    void sentMessage();
+    void sentReadAction();
+    void sentLoadAction();
+    void sentDelayValue(QString);
 
 public slots:
-    void addAction();
+    void addReadAction();
+    void addLoadAction();
+    void addReadDelay(QString);
 
 };
 

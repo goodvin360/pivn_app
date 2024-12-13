@@ -6,11 +6,26 @@ ReadFromFile::ReadFromFile(QWidget *parent) : QWidget(parent) {
 
 ReadFromFile::~ReadFromFile() {}
 
-void ReadFromFile::printMessage() {
-    emit sentMessage();
+void ReadFromFile::startReadFromFile() {
+    emit sentReadAction();
 }
 
-void ReadFromFile::addAction() {
-    printMessage();
-    std::cout << "i've done" << std::endl;
+void ReadFromFile::startLoadFile() {
+    emit sentLoadAction();
+}
+
+void ReadFromFile::editReadDelay(QString delay) {
+    emit sentDelayValue(delay);
+}
+
+void ReadFromFile::addReadAction() {
+    startReadFromFile();
+}
+
+void ReadFromFile::addLoadAction() {
+    startLoadFile();
+}
+
+void ReadFromFile::addReadDelay(QString delay) {
+    editReadDelay(delay);
 }
