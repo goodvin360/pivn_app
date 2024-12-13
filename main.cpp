@@ -5,12 +5,14 @@
 #include "ui_processing.h"
 #include "ui_readFile.h"
 #include "ui_plotter.h"
+#include "ui_trigger.h"
 #include "callermainwindow.h"
 #include "Counters.h"
 #include "Coefficients.h"
 #include "Processing.h"
 #include "ReadFromFile.h"
 #include "PlotterOptions.h"
+#include "TriggerMode.h"
 #include "QScrollBar"
 #include  <locale.h>
 
@@ -23,6 +25,7 @@ int main(int argc, char *argv[]) {
     Processing * procWin = new Processing(nullptr);
     ReadFromFile * readFromFileWin = new ReadFromFile(nullptr);
     PlotterOptions * plotterOptionsWin = new PlotterOptions(nullptr);
+    TriggerMode * trigModeWin = new TriggerMode(nullptr);
 
     Ui::MainWindow caller;
     Ui::Form_1 counters;
@@ -30,6 +33,7 @@ int main(int argc, char *argv[]) {
     Ui::Form_3 processing;
     Ui::Form_RF readFile;
     Ui::Form_Plot plotter;
+    Ui::Form_TriggerMode trigger;
 
     caller.setupUi(window);
     counters.setupUi(countersWin);
@@ -37,6 +41,7 @@ int main(int argc, char *argv[]) {
     processing.setupUi(procWin);
     readFile.setupUi(readFromFileWin);
     plotter.setupUi(plotterOptionsWin);
+    trigger.setupUi(trigModeWin);
 
     window->textBrowser = caller.textBrowser;
     window->textBrowser_2 = caller.textBrowser_2;

@@ -35,11 +35,13 @@
 #include "Processing.h"
 #include "ReadFromFile.h"
 #include "PlotterOptions.h"
+#include "TriggerMode.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
 #include "../ui_processing.h"
 #include "../ui_readFile.h"
 #include "../ui_plotter.h"
+#include "../ui_trigger.h"
 
 #pragma region Docs
 
@@ -58,12 +60,14 @@ public:
     Ui::Form_3 processing;
     Ui::Form_RF readfile;
     Ui::Form_Plot plotter;
+    Ui::Form_TriggerMode trigger;
 
     Counters*cntSettings;
     Coefficients*coefSettings;
     Processing*procSetting;
     ReadFromFile*readFileSettings;
     PlotterOptions*plotOptionsSetting;
+    TriggerMode*triggerModeSettings;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
@@ -217,6 +221,7 @@ public slots:
     void on_actionProcessing_triggered();
     void on_actionReadFile_triggered();
     void on_actionPlotOption_triggered();
+    void on_actionTriggerMode_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

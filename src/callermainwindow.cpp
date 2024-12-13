@@ -20,6 +20,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     plotOptionsSetting = new PlotterOptions();
     plotter.setupUi(plotOptionsSetting);
 
+    triggerModeSettings = new TriggerMode();
+    trigger.setupUi(triggerModeSettings);
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -36,6 +39,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTrigR, this, &CallerMainWindow::plotTriggerRough);
     QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTotTrigR, this, &CallerMainWindow::plotTriggerTotalRough);
     QObject::connect(plotOptionsSetting, &PlotterOptions::sentRescaleTrig, this, &CallerMainWindow::rescalePlotTrigger);
+    QObject::connect(triggerModeSettings, &TriggerMode::sentGoTrigger, this, &CallerMainWindow::addGoTrigger);
+    QObject::connect(triggerModeSettings, &TriggerMode::sentManualTrigger, this, &CallerMainWindow::manualTrigger);
+    QObject::connect(triggerModeSettings, &TriggerMode::sentAutoTrigger, this, &CallerMainWindow::autoTrigger);
 
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
@@ -50,6 +56,7 @@ CallerMainWindow::~CallerMainWindow() {
     procSetting->close();
     readFileSettings->close();
     plotOptionsSetting->close();
+    triggerModeSettings->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -884,12 +891,16 @@ void CallerMainWindow::autoTrigger(int st) {
         trigMode = 0;
         checkBox_7->setChecked(false);
         pushButton_7->setEnabled(0);
+        triggerModeSettings->checkBox->setChecked(false);
+        triggerModeSettings->pushButton->setEnabled(0);
     }
     else
     {
         trigMode = 1;
         checkBox_7->setChecked(true);
         pushButton_7->setEnabled(1);
+        triggerModeSettings->checkBox->setChecked(true);
+        triggerModeSettings->pushButton->setEnabled(1);
     }
 }
 
@@ -899,12 +910,16 @@ void CallerMainWindow::manualTrigger(int st) {
         trigMode = 1;
         checkBox_6->setChecked(false);
         pushButton_7->setEnabled(1);
+        triggerModeSettings->checkBox_2->setChecked(false);
+        triggerModeSettings->pushButton->setEnabled(1);
     }
     else
     {
         trigMode = 0;
         checkBox_6->setChecked(true);
         pushButton_7->setEnabled(0);
+        triggerModeSettings->checkBox_2->setChecked(true);
+        triggerModeSettings->pushButton->setEnabled(0);
     }
 }
 
@@ -927,14 +942,6 @@ void CallerMainWindow::addConstFluxTrig(int st) {
     }
 }
 
-void CallerMainWindow::setReadDelay(QString delay) {
-    inputProcessing(readDelay, delay.toStdString());
-}
-
-void CallerMainWindow::setAverageWindow(QString window) {
-    inputProcessing(avWindow, window.toStdString());
-}
-
 void CallerMainWindow::edgePointPlus() {
     tempTimeShift++;
     lineEdit_7->setText(QString::number(tempTime));
@@ -943,6 +950,14 @@ void CallerMainWindow::edgePointPlus() {
 void CallerMainWindow::edgePointMinus() {
     tempTimeShift--;
     lineEdit_7->setText(QString::number(tempTime));
+}
+
+void CallerMainWindow::setReadDelay(QString delay) {
+    inputProcessing(readDelay, delay.toStdString());
+}
+
+void CallerMainWindow::setAverageWindow(QString window) {
+    inputProcessing(avWindow, window.toStdString());
 }
 
 void CallerMainWindow::on_actioncounters_triggered()
@@ -965,6 +980,10 @@ void CallerMainWindow::on_actionReadFile_triggered() {
 
 void CallerMainWindow::on_actionPlotOption_triggered() {
     plotOptionsSetting->show();
+}
+
+void CallerMainWindow::on_actionTriggerMode_triggered() {
+    triggerModeSettings->show();
 }
 
 void CallerMainWindow::startUpFunc() {
@@ -1059,6 +1078,11 @@ void CallerMainWindow::startUpFunc() {
     plotOptionsSetting->checkBox_3 = plotter.checkBox_3;
     plotOptionsSetting->checkBox_4 = plotter.checkBox_4;
     plotOptionsSetting->checkBox_5 = plotter.checkBox_5;
+
+    triggerModeSettings->checkBox = trigger.checkBox;
+    triggerModeSettings->checkBox_2 = trigger.checkBox_2;
+    triggerModeSettings->pushButton = trigger.pushButton;
+    trigger.checkBox_2->setChecked(1);
 }
 
 void CallerMainWindow::clearNeutrons() {
