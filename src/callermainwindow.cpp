@@ -23,6 +23,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     triggerModeSettings = new TriggerMode();
     trigger.setupUi(triggerModeSettings);
 
+    constFluxSettings = new ConstFlux();
+    constFlux.setupUi(constFluxSettings);
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -42,6 +45,10 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(triggerModeSettings, &TriggerMode::sentGoTrigger, this, &CallerMainWindow::addGoTrigger);
     QObject::connect(triggerModeSettings, &TriggerMode::sentManualTrigger, this, &CallerMainWindow::manualTrigger);
     QObject::connect(triggerModeSettings, &TriggerMode::sentAutoTrigger, this, &CallerMainWindow::autoTrigger);
+    QObject::connect(constFluxSettings, &ConstFlux::sentConstFluxGo, this, &CallerMainWindow::addConstFluxGo);
+    QObject::connect(constFluxSettings, &ConstFlux::sentConstFluxTrig, this, &CallerMainWindow::addConstFluxTrig);
+    QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointPlus, this, &CallerMainWindow::edgePointPlus);
+    QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointMinus, this, &CallerMainWindow::edgePointMinus);
 
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
@@ -57,6 +64,7 @@ CallerMainWindow::~CallerMainWindow() {
     readFileSettings->close();
     plotOptionsSetting->close();
     triggerModeSettings->close();
+    constFluxSettings->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -170,6 +178,7 @@ void CallerMainWindow::startByTimer() {
 
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
+        constFluxSettings->lineEdit->setText(QString::number(tempTime));
 
         if (plotState>0 && isActive)
             makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
@@ -641,6 +650,7 @@ void CallerMainWindow::addStartFile() {
 
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
+                    constFluxSettings->lineEdit->setText(QString::number(tempTime));
 
                     if (plotState > 0 && isActive)
                         makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
@@ -934,22 +944,32 @@ void CallerMainWindow::addConstFluxTrig(int st) {
         pushButton_8->setEnabled(1);
         pushButton_10->setEnabled(1);
         pushButton_11->setEnabled(1);
+
+        constFlux.pushButton->setEnabled(1);
+        constFlux.pushButton_2->setEnabled(1);
+        constFlux.pushButton_3->setEnabled(1);
     }
     else {
         pushButton_8->setEnabled(0);
         pushButton_10->setEnabled(0);
         pushButton_11->setEnabled(0);
+
+        constFlux.pushButton->setEnabled(0);
+        constFlux.pushButton_2->setEnabled(0);
+        constFlux.pushButton_3->setEnabled(0);
     }
 }
 
 void CallerMainWindow::edgePointPlus() {
     tempTimeShift++;
     lineEdit_7->setText(QString::number(tempTime));
+    constFluxSettings->lineEdit->setText(QString::number(tempTime));
 }
 
 void CallerMainWindow::edgePointMinus() {
     tempTimeShift--;
     lineEdit_7->setText(QString::number(tempTime));
+    constFluxSettings->lineEdit->setText(QString::number(tempTime));
 }
 
 void CallerMainWindow::setReadDelay(QString delay) {
@@ -984,6 +1004,10 @@ void CallerMainWindow::on_actionPlotOption_triggered() {
 
 void CallerMainWindow::on_actionTriggerMode_triggered() {
     triggerModeSettings->show();
+}
+
+void CallerMainWindow::on_actionConstFlux_triggered() {
+    constFluxSettings->show();
 }
 
 void CallerMainWindow::startUpFunc() {
@@ -1083,6 +1107,17 @@ void CallerMainWindow::startUpFunc() {
     triggerModeSettings->checkBox_2 = trigger.checkBox_2;
     triggerModeSettings->pushButton = trigger.pushButton;
     trigger.checkBox_2->setChecked(1);
+
+    constFluxSettings->checkBox = constFlux.checkBox;
+    constFluxSettings->pushButton = constFlux.pushButton;
+    constFluxSettings->pushButton_2 = constFlux.pushButton_2;
+    constFluxSettings->pushButton_3 = constFlux.pushButton_3;
+    constFluxSettings->lineEdit = constFlux.lineEdit;
+    constFlux.lineEdit->setText(QString::number(edgePoint));
+    constFlux.lineEdit->setReadOnly(1);
+    constFlux.pushButton->setEnabled(0);
+    constFlux.pushButton_2->setEnabled(0);
+    constFlux.pushButton_3->setEnabled(0);
 }
 
 void CallerMainWindow::clearNeutrons() {

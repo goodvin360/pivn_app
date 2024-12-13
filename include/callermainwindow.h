@@ -36,12 +36,14 @@
 #include "ReadFromFile.h"
 #include "PlotterOptions.h"
 #include "TriggerMode.h"
+#include "ConstFlux.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
 #include "../ui_processing.h"
 #include "../ui_readFile.h"
 #include "../ui_plotter.h"
 #include "../ui_trigger.h"
+#include "../ui_constflux.h"
 
 #pragma region Docs
 
@@ -61,6 +63,7 @@ public:
     Ui::Form_RF readfile;
     Ui::Form_Plot plotter;
     Ui::Form_TriggerMode trigger;
+    Ui::Form_ConstFlux constFlux;
 
     Counters*cntSettings;
     Coefficients*coefSettings;
@@ -68,6 +71,7 @@ public:
     ReadFromFile*readFileSettings;
     PlotterOptions*plotOptionsSetting;
     TriggerMode*triggerModeSettings;
+    ConstFlux*constFluxSettings;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
@@ -222,6 +226,7 @@ public slots:
     void on_actionReadFile_triggered();
     void on_actionPlotOption_triggered();
     void on_actionTriggerMode_triggered();
+    void on_actionConstFlux_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

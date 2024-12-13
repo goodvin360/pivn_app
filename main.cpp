@@ -6,6 +6,7 @@
 #include "ui_readFile.h"
 #include "ui_plotter.h"
 #include "ui_trigger.h"
+#include "ui_constflux.h"
 #include "callermainwindow.h"
 #include "Counters.h"
 #include "Coefficients.h"
@@ -13,6 +14,7 @@
 #include "ReadFromFile.h"
 #include "PlotterOptions.h"
 #include "TriggerMode.h"
+#include "ConstFlux.h"
 #include "QScrollBar"
 #include  <locale.h>
 
@@ -26,6 +28,7 @@ int main(int argc, char *argv[]) {
     ReadFromFile * readFromFileWin = new ReadFromFile(nullptr);
     PlotterOptions * plotterOptionsWin = new PlotterOptions(nullptr);
     TriggerMode * trigModeWin = new TriggerMode(nullptr);
+    ConstFlux * constFluxWin = new ConstFlux(nullptr);
 
     Ui::MainWindow caller;
     Ui::Form_1 counters;
@@ -34,6 +37,7 @@ int main(int argc, char *argv[]) {
     Ui::Form_RF readFile;
     Ui::Form_Plot plotter;
     Ui::Form_TriggerMode trigger;
+    Ui::Form_ConstFlux constFlux;
 
     caller.setupUi(window);
     counters.setupUi(countersWin);
@@ -42,6 +46,7 @@ int main(int argc, char *argv[]) {
     readFile.setupUi(readFromFileWin);
     plotter.setupUi(plotterOptionsWin);
     trigger.setupUi(trigModeWin);
+    constFlux.setupUi(constFluxWin);
 
     window->textBrowser = caller.textBrowser;
     window->textBrowser_2 = caller.textBrowser_2;
