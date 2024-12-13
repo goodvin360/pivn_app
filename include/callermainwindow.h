@@ -34,10 +34,12 @@
 #include "Coefficients.h"
 #include "Processing.h"
 #include "ReadFromFile.h"
+#include "PlotterOptions.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
 #include "../ui_processing.h"
 #include "../ui_readFile.h"
+#include "../ui_plotter.h"
 
 #pragma region Docs
 
@@ -55,11 +57,13 @@ public:
     Ui::Form_2 coefficients;
     Ui::Form_3 processing;
     Ui::Form_RF readfile;
+    Ui::Form_Plot plotter;
 
     Counters*cntSettings;
     Coefficients*coefSettings;
     Processing*procSetting;
     ReadFromFile*readFileSettings;
+    PlotterOptions*plotOptionsSetting;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
@@ -161,7 +165,6 @@ public:
     vecFill*vecDataFile = new vecFill();
     vecFill*vecDataFileRough = new vecFill();
     FluxCalc*fluxCalc = new FluxCalc();
-    ReadFromFile*readFileTest = new ReadFromFile();
 
     QTimer*m_timer;
     SerialPort*esp32;
@@ -212,6 +215,7 @@ public slots:
     void on_actioncoefficients_triggered();
     void on_actionProcessing_triggered();
     void on_actionReadFile_triggered();
+    void on_actionPlotOption_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

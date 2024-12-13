@@ -4,11 +4,13 @@
 #include "ui_coefficients.h"
 #include "ui_processing.h"
 #include "ui_readFile.h"
+#include "ui_plotter.h"
 #include "callermainwindow.h"
 #include "Counters.h"
 #include "Coefficients.h"
 #include "Processing.h"
 #include "ReadFromFile.h"
+#include "PlotterOptions.h"
 #include "QScrollBar"
 #include  <locale.h>
 
@@ -20,18 +22,21 @@ int main(int argc, char *argv[]) {
     Coefficients * coefWin = new Coefficients(nullptr);
     Processing * procWin = new Processing(nullptr);
     ReadFromFile * readFromFileWin = new ReadFromFile(nullptr);
+    PlotterOptions * plotterOptionsWin = new PlotterOptions(nullptr);
 
     Ui::MainWindow caller;
     Ui::Form_1 counters;
     Ui::Form_2 coefficients;
     Ui::Form_3 processing;
     Ui::Form_RF readFile;
+    Ui::Form_Plot plotter;
 
     caller.setupUi(window);
     counters.setupUi(countersWin);
     coefficients.setupUi(coefWin);
     processing.setupUi(procWin);
     readFile.setupUi(readFromFileWin);
+    plotter.setupUi(plotterOptionsWin);
 
     window->textBrowser = caller.textBrowser;
     window->textBrowser_2 = caller.textBrowser_2;

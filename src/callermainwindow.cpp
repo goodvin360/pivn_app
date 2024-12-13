@@ -17,6 +17,9 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     readFileSettings = new ReadFromFile();
     readfile.setupUi(readFileSettings);
 
+    plotOptionsSetting = new PlotterOptions();
+    plotter.setupUi(plotOptionsSetting);
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -28,6 +31,12 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(readFileSettings, &ReadFromFile::sentReadAction, this, &CallerMainWindow::addStartFile);
     QObject::connect(readFileSettings, &ReadFromFile::sentLoadAction, this, &CallerMainWindow::addLoadFile);
     QObject::connect(readFileSettings, &ReadFromFile::sentDelayValue, this, &CallerMainWindow::setReadDelay);
+    QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTrig, this, &CallerMainWindow::plotTrigger);
+    QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTotTrig, this, &CallerMainWindow::plotTriggerTotal);
+    QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTrigR, this, &CallerMainWindow::plotTriggerRough);
+    QObject::connect(plotOptionsSetting, &PlotterOptions::sentPlotTotTrigR, this, &CallerMainWindow::plotTriggerTotalRough);
+    QObject::connect(plotOptionsSetting, &PlotterOptions::sentRescaleTrig, this, &CallerMainWindow::rescalePlotTrigger);
+
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
     m_timer->setInterval(1000);
@@ -40,6 +49,7 @@ CallerMainWindow::~CallerMainWindow() {
     coefSettings->close();
     procSetting->close();
     readFileSettings->close();
+    plotOptionsSetting->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -159,12 +169,14 @@ void CallerMainWindow::startByTimer() {
         if (!isActive) {
             plotState=0;
             checkBox_3->setChecked(0);
+            plotOptionsSetting->checkBox->setChecked(0);
         }
         if (plotTotalState>0 && isActiveTotal)
             makePlot->PlotGraphTotal(rescaleTrigger,tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
         if (!isActiveTotal) {
             plotTotalState=0;
             checkBox_4->setChecked(0);
+            plotOptionsSetting->checkBox_2->setChecked(0);
         }
 
         if (plotStateRough > 0 && isActiveRough)
@@ -172,12 +184,14 @@ void CallerMainWindow::startByTimer() {
         if (!isActiveRough) {
             plotStateRough=0;
             checkBox_2->setChecked(0);
+            plotOptionsSetting->checkBox_3->setChecked(0);
         }
         if (plotTotalStateRough > 0 && isActiveTotalRough)
             makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
         if (!isActiveTotalRough) {
             plotTotalStateRough=0;
             checkBox_9->setChecked(0);
+            plotOptionsSetting->checkBox_4->setChecked(0);
         }
 
         QString showLine = QString::fromStdString(res_out.str());
@@ -631,12 +645,14 @@ void CallerMainWindow::addStartFile() {
                     if (!isActive) {
                         plotState=0;
                         checkBox_3->setChecked(0);
+                        plotOptionsSetting->checkBox->setChecked(0);
                     }
                     if (plotTotalState > 0 && isActiveTotal)
                         makePlot->PlotGraphTotal(rescaleTrigger, tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
                     if (!isActiveTotal) {
                         plotTotalState=0;
                         checkBox_4->setChecked(0);
+                        plotOptionsSetting->checkBox_2->setChecked(0);
                     }
 
                     if (plotStateRough > 0 && isActiveRough)
@@ -644,12 +660,14 @@ void CallerMainWindow::addStartFile() {
                     if (!isActiveRough) {
                         plotStateRough=0;
                         checkBox_2->setChecked(0);
+                        plotOptionsSetting->checkBox_3->setChecked(0);
                     }
                     if (plotTotalStateRough > 0 && isActiveTotalRough)
                         makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
                     if (!isActiveTotalRough) {
                         plotTotalStateRough=0;
                         checkBox_9->setChecked(0);
+                        plotOptionsSetting->checkBox_4->setChecked(0);
                     }
 
                     std::stringstream res_out;
@@ -948,6 +966,10 @@ void CallerMainWindow::on_actionReadFile_triggered() {
     readFileSettings->show();
 }
 
+void CallerMainWindow::on_actionPlotOption_triggered() {
+    plotOptionsSetting->show();
+}
+
 void CallerMainWindow::startUpFunc() {
 
     resTime.push_back(200);
@@ -1034,6 +1056,12 @@ void CallerMainWindow::startUpFunc() {
 
     readFileSettings->lineEdit = readfile.lineEdit;
     readfile.lineEdit->setText(QString::number(readDelay));
+
+    plotOptionsSetting->checkBox = plotter.checkBox;
+    plotOptionsSetting->checkBox_2 = plotter.checkBox_2;
+    plotOptionsSetting->checkBox_3 = plotter.checkBox_3;
+    plotOptionsSetting->checkBox_4 = plotter.checkBox_4;
+    plotOptionsSetting->checkBox_5 = plotter.checkBox_5;
 }
 
 void CallerMainWindow::clearNeutrons() {

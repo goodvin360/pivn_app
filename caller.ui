@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>857</height>
+    <height>1276</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -753,6 +753,7 @@
     </widget>
     <addaction name="menusettings"/>
     <addaction name="actionReadFile"/>
+    <addaction name="actionPlotOption"/>
    </widget>
    <addaction name="menumenu"/>
   </widget>
@@ -791,6 +792,11 @@
   <action name="actionmenu_3">
    <property name="text">
     <string>menu</string>
+   </property>
+  </action>
+  <action name="actionPlotOption">
+   <property name="text">
+    <string>PlotOption</string>
    </property>
   </action>
  </widget>
