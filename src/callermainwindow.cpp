@@ -143,10 +143,10 @@ void CallerMainWindow::startByTimer() {
             integrationTime = var1;
             tempTime = var2;
             leftTime = var3;
-            vecDataRough->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
-                                       trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift,
-                                       edgePointTrig,
-                                       procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig,
+            vecDataRough->getDataTotal(vecDataRough->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
+                                       trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR, tempTimeShiftR,
+                                       edgePointTrigR,
+                                       procSetting->backDelay, avWindow, leftTimeR, procSetting->multiPulsesTrig,
                                        procSetting->clearBackVecTrig,
                                        procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 1);
         }
@@ -606,23 +606,12 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-//                    int var1 = integrationTime;
-//                    int var2 = tempTime;
-//                    int var3 = leftTime;
-//                    int var4 = edgePointTrig;
-//                    int var5 = tempTimeShift;
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
-//                    std::cout << "sens chann still alive at " << leftTime << std::endl;
 
                     if (count==6) {
-//                        integrationTime = var1;
-//                        tempTime = var2;
-//                        leftTime = var3;
-//                        edgePointTrig = var4;
-//                        tempTimeShift = var5;
                         vecDataFileRough->getDataTotal(vecDataFileRough->resultsDb, integrationTime, nFlux, coeff_a,
                                                        coeff_b, portHasBeenCrashed,
                                                        trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR,
@@ -631,7 +620,6 @@ void CallerMainWindow::addStartFile() {
                                                        procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                                        procSetting->critVal, procSetting->intTime,
                                                        procSetting->nucleusTrig, 1);
-//                        std::cout << "rough chann still alive at " << leftTime << std::endl;
                     }
 
                     lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotalP.at(1).back(),'f',2));
