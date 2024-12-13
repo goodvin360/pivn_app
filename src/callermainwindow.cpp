@@ -606,25 +606,32 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
-                    int var1 = integrationTime;
-                    int var2 = tempTime;
-                    int var3 = leftTime;
+//                    int var1 = integrationTime;
+//                    int var2 = tempTime;
+//                    int var3 = leftTime;
+//                    int var4 = edgePointTrig;
+//                    int var5 = tempTimeShift;
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
+//                    std::cout << "sens chann still alive at " << leftTime << std::endl;
+
                     if (count==6) {
-                        integrationTime = var1;
-                        tempTime = var2;
-                        leftTime = var3;
+//                        integrationTime = var1;
+//                        tempTime = var2;
+//                        leftTime = var3;
+//                        edgePointTrig = var4;
+//                        tempTimeShift = var5;
                         vecDataFileRough->getDataTotal(vecDataFileRough->resultsDb, integrationTime, nFlux, coeff_a,
                                                        coeff_b, portHasBeenCrashed,
-                                                       trigMode, trigVal, edgePoint, constFluxTrig, tempTime,
-                                                       tempTimeShift, edgePointTrig,
-                                                       procSetting->backDelay, avWindow, leftTime,
+                                                       trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR,
+                                                       tempTimeShiftR, edgePointTrigR,
+                                                       procSetting->backDelay, avWindow, leftTimeR,
                                                        procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                                        procSetting->critVal, procSetting->intTime,
                                                        procSetting->nucleusTrig, 1);
+//                        std::cout << "rough chann still alive at " << leftTime << std::endl;
                     }
 
                     lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotalP.at(1).back(),'f',2));
@@ -747,6 +754,7 @@ void CallerMainWindow::addStartFile() {
             vecDataFile->cleanUp();
             vecDataFileRough->cleanUp();
             edgePointTrig = 0;
+            edgePointTrigR = 0;
             tempTime=0;
             tempTimeShift = 0;
             pushButton->setEnabled(1);
@@ -914,6 +922,7 @@ void CallerMainWindow::manualTrigger(int st) {
 
 void CallerMainWindow::addConstFluxGo() {
         edgePointTrig++;
+        edgePointTrigR++;
 }
 
 void CallerMainWindow::addConstFluxTrig(int st) {

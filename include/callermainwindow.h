@@ -124,17 +124,18 @@ public:
     int rescaleTrigger = 0;
     int timeState = 0;
     double integrationTime = 30;
-    double leftTime = integrationTime;
+    double leftTime = integrationTime, leftTimeR = integrationTime;
     double totalCounts = 0;
     double nFlux = 0;
     int shotCounter = 0;
     int trigMode = 0;
     int trigVal = 0;
-    double edgePoint = 0;
-    double tempTime = 0;
-    double tempTimeShift = 0;
+    double edgePoint = 0, edgePointR = 0;
+    double tempTime = 0, tempTimeR = 0;
+    double tempTimeShift = 0, tempTimeShiftR = 0;
     int constFluxTrig = 0;
-    int edgePointTrig = 0;
+    int edgePointTrig = 0, edgePointTrigR = 0;
+
     int cnt1_trig = 0;
     int cnt2_trig = 0;
     int cnt3_trig = 0;

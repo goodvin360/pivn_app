@@ -182,6 +182,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         var3 = 5;   // the first counter in array number
         var4 = 7;   // the last counter in array number
         var5 = 2;   // amount of counters in array
+        std::cout << "start: rough chann still alive at " << lftTime << std::endl;
     }
     if (roughTrigger == 0) {
         resultsDbTotal = resultsDbTotalP;
@@ -192,6 +193,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         var3 = 1;
         var4 = 5;
         var5 = 4;
+        std::cout << "start: sens chann still alive at " << lftTime << std::endl;
+
     }
 
     fluxTime = totTime+countStartTime;
@@ -899,6 +902,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             tempErr2 = 0;
             countErr = 0;
         }
+
+        if (roughTrigger == 1)
+            std::cout << "rough chann still alive at " << lftTime << std::endl << std::endl;
+        else
+            std::cout << "sens chann still alive at " << lftTime << std::endl << std::endl;
     }
 
     maxCountRate = 0;
