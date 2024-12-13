@@ -33,9 +33,11 @@
 #include "Counters.h"
 #include "Coefficients.h"
 #include "Processing.h"
+#include "ReadFromFile.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
 #include "../ui_processing.h"
+#include "../ui_readFile.h"
 
 #pragma region Docs
 
@@ -52,11 +54,12 @@ public:
     Ui::Form_1 counters;
     Ui::Form_2 coefficients;
     Ui::Form_3 processing;
-
+    Ui::Form_RF readfile;
 
     Counters*cntSettings;
     Coefficients*coefSettings;
     Processing*procSetting;
+    ReadFromFile*readFileSettings;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
@@ -68,9 +71,15 @@ public:
     QLineEdit*lineEdit_8 = nullptr;
     QLineEdit*lineEdit_9 = nullptr;
     QLineEdit*lineEdit_10 = nullptr;
+    QLineEdit*lineEdit_11 = nullptr;
+    QLineEdit*lineEdit_12 = nullptr;
+    QLineEdit*lineEdit_13 = nullptr;
+    QLineEdit*lineEdit_14 = nullptr;
     QTextBrowser*textBrowser = nullptr;
     QTextBrowser*textBrowser_2 = nullptr;
     QTextBrowser*textBrowser_3 = nullptr;
+    QTextBrowser*textBrowser_4 = nullptr;
+    QTextBrowser*textBrowser_5 = nullptr;
     QComboBox*comboBox = new QComboBox();
     QPushButton*pushButton = new QPushButton();         //start
     QPushButton*pushButton_2 = new QPushButton();       //connect to COM
@@ -84,12 +93,14 @@ public:
     //pushButtons 6,9,12 - clear buttons
 
     QCheckBox*checkBox = new QCheckBox();
+    QCheckBox*checkBox_2 = new QCheckBox();
     QCheckBox*checkBox_3 = new QCheckBox();
     QCheckBox*checkBox_4 = new QCheckBox();
     QCheckBox*checkBox_5 = new QCheckBox();
     QCheckBox*checkBox_6 = new QCheckBox();
     QCheckBox*checkBox_7 = new QCheckBox();
     QCheckBox*checkBox_8 = new QCheckBox();
+    QCheckBox*checkBox_9 = new QCheckBox();
 
     bool portIsMissing = false;
     bool portHasBeenCrashed = false;
@@ -104,6 +115,8 @@ public:
     bool onFlag = false;
     int plotState = 0;
     int plotTotalState = 0;
+    int plotStateRough = 0;
+    int plotTotalStateRough = 0;
     int rescaleTrigger = 0;
     int timeState = 0;
     double integrationTime = 30;
@@ -122,23 +135,38 @@ public:
     int cnt2_trig = 0;
     int cnt3_trig = 0;
     int cnt4_trig = 0;
+    int cnt5_trig = 0;
+    int cnt6_trig = 0;
+    int msgVar1 = 0, msgVar11 = 0, msgVar2 = 0, msgVar22 = 0, msgVar3 = 0, msgVar33 = 0;
+    std::vector<int> cntTrigValues;
     int counter = 0;
     double readDelay = 10;
     double avWindow = 5;
     int xp1tot = 500, xp2tot = 999, yp1tot = 500, yp2tot = 999;
     int xp1dif = 500, xp2dif = 999, yp1dif = 500, yp2dif = 999;
+    int xp1totR = 500, xp2totR = 999, yp1totR = 500, yp2totR = 999;
+    int xp1difR = 500, xp2difR = 999, yp1difR = 500, yp2difR = 999;
     bool isActive = true;
     bool isActiveTotal = true;
-    double resTime[4] {200, 300, 400, 350};
-    size_t count = std::size(resTime);
+    bool isActiveRough = true;
+    bool isActiveTotalRough = true;
+    std::vector<double> resTime{};
+//    double resTime[6] {200, 300, 400, 350, 200, 200};
+    int count = 0;
+    std::vector<QLineEdit*> countersData;
+    std::vector<QCheckBox*> cntTriggers;
 
     vecFill*vecData = new vecFill();
+    vecFill*vecDataRough = new vecFill();
     vecFill*vecDataFile = new vecFill();
+    vecFill*vecDataFileRough = new vecFill();
     FluxCalc*fluxCalc = new FluxCalc();
+    ReadFromFile*readFileTest = new ReadFromFile();
 
     QTimer*m_timer;
     SerialPort*esp32;
     Plotter*makePlot;
+    Plotter*makePlotRough;
     std::vector<Plotter*> plotObjVec;
 
     std::map<double, std::string> resultsNew;
@@ -162,6 +190,8 @@ public slots:
     void addLoadFile();
     void plotTrigger(int st);
     void plotTriggerTotal(int stTot);
+    void plotTriggerRough(int st);
+    void plotTriggerTotalRough(int stTot);
     void rescalePlotTrigger(int stRescale);
     void setFiniteTime(int stTime);
     void setCountIntTime(QString intTime);
@@ -181,6 +211,7 @@ public slots:
     void on_actioncounters_triggered();
     void on_actioncoefficients_triggered();
     void on_actionProcessing_triggered();
+    void on_actionReadFile_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Coefficients settings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -21,55 +21,96 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <widget class="QCheckBox" name="checkBox_2">
      <property name="text">
       <string>14 MeV</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="3">
     <widget class="QCheckBox" name="checkBox_3">
      <property name="text">
       <string>2.5 MeV</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="0" colspan="2">
     <widget class="QCheckBox" name="checkBox">
      <property name="text">
       <string>User's coefficients</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>coefficient &quot;a&quot; :</string>
+   <item row="2" column="0" colspan="4">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Counters 1 - 4</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>coefficient &quot;a&quot; :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>coefficient &quot;b&quot; :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Counters 5 - 6</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>coefficient &quot;a&quot; :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>coefficient &quot;b&quot; :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_5"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="lineEdit"/>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>coefficient &quot;b&quot; :</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="lineEdit_2"/>
-   </item>
-   <item row="4" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>distance, cm :</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item row="3" column="1" colspan="3">
     <widget class="QLineEdit" name="lineEdit_3"/>
    </item>
   </layout>
@@ -83,8 +124,8 @@
    <slot>trig14(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>143</x>
-     <y>44</y>
+     <x>293</x>
+     <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>75</x>
@@ -99,8 +140,8 @@
    <slot>trig2_5(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>43</y>
+     <x>390</x>
+     <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>212</x>
@@ -115,8 +156,8 @@
    <slot>coefTrig(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>41</x>
-     <y>94</y>
+     <x>50</x>
+     <y>48</y>
     </hint>
     <hint type="destinationlabel">
      <x>16</x>
@@ -163,12 +204,44 @@
    <slot>setDist(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
-     <y>247</y>
+     <x>390</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>107</x>
      <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_4</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>Form_2</receiver>
+   <slot>setCoefARough(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_5</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>Form_2</receiver>
+   <slot>setCoefBRough(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>38</y>
     </hint>
    </hints>
   </connection>
@@ -180,5 +253,7 @@
   <slot>coefTrig(int)</slot>
   <slot>trig14(int)</slot>
   <slot>trig2_5(int)</slot>
+  <slot>setCoefARough(QString)</slot>
+  <slot>setCoefBRough(QString)</slot>
  </slots>
 </ui>

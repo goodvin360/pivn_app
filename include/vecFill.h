@@ -14,17 +14,21 @@ public:
 
     std::vector<std::vector<double>> resultsDb;
 
+    std::vector<std::vector<double>> resultsDbTotal;
+
     std::vector<std::vector<double>> resultsDbPart;
 
-    std::vector<std::vector<double>> resultsDbTotal;
+    std::vector<std::vector<double>> resultsDbTotalP;
+
+    std::vector<std::vector<double>> resultsDbTotalRoughP;
 
     std::vector<std::vector<double>> resultsDbSeparated;
 
-    std::vector<std::vector<double>> getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t);
+    std::vector<std::vector<double>> getData(std::string &str, int &counter, std::vector<int> cntTrig, std::vector<double> resT, int);
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       double backDelayTime, int window, double&lftTime, int mPulses, int clearTrig,
-                      double critLvl, double intTime, int nucleus);
+                      double critLvl, double intTime, int nucleus, int roughTrigger);
 
     void cleanUp();
 
@@ -65,7 +69,7 @@ public:
     bool fileTrigger = false;
     double trigDelta = 0;
     double backConstWindow = 50;
-    double resTime[4] = {5e-4, 5e-4, 5e-4, 5e-4};
+    std::vector<double>resTime;
     double lmd116 = log(2)/14.1;
     double lmd116m = log(2)/3240;
     double lmd114 = log(2)/72;

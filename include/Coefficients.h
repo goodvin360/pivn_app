@@ -6,6 +6,7 @@
 #include "QWidget"
 #include "QCheckBox"
 #include "QtWidgets/QLineEdit"
+#include "QTabWidget"
 
 #pragma region Docs
 
@@ -19,9 +20,13 @@ public: Coefficients(QWidget* parent = nullptr);
     QCheckBox*checkBox = new QCheckBox(); //user's coeff trigger
     QCheckBox*checkBox_2 = new QCheckBox(); //14 MeV trigger
     QCheckBox*checkBox_3 = new QCheckBox(); // 2.5 MeV trigger
-    QLineEdit*lineEdit = nullptr;   //coeff "a" line
-    QLineEdit*lineEdit_2 = nullptr; //coeff "b" line
+    QLineEdit*lineEdit = nullptr;   //coeff "a" line for sens chan
+    QLineEdit*lineEdit_2 = nullptr; //coeff "b" line for sens chan
     QLineEdit*lineEdit_3 = nullptr; //distance line
+    QLineEdit*lineEdit_4 = nullptr; //coeff "a" line for rough chan
+    QLineEdit*lineEdit_5 = nullptr; //coeff "b" line for rough chan
+    QTabWidget*tabWidget = new QTabWidget();
+
 
 //    double coeff_a = 2671;
 //    double coeff_a = 2876;
@@ -29,6 +34,10 @@ public: Coefficients(QWidget* parent = nullptr);
 //    double coeff_b = -450245;
 //    double coeff_b = -82143;
     double coeff_b = 13354;
+
+    double coeff_a_rough = 2840;
+    double coeff_b_rough = 13354;
+
     double distance = 24;
     int coefState = 0;
     int coef14 = 0;
@@ -41,6 +50,8 @@ public slots:
     void coefTrig(int trig);
     void setCoefA(QString coef_a);
     void setCoefB(QString coef_b);
+    void setCoefARough(QString coef_a);
+    void setCoefBRough(QString coef_b);
     void setDist(QString dist);
 };
 

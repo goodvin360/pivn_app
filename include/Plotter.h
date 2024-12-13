@@ -13,15 +13,17 @@
 class Plotter
 {
 public:
-    Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d);
+    Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d, int roughTrigger);
     ~Plotter();
 
     void PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2, bool &isActive);
     void PlotGraphTotal(int rescaleTrig, double &ePoint, int &xp1, int &xp2, int &yp1, int &yp2, bool &isActiveTot);
+
     Chart*chart;
     ChartView*chartView;
     Chart*chartTot;
     ChartView*chartViewTot;
+
 private:
 
     QValueAxis*m_axisX;
@@ -36,6 +38,7 @@ private:
     vecFill*Data;
     std::vector<double> maxValVec;
     int rescaleSize = 200;
+    int var1 = 0, var2 = 0, var3 = 0;
 
 };
 

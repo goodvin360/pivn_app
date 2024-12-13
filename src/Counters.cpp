@@ -24,3 +24,35 @@ void Counters::cnt4(int val) {
     cnt4_trig = val;
 }
 
+void Counters::cnt5(int val) {
+    cnt5_trig = val;
+}
+
+void Counters::cnt6(int val) {
+    cnt6_trig = val;
+}
+
+void Counters::fourCounters(int val) {
+    if (val>0)
+    {
+        countersNumTrig = 0;
+        checkBox_8->setChecked(false);
+    }
+    else{
+        countersNumTrig = 1;
+        checkBox_8->setChecked(true);
+    }
+}
+
+void Counters::sixCounters(int val) {
+    if (val>0)
+    {
+        countersNumTrig = 1;
+        checkBox_7->setChecked(false);
+    }
+    else{
+        countersNumTrig = 0;
+        checkBox_7->setChecked(true);
+    }
+}
+

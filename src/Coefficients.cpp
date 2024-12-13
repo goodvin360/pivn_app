@@ -57,6 +57,14 @@ void Coefficients::setCoefB(QString coef_b) {
     inputProcessing(coeff_b,coef_b.toStdString());
 }
 
+void Coefficients::setCoefARough(QString coef_a) {
+    inputProcessing(coeff_a_rough,coef_a.toStdString());
+}
+
+void Coefficients::setCoefBRough(QString coef_b) {
+    inputProcessing(coeff_b_rough,coef_b.toStdString());
+}
+
 void Coefficients::setDist(QString dist) {
     inputProcessing(distance,dist.toStdString());
     if (coefState==0)
@@ -64,15 +72,24 @@ void Coefficients::setDist(QString dist) {
         if (coef14>0) {
             coeff_a = distance * 15;
             coeff_b = distance + 5;
+
+            coeff_a_rough = distance * 150;
+            coeff_b_rough = distance + 50;
         }
         if (coef2_5>0)
         {
             coeff_a = -497 + distance*82 + pow(distance,2)*1.857;
             coeff_b = distance*4922-53842;
+
+            coeff_a_rough = -4970 + distance*820 + pow(distance,2)*18.57;
+            coeff_b_rough = distance*49220-53842;
         }
     }
     lineEdit->setText(QString::number(coeff_a));
     lineEdit_2->setText(QString::number(coeff_b));
+
+    lineEdit_4->setText(QString::number(coeff_a_rough));
+    lineEdit_5->setText(QString::number(coeff_b_rough));
 }
 
 void Coefficients::inputProcessing(double &var, std::string inp) {

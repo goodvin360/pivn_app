@@ -14,35 +14,41 @@ void vecFill::printMessage(QString msg, int num) {
     emit sentMessage(msg, num);
 }
 
-std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter, int cnt1, int cnt2, int cnt3, int cnt4, double resT[], size_t counters) {
+std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter, std::vector<int> cntTrig, std::vector<double>resT, int counters) {
     cnt = counter;
-    for (size_t i{}; i < counters; i++)
+    resTime = resT;
+    for (int i=0; i < counters; i++)
     {
-        resTime[i] = resT[i]*1e-6;
-        if (resTime[i]>maxResTime)
-            maxResTime = resTime[i];
+        if (resT[i]>maxResTime)
+            maxResTime = resT[i];
     }
     if (counter==0)
     {
-        for (int i=0; i<6; i++)
+        for (int i=0; i<counters+2; i++)
         {
             std::vector<double> smData;
             resultsDb.push_back(smData);
         }
 
-        for (int i=0; i<6; i++)
+/*        for (int i=0; i<6; i++)
         {
             std::vector<double> smData;
             resultsDbPart.push_back(smData);
+        }*/
+
+        for (int i=0; i<4; i++)
+        {
+            std::vector<double> smData;
+            resultsDbTotalP.push_back(smData);
         }
 
         for (int i=0; i<4; i++)
         {
             std::vector<double> smData;
-            resultsDbTotal.push_back(smData);
+            resultsDbTotalRoughP.push_back(smData);
         }
 
-        for (int i=0; i<5; i++)
+        for (int i=0; i<counters+1; i++)
         {
             std::vector<double> smData;
             resultsDbSeparated.push_back(smData);
@@ -71,12 +77,12 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
         }
         else if (flag)
         {
-            if (m==2 && cnt1 == 0)
-                token = "0";
-            if (m==3 && cnt2 == 0)
-                token = "0";
-            if (m==4 && cnt3 == 0)
-                token = "0";
+//            if (m==2 && cnt1 == 0)
+//                token = "0";
+//            if (m==3 && cnt2 == 0)
+//                token = "0";
+//            if (m==4 && cnt3 == 0)
+//                token = "0";
             resultsDb.at(m).push_back(stod(token));
         }
         var.erase(0, pos + delimiter2.length());
@@ -90,47 +96,71 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
     }
     if (flag)
     {
-        if (m==5 && cnt4 == 0)
-            var = "0";
+//        if (m==5 && cnt4 == 0)
+//            var = "0";
         resultsDb.at(m).push_back(stod(var));
     }
+
     if (!resultsDb.at(0).empty())
     {
-        resultsDbTotal.at(0).push_back(resultsDb.at(0).back());
+        resultsDbTotalP.at(0).push_back(resultsDb.at(0).back());
+        resultsDbTotalRoughP.at(0).push_back(resultsDb.at(0).back());
         resultsDbSeparated.at(0).push_back(resultsDb.at(0).back());
         double sum = 0;
         double sum_clean = 0;
+        double sumRough = 0;
+        double sum_cleanRough = 0;
         for (int i = 2; i < resultsDb.size(); i++) {
             double var = 0;
-            if (resultsDb.at(i).back() >= 1 / resTime[i - 2])
-                var = 1 / resTime[i - 2] - 1;
-            else var = resultsDb.at(i).back();
-            if (cnt1 == 0)
-                resultsDb.at(2).back() = 0;
-            if (cnt2 == 0)
-                resultsDb.at(3).back() = 0;
-            if (cnt3 == 0)
-                resultsDb.at(4).back() = 0;
-            if (cnt4 == 0)
-                resultsDb.at(5).back() = 0;
-            sum += var / (1 - var * resTime[i - 2]);
-            sum_clean += var;
-            if ((i-1)<5)
-                resultsDbSeparated.at(i-1).push_back(var);
-            if (resultsDb.at(i).back()>maxCountRate)
-                maxCountRate = resultsDb.at(i).back();
-        }
-        resultsDbTotal.at(1).push_back(sum);
-        resultsDbTotal.at(2).push_back(0);
-            if (resultsDbTotal.at(2).size()>2)
+            if (cntTrig.size()==resultsDb.size()-2)
             {
-                double last_val = resultsDbTotal.at(2).at(resultsDbTotal.at(2).size()-2);
+                if (cntTrig[i-2]==0)
+                    resultsDb.at(i).back() = 0;
+            }
+//            if (cnt1 == 0)
+//                resultsDb.at(2).back() = 0;
+//            if (cnt2 == 0)
+//                resultsDb.at(3).back() = 0;
+//            if (cnt3 == 0)
+//                resultsDb.at(4).back() = 0;
+//            if (cnt4 == 0)
+//                resultsDb.at(5).back() = 0;
+            if (resultsDb.at(i).back() >= 1 / resT[i - 2])
+                var = 1 / resT[i - 2] - 1;
+            else var = resultsDb.at(i).back();
+            if (i<6) {
+                sum += var / (1 - var * resT[i - 2]);
+                sum_clean += var;
+            }
+            if (i>5) {
+                sumRough += var / (1 - var * resT[i - 2]);
+                sum_cleanRough += var;
+            }
+            if ((i-1)<resultsDbSeparated.size())
+                resultsDbSeparated.at(i-1).push_back(var);
+        }
+        resultsDbTotalP.at(1).push_back(sum);
+        resultsDbTotalP.at(2).push_back(0);
+            if (resultsDbTotalP.at(2).size()>2)
+            {
+                double last_val = resultsDbTotalP.at(2).at(resultsDbTotalP.at(2).size()-2);
                 if (last_val>0) {
-                    resultsDbTotal.at(2).pop_back();
-                    resultsDbTotal.at(2).push_back(last_val);
+                    resultsDbTotalP.at(2).pop_back();
+                    resultsDbTotalP.at(2).push_back(last_val);
                 }
             }
-        resultsDbTotal.at(3).push_back(sum_clean);
+        resultsDbTotalRoughP.at(1).push_back(sumRough);
+        resultsDbTotalRoughP.at(2).push_back(0);
+        if (resultsDbTotalRoughP.at(2).size()>2)
+        {
+            double last_val = resultsDbTotalRoughP.at(2).at(resultsDbTotalRoughP.at(2).size()-2);
+            if (last_val>0) {
+                resultsDbTotalRoughP.at(2).pop_back();
+                resultsDbTotalRoughP.at(2).push_back(last_val);
+            }
+        }
+        resultsDbTotalP.at(3).push_back(sum_clean);
+        resultsDbTotalRoughP.at(3).push_back(sum_cleanRough);
     }
     return resultsDb;
 }
@@ -138,7 +168,32 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            double backDelayTime, int window, double &lftTime, int mPulses, int clearTrig,
-                           double critLvl, double intTime, int nucleus) {
+                           double critLvl, double intTime, int nucleus, int roughTrigger) {
+    int var3 = 0;
+    int var4 = 0;
+    double var5 = 0;
+
+    if (roughTrigger == 1) {
+        resultsDbTotal = resultsDbTotalRoughP;
+        for (int i = 6; i < 8; i++) {
+            if (resultsDb.at(i).back()>maxCountRate)
+                maxCountRate = resultsDb.at(i).back();
+        }
+        var3 = 5;   // the first counter in array number
+        var4 = 7;   // the last counter in array number
+        var5 = 2;   // amount of counters in array
+    }
+    if (roughTrigger == 0) {
+        resultsDbTotal = resultsDbTotalP;
+        for (int i = 2; i < 6; i++) {
+            if (resultsDb.at(i).back()>maxCountRate)
+                maxCountRate = resultsDb.at(i).back();
+        }
+        var3 = 1;
+        var4 = 5;
+        var5 = 4;
+    }
+
     fluxTime = totTime+countStartTime;
     nCritical = (critLvl/100)/maxResTime;
     if (data.at(0).size()==1) {
@@ -350,7 +405,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 double var1 = 0;
                 double var2 = 1;
 
-                for (int i=1; i<5; i++)
+                for (int i=var3; i<var4; i++)
                 {
                     var1=resultsDbSeparated.at(i).back()+pow(deltaResTime*resTime[i-1],2)*pow(resultsDbSeparated.at(i).back(),4);
                     var2=pow((resTime[i-1]*resultsDbSeparated.at(i).back()-1),2);
@@ -358,10 +413,10 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 }
 
                 tempErr2 = 0;
-                for (int i=1; i<5; i++)
+                for (int i=var3; i<var4; i++)
                 {
-                    var1 = backLastVal/4+pow(deltaResTime*resTime[i-1],2)*pow(backVal/4,4);
-                    var2 = pow((resTime[i-1]*backVal/4-1),2);
+                    var1 = backLastVal/var5+pow(deltaResTime*resTime[i-1],2)*pow(backVal/var5,4);
+                    var2 = pow((resTime[i-1]*backVal/var5-1),2);
                     tempErr2+=var1/var2;
                 }
                 tempErr2=backVec.size()*tempErr2;
@@ -375,12 +430,18 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             fluxTimeCounter++;
         }
 
-        if (fluxTimeCounter == fluxTime+backDelayTime || isSecondPulse) {
+        if (fluxTimeCounter == fluxTime || isSecondPulse) {
             QString s(0x00B1);
             double error = statErr*Flux;
-            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             msgFillUp();
-            printMessage(pulseDataMsg,2);
+            if (roughTrigger==0) {
+                printMessage(pulseDataMsg, 2);
+                printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
+            }
+            else {
+                printMessage(pulseDataMsg, 22);
+                printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),11);
+            }
             isBack = true;
             fluxTimeCounter = 0;
             countStartTime = 0;
@@ -755,7 +816,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             double var2 = 1;
 
             int timePoint = resultsDbSeparated.at(0).size()-fluxTimeCounter;
-            for (int i=1; i<5; i++) {
+            for (int i=var3; i<var4; i++) {
                 for (int j=0; j<fluxTime; j++) {
                     var1 = resultsDbSeparated.at(i).at(j+timePoint) + pow(deltaResTime * resTime[i - 1], 2) * pow(resultsDbSeparated.at(i).at(j+timePoint), 4);
                     var2 = pow((resTime[i - 1] * resultsDbSeparated.at(i).at(j+timePoint) - 1), 2);
@@ -764,9 +825,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             tempErr2 = 0;
-            for (int i=1; i<5; i++) {
-                var1 = backVal/4+pow(deltaResTime*resTime[i-1],2)*pow(backVal/4,4);
-                var2 = pow((resTime[i-1]*backVal/4-1),2);
+            for (int i=var3; i<var4; i++) {
+                var1 = backVal/var5+pow(deltaResTime*resTime[i-1],2)*pow(backVal/var5,4);
+                var2 = pow((resTime[i-1]*backVal/var5-1),2);
                 tempErr2+=backVecConst.size()*var1/var2;
             }
 
@@ -798,9 +859,15 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
             QString s(0x00B1);
             double error = statErr*Flux;
-            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
             msgFillUp();
-            printMessage(constDataMsg,3);
+            if (roughTrigger==0) {
+                printMessage(constDataMsg, 3);
+                printMessage(QString::number(Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+            }
+            else {
+                printMessage(constDataMsg, 33);
+                printMessage(QString::number(Flux, 'g', 3) + s + QString::number(error, 'g', 3), 11);
+            }
             isBackForConst = false;
             fluxTimeCounter = 0;
             backVal = 0;
@@ -835,11 +902,17 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
     }
 
     maxCountRate = 0;
+
+    if (roughTrigger == 1)
+        resultsDbTotalRoughP = resultsDbTotal;
+    if (roughTrigger == 0)
+        resultsDbTotalP = resultsDbTotal;
 }
 
 void vecFill::cleanUp() {
     resultsDb.clear();
-    resultsDbTotal.clear();
+    resultsDbTotalP.clear();
+    resultsDbTotalRoughP.clear();
     resultsDbSeparated.clear();
     backVec.clear();
     backVal = 0;

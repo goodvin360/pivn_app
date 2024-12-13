@@ -14,12 +14,18 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     procSetting = new Processing();
     processing.setupUi(procSetting);
 
+    readFileSettings = new ReadFromFile();
+    readfile.setupUi(readFileSettings);
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(fluxCalc, &FluxCalc::sentMessage, this, &CallerMainWindow::printMsg);
     QObject::connect(vecData, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
     QObject::connect(vecDataFile, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
+    QObject::connect(vecDataRough, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
+    QObject::connect(vecDataFileRough, &vecFill::sentMessage, this, &CallerMainWindow::printMsg);
+    QObject::connect(readFileSettings, &ReadFromFile::sentMessage, this, &CallerMainWindow::addStartFile);
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
     m_timer->setInterval(1000);
@@ -31,6 +37,7 @@ CallerMainWindow::~CallerMainWindow() {
     cntSettings->close();
     coefSettings->close();
     procSetting->close();
+    readFileSettings->close();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -45,10 +52,28 @@ void CallerMainWindow::startByTimer() {
     std::string token;
     std::string timeStr;
 
-    cnt1_trig = cntSettings->cnt1_trig;
-    cnt2_trig = cntSettings->cnt2_trig;
-    cnt3_trig = cntSettings->cnt3_trig;
-    cnt4_trig = cntSettings->cnt4_trig;
+    if (cntSettings->countersNumTrig==0)
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<4; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }
+    else
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<6; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }
 
     resultsNew.clear();
     while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
@@ -56,13 +81,14 @@ void CallerMainWindow::startByTimer() {
         token = inputValStr.substr(0, pos);
         if (token.length() > 0) {
             token.pop_back();
-            if (dotsFind(token,":").second == 5)
+            if (dotsFind(token,":").second == count+1)
             {
                 resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(token,":").first), token));
                 tempVar2 = resultsNew.size();
                 if (tempVar2>tempVar1)
                 {
-                    vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
+                    vecData->getData(resultsNew.rbegin()->second,counter, cntTrigValues, resTime, count);
+                    vecDataRough->getData(resultsNew.rbegin()->second,counter, cntTrigValues, resTime, count);
                     counter+=1;
                 }
             }
@@ -73,13 +99,14 @@ void CallerMainWindow::startByTimer() {
     if (inputValStr!="")
     {
         tempVar1 = resultsNew.size();
-        if (dotsFind(inputValStr,":").second == 5)
+        if (dotsFind(inputValStr,":").second == count+1)
         {
             resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr,":").first),inputValStr));
             tempVar2 = resultsNew.size();
             if (tempVar2>tempVar1)
             {
-                vecData->getData(resultsNew.rbegin()->second,counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
+                vecData->getData(resultsNew.rbegin()->second,counter, cntTrigValues, resTime, count);
+                vecDataRough->getData(resultsNew.rbegin()->second,counter, cntTrigValues, resTime, count);
                 counter+=1;
             }
         }
@@ -92,16 +119,39 @@ void CallerMainWindow::startByTimer() {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
 
+        int var1 = integrationTime;
+        int var2 = tempTime;
+        int var3 = leftTime;
+
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig);
+                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
+        if (count==6) {
+            integrationTime = var1;
+            tempTime = var2;
+            leftTime = var3;
+            vecDataRough->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
+                                       trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift,
+                                       edgePointTrig,
+                                       procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig,
+                                       procSetting->clearBackVecTrig,
+                                       procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 1);
+        }
 
-        lineEdit_2->setText(QString::number(vecData->resultsDbTotal.at(1).back(),'f',2));
-        lineEdit_3->setText(QString::number(vecData->resultsDbTotal.at(2).back(),'f',2));
-        lineEdit_4->setText(QString::number(vecData->resultsDbTotal.at(3).back(),'f',2));
+        lineEdit_2->setText(QString::number(vecData->resultsDbTotalP.at(1).back(),'f',2));
+        lineEdit_3->setText(QString::number(vecData->resultsDbTotalP.at(2).back(),'f',2));
+        lineEdit_4->setText(QString::number(vecData->resultsDbTotalP.at(3).back(),'f',2));
+
+        if (count==6) {
+            lineEdit_13->setText(QString::number(vecData->resultsDbTotalRoughP.at(1).back(), 'f', 2));
+            lineEdit_11->setText(QString::number(vecData->resultsDbTotalRoughP.at(2).back(), 'f', 2));
+            lineEdit_12->setText(QString::number(vecData->resultsDbTotalRoughP.at(3).back(), 'f', 2));
+        }
+
         lineEdit_10->setText(QString::number(leftTime));
         lineEdit_7->setText(QString::number(tempTime));
+
         if (plotState>0 && isActive)
             makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
         if (!isActive) {
@@ -114,8 +164,24 @@ void CallerMainWindow::startByTimer() {
             plotTotalState=0;
             checkBox_4->setChecked(0);
         }
+
+        if (plotStateRough > 0 && isActiveRough)
+            makePlotRough->PlotGraph(rescaleTrigger, xp1difR, xp2difR, yp1difR, yp2difR, isActiveRough);
+        if (!isActiveRough) {
+            plotStateRough=0;
+            checkBox_2->setChecked(0);
+        }
+        if (plotTotalStateRough > 0 && isActiveTotalRough)
+            makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
+        if (!isActiveTotalRough) {
+            plotTotalStateRough=0;
+            checkBox_9->setChecked(0);
+        }
+
         QString showLine = QString::fromStdString(res_out.str());
-        lineEdit_6->setText(QString::number(nFlux,'g',3));
+        lineEdit_6->setText(QString::number(vecData->Flux,'g',3));
+        if (cntSettings->countersNumTrig==1)
+            lineEdit_14->setText(QString::number(vecDataRough->Flux,'g',3));
         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
         QScrollBar*sb = textBrowser->verticalScrollBar();
         sb->setValue(sb->maximum());
@@ -175,18 +241,36 @@ void CallerMainWindow::startByTimer() {
         textBrowser->setText(textBrowser->toPlainText()
                              + "results stored in the file" + '\n');
 
-        if (vecData->Flux>0) {
+        if (vecData->Flux>0 || vecDataRough->Flux>0) {
             QString s(0x00B1);
-            double error = vecData->statErr * vecData->Flux;
+            double error = 0;
+
+            error = vecData->statErr * vecData->Flux;
             printMsg(QString::number(vecData->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+
+            if (cntSettings->countersNumTrig==1) {
+                error = vecDataRough->statErr * vecDataRough->Flux;
+                printMsg(QString::number(vecDataRough->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 11);
+            }
+
             vecData->msgFillUp();
-            if (constFluxTrig==0)
-                printMsg(vecData->pulseDataMsg,2);
-            if (constFluxTrig>0)
-                printMsg(vecData->constDataMsg,3);
+            if (cntSettings->countersNumTrig==1)
+                vecDataRough->msgFillUp();
+
+            if (constFluxTrig==0) {
+                printMsg(vecData->pulseDataMsg, 2);
+                if (cntSettings->countersNumTrig==1)
+                    printMsg(vecDataRough->pulseDataMsg, 22);
+            }
+            if (constFluxTrig>0) {
+                printMsg(vecData->constDataMsg, 3);
+                if (cntSettings->countersNumTrig==1)
+                    printMsg(vecDataRough->constDataMsg, 33);
+            }
         }
 
         vecData->cleanUp();
+        vecDataRough->cleanUp();
         edgePointTrig = 0;
         tempTime=0;
         tempTimeShift = 0;
@@ -200,6 +284,9 @@ void CallerMainWindow::startByTimer() {
         lineEdit_2->setText(QString::number(0));
         lineEdit_3->setText(QString::number(0));
         lineEdit_4->setText(QString::number(0));
+        lineEdit_11->setText(QString::number(0));
+        lineEdit_12->setText(QString::number(0));
+        lineEdit_13->setText(QString::number(0));
     }
 }
 
@@ -211,12 +298,26 @@ void CallerMainWindow::printMsg(QString msg, int num) {
     textBrowser_3->setTabStopWidth(tabStop * metrics.width(' '));*/
 
     if (num == 1) {
-        shotCounter+=1;
+        if (msgVar1>=msgVar11 && msgVar1>=msgVar2 && msgVar1>=msgVar22 && msgVar1>=msgVar3 && msgVar2>=msgVar33)
+            shotCounter+=1;
         textBrowser_2->setText(textBrowser_2->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
         QScrollBar*sb = textBrowser_2->verticalScrollBar();
         sb->setValue(sb->maximum());
+        msgVar1++;
     }
+
+    if (num == 11) {
+        if (msgVar11>=msgVar1 && msgVar11>=msgVar2 && msgVar11>=msgVar22 && msgVar11>=msgVar3 && msgVar11>=msgVar33)
+            shotCounter+=1;
+        textBrowser_5->setText(textBrowser_5->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_5->verticalScrollBar();
+        sb->setValue(sb->maximum());
+        msgVar11++;
+    }
+
     if (num == 2) {
+        if (msgVar2>=msgVar1 && msgVar2>=msgVar11 && msgVar2>=msgVar22 && msgVar2>=msgVar3 && msgVar2>=msgVar33)
+            shotCounter+=1;
         if (shotCounter==1)
             textBrowser_3->setText(textBrowser_3->toPlainText()
             + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
@@ -224,9 +325,25 @@ void CallerMainWindow::printMsg(QString msg, int num) {
         textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
         QScrollBar*sb = textBrowser_3->verticalScrollBar();
         sb->setValue(sb->maximum());
+        msgVar2++;
+    }
+
+    if (num == 22) {
+        if (msgVar22>=msgVar1 && msgVar22>=msgVar11 && msgVar22>=msgVar2 && msgVar22>=msgVar3 && msgVar22>=msgVar33)
+            shotCounter+=1;
+        if (shotCounter==1)
+            textBrowser_4->setText(textBrowser_4->toPlainText()
+               + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
+               + "Error" + '\t'+ "Extrapolated" + '\t' + "Pulse time" + '\t' + "Start" + '\n');
+        textBrowser_4->setText(textBrowser_4->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_4->verticalScrollBar();
+        sb->setValue(sb->maximum());
+        msgVar22++;
     }
 
     if (num == 3) {
+        if (msgVar3>=msgVar1 && msgVar3>=msgVar11 && msgVar3>=msgVar2 && msgVar3>=msgVar22 && msgVar3>=msgVar33)
+            shotCounter+=1;
         if (shotCounter==1)
             textBrowser_3->setText(textBrowser_3->toPlainText()
             + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
@@ -234,6 +351,20 @@ void CallerMainWindow::printMsg(QString msg, int num) {
         textBrowser_3->setText(textBrowser_3->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
         QScrollBar*sb = textBrowser_3->verticalScrollBar();
         sb->setValue(sb->maximum());
+        msgVar3++;
+    }
+
+    if (num == 33) {
+        if (msgVar33>=msgVar1 && msgVar33>=msgVar11 && msgVar33>=msgVar2 && msgVar33>=msgVar22 && msgVar33>=msgVar3)
+            shotCounter+=1;
+        if (shotCounter==1)
+            textBrowser_4->setText(textBrowser_4->toPlainText()
+                                   + "Cnt clean" + '\t' + "Cnt adjusted" + '\t' + "Minus back" + '\t' + "Back" + '\t'
+                                   + "Error" + '\t'+ "Extrapolated" + '\t' + "irStart" + '\t' + "irEnd" + '\t' + "Start" + '\n');
+        textBrowser_4->setText(textBrowser_4->toPlainText() + QString::number(shotCounter) + ": " + msg + '\n');
+        QScrollBar*sb = textBrowser_4->verticalScrollBar();
+        sb->setValue(sb->maximum());
+        msgVar33++;
     }
 
 }
@@ -294,19 +425,23 @@ void CallerMainWindow::addStart() {
     pushButton_4->setEnabled(0);
     pushButton_5->setEnabled(0);
 
-    makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
+    makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
     plotObjVec.push_back(makePlot);
+    makePlotRough = new Plotter(vecDataRough, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
+    plotObjVec.push_back(makePlotRough);
     onFlag = true;
     counter = 0;
     flushCounter = 0;
     shotCounter = 0;
-    resTime[0]=std::stod(cntSettings->lineEdit->text().toStdString());
-    resTime[1]=std::stod(cntSettings->lineEdit_2->text().toStdString());
-    resTime[2]=std::stod(cntSettings->lineEdit_3->text().toStdString());
-    resTime[3]=std::stod(cntSettings->lineEdit_4->text().toStdString());
 
-    coeff_a=coefSettings->coeff_a;
-    coeff_b=coefSettings->coeff_b;
+    if (cntSettings->countersNumTrig==0) {
+        coeff_a = coefSettings->coeff_a;
+        coeff_b = coefSettings->coeff_b;
+    }
+    else {
+        coeff_a = coefSettings->coeff_a_rough;
+        coeff_b = coefSettings->coeff_b_rough;
+    }
 
     textBrowser->clear();
 
@@ -368,17 +503,20 @@ void CallerMainWindow::addStartFile() {
     if (fileName!= nullptr)
     {
         shotCounter = 0;
-        makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif);
+        makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
         plotObjVec.push_back(makePlot);
+        makePlotRough = new Plotter(vecDataFileRough, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
+        plotObjVec.push_back(makePlotRough);
         textBrowser->setText("\n");
 
-        resTime[0]=std::stod(counters.lineEdit->text().toStdString());
-        resTime[1]=std::stod(counters.lineEdit_2->text().toStdString());
-        resTime[2]=std::stod(counters.lineEdit_3->text().toStdString());
-        resTime[3]=std::stod(counters.lineEdit_4->text().toStdString());
-
-        coeff_a=coefSettings->coeff_a;
-        coeff_b=coefSettings->coeff_b;
+        if (cntSettings->countersNumTrig==0) {
+            coeff_a = coefSettings->coeff_a;
+            coeff_b = coefSettings->coeff_b;
+        }
+        else {
+            coeff_a = coefSettings->coeff_a_rough;
+            coeff_b = coefSettings->coeff_b_rough;
+        }
 
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
@@ -391,10 +529,29 @@ void CallerMainWindow::addStartFile() {
         for (int i=0; i<fileData.size(); i++)
         {
             if (onFlag) {
-                cnt1_trig = cntSettings->cnt1_trig;
-                cnt2_trig = cntSettings->cnt2_trig;
-                cnt3_trig = cntSettings->cnt3_trig;
-                cnt4_trig = cntSettings->cnt4_trig;
+
+                if (cntSettings->countersNumTrig==0)
+                {
+                    resTime.clear();
+                    cntTrigValues.clear();
+                    for (int j=0; j<4; j++) {
+                        resTime.push_back(std::stod(countersData.at(j)->text().toStdString())*1e-6);
+                        cntTrigValues.push_back(cntTriggers.at(j)->isChecked());
+                    }
+
+                    count = resTime.size();
+                }
+                else
+                {
+                    resTime.clear();
+                    cntTrigValues.clear();
+                    for (int j=0; j<6; j++) {
+                        resTime.push_back(std::stod(countersData.at(j)->text().toStdString())*1e-6);
+                        cntTrigValues.push_back(cntTriggers.at(j)->isChecked());
+                    }
+
+                    count = resTime.size();
+                }
 
                 tempVar1 = resultsNew.size();
                 std::string inputValStr = fileData.at(i);
@@ -405,12 +562,13 @@ void CallerMainWindow::addStartFile() {
                 while ((pos = inputValStr.find(delimiter)) != std::string::npos) {
                     token = inputValStr.substr(0, pos);
                     if (token.length() > 0) {
-                        if (dotsFind(token, ":").second == 5) {
+                        if (dotsFind(token, ":").second == count+1) {
                             resultsNew.insert(
                                     std::pair<double, std::string>(std::stod(dotsFind(token, ":").first), token));
                             tempVar2 = resultsNew.size();
                             if (tempVar2 > tempVar1) {
-                                vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
+                                vecDataFile->getData(resultsNew.rbegin()->second, counter, cntTrigValues, resTime, count);
+                                vecDataFileRough->getData(resultsNew.rbegin()->second, counter, cntTrigValues, resTime, count);
                                 counter += 1;
                             }
                         }
@@ -420,26 +578,52 @@ void CallerMainWindow::addStartFile() {
 
                 if (inputValStr != "") {
                     tempVar1 = resultsNew.size();
-                    if (dotsFind(inputValStr, ":").second == 5) {
+                    if (dotsFind(inputValStr, ":").second == count+1) {
                         resultsNew.insert(std::pair<double, std::string>(std::stod(dotsFind(inputValStr, ":").first),
                                                                          inputValStr));
                         tempVar2 = resultsNew.size();
                         if (tempVar2 > tempVar1) {
-                            vecDataFile->getData(resultsNew.rbegin()->second, counter, cnt1_trig, cnt2_trig, cnt3_trig, cnt4_trig, resTime, count);
+                            vecDataFile->getData(resultsNew.rbegin()->second, counter, cntTrigValues, resTime, count);
+                            vecDataFileRough->getData(resultsNew.rbegin()->second, counter, cntTrigValues, resTime, count);
                             counter += 1;
                         }
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
+                    int var1 = integrationTime;
+                    int var2 = tempTime;
+                    int var3 = leftTime;
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig);
-                    lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotal.at(1).back(),'f',2));
-                    lineEdit_3->setText(QString::number(vecDataFile->resultsDbTotal.at(2).back(),'f',2));
-                    lineEdit_4->setText(QString::number(vecDataFile->resultsDbTotal.at(3).back(),'f',2));
+                                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
+                    if (count==6) {
+                        integrationTime = var1;
+                        tempTime = var2;
+                        leftTime = var3;
+                        vecDataFileRough->getDataTotal(vecDataFileRough->resultsDb, integrationTime, nFlux, coeff_a,
+                                                       coeff_b, portHasBeenCrashed,
+                                                       trigMode, trigVal, edgePoint, constFluxTrig, tempTime,
+                                                       tempTimeShift, edgePointTrig,
+                                                       procSetting->backDelay, avWindow, leftTime,
+                                                       procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
+                                                       procSetting->critVal, procSetting->intTime,
+                                                       procSetting->nucleusTrig, 1);
+                    }
+
+                    lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotalP.at(1).back(),'f',2));
+                    lineEdit_3->setText(QString::number(vecDataFile->resultsDbTotalP.at(2).back(),'f',2));
+                    lineEdit_4->setText(QString::number(vecDataFile->resultsDbTotalP.at(3).back(),'f',2));
+
+                    if (count==6) {
+                        lineEdit_13->setText(QString::number(vecDataFileRough->resultsDbTotalRoughP.at(1).back(), 'f', 2));
+                        lineEdit_11->setText(QString::number(vecDataFileRough->resultsDbTotalRoughP.at(2).back(), 'f', 2));
+                        lineEdit_12->setText(QString::number(vecDataFileRough->resultsDbTotalRoughP.at(3).back(), 'f', 2));
+                    }
+
                     lineEdit_10->setText(QString::number(leftTime));
                     lineEdit_7->setText(QString::number(tempTime));
+
                     if (plotState > 0 && isActive)
                         makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
                     if (!isActive) {
@@ -452,13 +636,27 @@ void CallerMainWindow::addStartFile() {
                         plotTotalState=0;
                         checkBox_4->setChecked(0);
                     }
+
+                    if (plotStateRough > 0 && isActiveRough)
+                        makePlotRough->PlotGraph(rescaleTrigger, xp1difR, xp2difR, yp1difR, yp2difR, isActiveRough);
+                    if (!isActiveRough) {
+                        plotStateRough=0;
+                        checkBox_2->setChecked(0);
+                    }
+                    if (plotTotalStateRough > 0 && isActiveTotalRough)
+                        makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
+                    if (!isActiveTotalRough) {
+                        plotTotalStateRough=0;
+                        checkBox_9->setChecked(0);
+                    }
+
                     std::stringstream res_out;
                     for (int k = 0; k < vecDataFile->resultsDb.size(); k++) {
                         res_out << vecDataFile->resultsDb.at(k).back() << " ";}
-
                         QString showLine = QString::fromStdString(res_out.str());
-                        totalCounts = vecDataFile->totalCnt;
-                        lineEdit_6->setText(QString::number(nFlux,'g',3));
+                        lineEdit_6->setText(QString::number(vecDataFile->Flux,'g',3));
+                        if (cntSettings->countersNumTrig==1)
+                            lineEdit_14->setText(QString::number(vecDataFileRough->Flux,'g',3));
                         textBrowser->setText(textBrowser->toPlainText()+showLine+'\n');
                         QScrollBar*sb = textBrowser->verticalScrollBar();
                         sb->setValue(sb->maximum());
@@ -476,19 +674,37 @@ void CallerMainWindow::addStartFile() {
 
         if (!onFlag)
         {
-            if (vecDataFile->Flux>0) {
+            if (vecDataFile->Flux>0 || vecDataFileRough->Flux>0) {
                 QString s(0x00B1);
-                double error = vecDataFile->statErr * vecDataFile->Flux;
+                double error = 0;
+                error = vecDataFile->statErr * vecDataFile->Flux;
                 printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+
+                if (cntSettings->countersNumTrig==1) {
+                    error = vecDataFileRough->statErr * vecDataFile->Flux;
+                    printMsg(QString::number(vecDataFileRough->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 11);
+                }
+
                 vecDataFile->msgFillUp();
-                if (constFluxTrig==0)
-                    printMsg(vecDataFile->pulseDataMsg,2);
-                if (constFluxTrig>0)
-                    printMsg(vecDataFile->constDataMsg,3);
+
+                if (cntSettings->countersNumTrig==1)
+                    vecDataFileRough->msgFillUp();
+
+                if (constFluxTrig==0) {
+                    printMsg(vecDataFile->pulseDataMsg, 2);
+                    if (cntSettings->countersNumTrig==1)
+                        printMsg(vecDataFileRough->pulseDataMsg, 22);
+                }
+                if (constFluxTrig>0) {
+                    printMsg(vecDataFile->constDataMsg, 3);
+                    if (cntSettings->countersNumTrig==1)
+                        printMsg(vecDataFileRough->constDataMsg, 33);
+                }
             }
 
             textBrowser->setText(textBrowser->toPlainText()+"Finished"+'\n');
             vecDataFile->cleanUp();
+            vecDataFileRough->cleanUp();
             edgePointTrig = 0;
             tempTime=0;
             tempTimeShift = 0;
@@ -500,12 +716,16 @@ void CallerMainWindow::addStartFile() {
             lineEdit_2->setText(QString::number(0));
             lineEdit_3->setText(QString::number(0));
             lineEdit_4->setText(QString::number(0));
+            lineEdit_11->setText(QString::number(0));
+            lineEdit_12->setText(QString::number(0));
+            lineEdit_13->setText(QString::number(0));
         }
 
         if (onFlag) {
             onFlag = false;
             textBrowser->setText(textBrowser->toPlainText() + "Finished" + '\n');
             vecDataFile->cleanUp();
+            vecDataFileRough->cleanUp();
             edgePointTrig = 0;
             tempTime=0;
             tempTimeShift = 0;
@@ -517,6 +737,9 @@ void CallerMainWindow::addStartFile() {
             lineEdit_2->setText(QString::number(0));
             lineEdit_3->setText(QString::number(0));
             lineEdit_4->setText(QString::number(0));
+            lineEdit_11->setText(QString::number(0));
+            lineEdit_12->setText(QString::number(0));
+            lineEdit_13->setText(QString::number(0));
         }
     }
 }
@@ -548,12 +771,44 @@ std::pair<std::string, int> CallerMainWindow::dotsFind(std::string str, std::str
 
 void CallerMainWindow::plotTrigger(int st) {
     plotState = st;
+    int sz = plotObjVec.size();
     if (!plotObjVec.empty())
-        plotObjVec.back()->chartView->isOn=true;
+        plotObjVec.at(sz-2)->chartView->isOn=true;
     if (!isActive && st >0)
         isActive = true;
     if (st == 0) {
         isActive = false;
+        if (!plotObjVec.empty()) {
+            plotObjVec.at(sz-2)->chartView->close();
+            plotObjVec.at(sz-2)->chartView->isOn = true;
+        }
+    }
+}
+
+void CallerMainWindow::plotTriggerTotal(int stTot) {
+    plotTotalState = stTot;
+    int sz = plotObjVec.size();
+    if (!plotObjVec.empty())
+        plotObjVec.at(sz-2)->chartViewTot->isOn=true;
+    if (!isActiveTotal && stTot>0)
+        isActiveTotal = true;
+    if (stTot == 0) {
+        isActiveTotal = false;
+        if (!plotObjVec.empty()) {
+            plotObjVec.at(sz-2)->chartViewTot->close();
+            plotObjVec.at(sz-2)->chartViewTot->isOn = true;
+        }
+    }
+}
+
+void CallerMainWindow::plotTriggerRough(int st) {
+    plotStateRough = st;
+    if (!plotObjVec.empty())
+        plotObjVec.back()->chartView->isOn=true;
+    if (!isActiveRough && st >0)
+        isActiveRough = true;
+    if (st == 0) {
+        isActiveRough = false;
         if (!plotObjVec.empty()) {
             plotObjVec.back()->chartView->close();
             plotObjVec.back()->chartView->isOn = true;
@@ -561,14 +816,14 @@ void CallerMainWindow::plotTrigger(int st) {
     }
 }
 
-void CallerMainWindow::plotTriggerTotal(int stTot) {
-    plotTotalState = stTot;
+void CallerMainWindow::plotTriggerTotalRough(int stTot) {
+    plotTotalStateRough = stTot;
     if (!plotObjVec.empty())
         plotObjVec.back()->chartViewTot->isOn=true;
-    if (!isActiveTotal && stTot>0)
-        isActiveTotal = true;
+    if (!isActiveTotalRough && stTot>0)
+        isActiveTotalRough = true;
     if (stTot == 0) {
-        isActiveTotal = false;
+        isActiveTotalRough = false;
         if (!plotObjVec.empty()) {
             plotObjVec.back()->chartViewTot->close();
             plotObjVec.back()->chartViewTot->isOn = true;
@@ -687,36 +942,81 @@ void CallerMainWindow::on_actionProcessing_triggered() {
     procSetting->show();
 }
 
+void CallerMainWindow::on_actionReadFile_triggered() {
+    readFileSettings->show();
+}
+
 void CallerMainWindow::startUpFunc() {
+
+    resTime.push_back(200);
+    resTime.push_back(300);
+    resTime.push_back(400);
+    resTime.push_back(350);
+    resTime.push_back(250);
+    resTime.push_back(250);
+
+    count = resTime.size();
+
     cntSettings->lineEdit = counters.lineEdit;
     cntSettings->lineEdit_2 = counters.lineEdit_2;
     cntSettings->lineEdit_3 = counters.lineEdit_3;
     cntSettings->lineEdit_4 = counters.lineEdit_4;
+    cntSettings->lineEdit_5 = counters.lineEdit_5;
+    cntSettings->lineEdit_6 = counters.lineEdit_6;
+
     cntSettings->checkBox = counters.checkBox;
     cntSettings->checkBox_2 = counters.checkBox_2;
     cntSettings->checkBox_3 = counters.checkBox_3;
     cntSettings->checkBox_4 = counters.checkBox_4;
+    cntSettings->checkBox_5 = counters.checkBox_5;
+    cntSettings->checkBox_6 = counters.checkBox_6;
+    cntSettings->checkBox_7 = counters.checkBox_7;
+    cntSettings->checkBox_8 = counters.checkBox_8;
+
+    countersData.push_back(counters.lineEdit);
+    countersData.push_back(counters.lineEdit_2);
+    countersData.push_back(counters.lineEdit_3);
+    countersData.push_back(counters.lineEdit_4);
+    countersData.push_back(counters.lineEdit_5);
+    countersData.push_back(counters.lineEdit_6);
+
+    cntTriggers.push_back(counters.checkBox);
+    cntTriggers.push_back(counters.checkBox_2);
+    cntTriggers.push_back(counters.checkBox_3);
+    cntTriggers.push_back(counters.checkBox_4);
+    cntTriggers.push_back(counters.checkBox_5);
+    cntTriggers.push_back(counters.checkBox_6);
 
     counters.checkBox->setChecked(true);
     counters.checkBox_2->setChecked(true);
     counters.checkBox_3->setChecked(true);
     counters.checkBox_4->setChecked(true);
+    counters.checkBox_5->setChecked(true);
+    counters.checkBox_6->setChecked(true);
+    counters.checkBox_7->setChecked(true);
     counters.lineEdit->setText(QString::number(resTime[0]));
     counters.lineEdit_2->setText(QString::number(resTime[1]));
     counters.lineEdit_3->setText(QString::number(resTime[2]));
     counters.lineEdit_4->setText(QString::number(resTime[3]));
+    counters.lineEdit_5->setText(QString::number(resTime[4]));
+    counters.lineEdit_6->setText(QString::number(resTime[5]));
 
     coefSettings->lineEdit = coefficients.lineEdit;
     coefSettings->lineEdit_2 = coefficients.lineEdit_2;
     coefSettings->lineEdit_3 = coefficients.lineEdit_3;
+    coefSettings->lineEdit_4 = coefficients.lineEdit_4;
+    coefSettings->lineEdit_5 = coefficients.lineEdit_5;
     coefSettings->checkBox = coefficients.checkBox;
     coefSettings->checkBox_2 = coefficients.checkBox_2;
     coefSettings->checkBox_3 = coefficients.checkBox_3;
+    coefSettings->tabWidget = coefficients.tabWidget;
 
     coefficients.checkBox->setChecked(true);
     coefficients.checkBox_3->setChecked(true);
     coefficients.lineEdit->setText(QString::number(coefSettings->coeff_a));
     coefficients.lineEdit_2->setText(QString::number(coefSettings->coeff_b));
+    coefficients.lineEdit_4->setText(QString::number(coefSettings->coeff_a_rough));
+    coefficients.lineEdit_5->setText(QString::number(coefSettings->coeff_b_rough));
     coefficients.lineEdit_3->setText(QString::number(coefSettings->distance));
 
     procSetting->checkBox = processing.checkBox;
@@ -733,14 +1033,18 @@ void CallerMainWindow::startUpFunc() {
 
 void CallerMainWindow::clearNeutrons() {
     textBrowser_2->clear();
+    textBrowser_5->clear();
 }
 
 void CallerMainWindow::clearCounts() {
     textBrowser_3->clear();
+    textBrowser_4->clear();
     lineEdit_6->setText("0");
+    lineEdit_14->setText("0");
     lineEdit_10->setText(QString::number(integrationTime));
 }
 
 void CallerMainWindow::clearMessage() {
     textBrowser->clear();
 }
+

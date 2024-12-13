@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>272</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,58 +35,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QCheckBox" name="checkBox_4">
-       <property name="text">
-        <string>№4</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="2">
       <widget class="QLineEdit" name="lineEdit_2"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="checkBox_2">
-       <property name="text">
-        <string>№2</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLineEdit" name="lineEdit_4"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="checkBox">
-       <property name="text">
-        <string>№1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="checkBox_3">
-       <property name="text">
-        <string>№3</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEdit_3"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Counters (On/Off)</string>
-       </property>
-      </widget>
      </item>
      <item row="0" column="1">
       <spacer name="horizontalSpacer">
@@ -104,6 +54,97 @@
        </property>
       </spacer>
      </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>№1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QCheckBox" name="checkBox_6">
+       <property name="text">
+        <string>№6</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QCheckBox" name="checkBox_7">
+       <property name="text">
+        <string>4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="checkBox_3">
+       <property name="text">
+        <string>№3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>№2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLineEdit" name="lineEdit_5"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Counters (On/Off)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLineEdit" name="lineEdit_6"/>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="lineEdit_4"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEdit_3"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="checkBox_5">
+       <property name="text">
+        <string>№5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="checkBox_4">
+       <property name="text">
+        <string>№4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QCheckBox" name="checkBox_8">
+       <property name="text">
+        <string>6</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Counters num.:</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -117,8 +158,8 @@
    <slot>cnt1(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>122</y>
+     <x>64</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>12</x>
@@ -133,8 +174,8 @@
    <slot>cnt2(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>122</y>
+     <x>98</x>
+     <y>88</y>
     </hint>
     <hint type="destinationlabel">
      <x>131</x>
@@ -149,8 +190,8 @@
    <slot>cnt3(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>252</x>
-     <y>122</y>
+     <x>98</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
      <x>231</x>
@@ -165,12 +206,76 @@
    <slot>cnt4(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>122</y>
+     <x>98</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
      <x>338</x>
      <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_5</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_1</receiver>
+   <slot>cnt5(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>16</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_6</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_1</receiver>
+   <slot>cnt6(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_7</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_1</receiver>
+   <slot>fourCounters(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>227</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_8</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_1</receiver>
+   <slot>sixCounters(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>156</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>352</x>
+     <y>258</y>
     </hint>
    </hints>
   </connection>
@@ -180,5 +285,9 @@
   <slot>cnt2(int)</slot>
   <slot>cnt3(int)</slot>
   <slot>cnt4(int)</slot>
+  <slot>cnt5(int)</slot>
+  <slot>cnt6(int)</slot>
+  <slot>fourCounters(int)</slot>
+  <slot>sixCounters(int)</slot>
  </slots>
 </ui>

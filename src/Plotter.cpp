@@ -1,16 +1,28 @@
 #include <iostream>
 #include "Plotter.h"
 
-Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d):Data(data) {
+Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d,
+                 int roughTrigger):Data(data) {
+
+    if (roughTrigger ==0) {
+        var1 = 4; //num of counters
+        var2 = 2; //number of the first counter in array
+        var3 = 1; //start value for counters naming in the graph
+    }
+    else {
+        var1 = 2;
+        var2 = 6;
+        var3 = 5;
+    }
 
     chart = new Chart();
     chartView = new ChartView(chart);
     m_axisX = new QValueAxis();
     m_axisY = new QValueAxis();
-    for (int i=0; i<4; i++)
+    for (int i=0; i<var1; i++)
     {
         QLineSeries*series = new QLineSeries();
-        series->setName(QString("channel " + QString::number(i+1)));
+        series->setName(QString("channel " + QString::number(i+var3)));
         series->setUseOpenGL(true);
         lsVector.push_back(series);
     }
@@ -103,12 +115,12 @@ void Plotter::PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2,
             chartView->geometry().getCoords(&xp1, &yp1, &xp2, &yp2);
             for (int i = 0; i < lsVector.size(); i++) {
                 QVector<QPointF> points(2 * vecData.at(0).size());
-                for (std::vector<int>::size_type l = 0; l != vecData.at(2 + i).size(); ++l) {
+                for (std::vector<int>::size_type l = 0; l != vecData.at(var2 + i).size(); ++l) {
 //                points[l] = QPointF(l, vecData.at(2+i)[l]);
                     for (int m = 0; m <= l; m++) {
                         if (l == m) {
-                            points[l + m] = QPointF(l+vecData.at(0).front(), vecData.at(2 + i)[l]);
-                            points[l + m + 1] = QPointF(l + 1+vecData.at(0).front(), vecData.at(2 + i)[l]);
+                            points[l + m] = QPointF(l+vecData.at(0).front(), vecData.at(var2 + i)[l]);
+                            points[l + m + 1] = QPointF(l + 1+vecData.at(0).front(), vecData.at(var2 + i)[l]);
                         }
                     }
                 }
@@ -130,15 +142,15 @@ void Plotter::PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2,
             if (rescaleTrig > 0) {
                 if (vecData.at(0).back() <= rescaleSize) {
                     maxValVec.clear();
-                    for (int i = 0; i < 4; i++) {
-                        maxValVec.push_back(*max_element(vecData.at(i + 2).begin(), vecData.at(i + 2).end()));
+                    for (int i = 0; i < var1; i++) {
+                        maxValVec.push_back(*max_element(vecData.at(i + var2).begin(), vecData.at(i + var2).end()));
                     }
                     max_y = *max_element(maxValVec.begin(), maxValVec.end());
                     m_axisX->setRange(0, rescaleSize);
                 } else {
                     maxValVec.clear();
-                    for (int i = 0; i < 4; i++) {
-                        maxValVec.push_back(*max_element(vecData.at(i + 2).end() - rescaleSize, vecData.at(i + 2).end()));
+                    for (int i = 0; i < var1; i++) {
+                        maxValVec.push_back(*max_element(vecData.at(i + var2).end() - rescaleSize, vecData.at(i + var2).end()));
                     }
                     max_y = *max_element(maxValVec.begin(), maxValVec.end());
                     m_axisX->setRange(vecData.at(0).back() - rescaleSize, vecData.at(0).back());
@@ -148,8 +160,8 @@ void Plotter::PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2,
                     m_axisY->setRange(0, 1);
             } else {
                 maxValVec.clear();
-                for (int i = 0; i < 4; i++) {
-                    maxValVec.push_back(*max_element(vecData.at(i + 2).begin(), vecData.at(i + 2).end()));
+                for (int i = 0; i < var1; i++) {
+                    maxValVec.push_back(*max_element(vecData.at(i + var2).begin(), vecData.at(i + var2).end()));
                 }
                 max_y = *max_element(maxValVec.begin(), maxValVec.end());
                 m_axisX->setRange(0, vecData.at(0).size());
