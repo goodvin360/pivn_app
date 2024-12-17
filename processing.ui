@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>233</width>
+    <height>179</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,16 +23,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_3"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QCheckBox" name="checkBox_3">
-        <property name="text">
-         <string>Ag</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -40,13 +30,33 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_2"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>nCrit, %</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineEdit"/>
       </item>
-      <item row="5" column="1">
-       <widget class="QCheckBox" name="checkBox_4">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>In</string>
+         <string>back delay, s</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_3"/>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>Clear back vector</string>
         </property>
        </widget>
       </item>
@@ -57,27 +67,17 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_2"/>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="checkBox">
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="checkBox_3">
         <property name="text">
-         <string>Clear back vector</string>
+         <string>Ag</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
+      <item row="5" column="1">
+       <widget class="QCheckBox" name="checkBox_4">
         <property name="text">
-         <string>nCrit, %</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>back delay, s</string>
+         <string>In</string>
         </property>
        </widget>
       </item>
@@ -89,34 +89,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>checkBox</sender>
+   <sender>checkBox_3</sender>
    <signal>stateChanged(int)</signal>
    <receiver>Form_3</receiver>
-   <slot>clearBack(int)</slot>
+   <slot>addAgTrig(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>181</y>
+     <x>56</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>21</x>
-     <y>5</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_2</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>Form_3</receiver>
-   <slot>multiPulses(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>43</x>
-     <y>221</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>5</x>
-     <y>186</y>
+     <x>4</x>
+     <y>244</y>
     </hint>
    </hints>
   </connection>
@@ -127,11 +111,11 @@
    <slot>addCriticalVal(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>239</x>
-     <y>98</y>
+     <x>231</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
-     <x>396</x>
+     <x>240</x>
      <y>14</y>
     </hint>
    </hints>
@@ -153,18 +137,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>lineEdit_3</sender>
-   <signal>textEdited(QString)</signal>
+   <sender>checkBox_2</sender>
+   <signal>stateChanged(int)</signal>
    <receiver>Form_3</receiver>
-   <slot>addBackDelay(QString)</slot>
+   <slot>multiPulses(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>141</y>
+     <x>43</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
-     <x>397</x>
-     <y>123</y>
+     <x>5</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form_3</receiver>
+   <slot>clearBack(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>21</x>
+     <y>5</y>
     </hint>
    </hints>
   </connection>
@@ -175,28 +175,28 @@
    <slot>addInTrig(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>251</y>
+     <x>131</x>
+     <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>398</x>
-     <y>253</y>
+     <x>240</x>
+     <y>252</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>checkBox_3</sender>
-   <signal>stateChanged(int)</signal>
+   <sender>lineEdit_3</sender>
+   <signal>textEdited(QString)</signal>
    <receiver>Form_3</receiver>
-   <slot>addAgTrig(int)</slot>
+   <slot>addBackDelay(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>26</x>
-     <y>246</y>
+     <x>231</x>
+     <y>142</y>
     </hint>
     <hint type="destinationlabel">
-     <x>4</x>
-     <y>244</y>
+     <x>240</x>
+     <y>123</y>
     </hint>
    </hints>
   </connection>
