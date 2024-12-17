@@ -304,8 +304,11 @@ void CallerMainWindow::startByTimer() {
         vecData->cleanUp();
         vecDataRough->cleanUp();
         edgePointTrig = 0;
-        tempTime=0;
+        tempTime = 0;
         tempTimeShift = 0;
+        tempTimeR = 0;
+        tempTimeShiftR = 0;
+        edgePointTrigR = 0;
 
         delete esp32;
 
@@ -313,6 +316,8 @@ void CallerMainWindow::startByTimer() {
         pushButton->setEnabled(1);
         pushButton_4->setEnabled(1);
         pushButton_5->setEnabled(1);
+        readfile.pushButton_2->setEnabled(1);
+        readfile.pushButton->setEnabled(1);
         lineEdit_2->setText(QString::number(0));
         lineEdit_3->setText(QString::number(0));
         lineEdit_4->setText(QString::number(0));
@@ -456,6 +461,8 @@ void CallerMainWindow::addStart() {
     pushButton->setEnabled(0);
     pushButton_4->setEnabled(0);
     pushButton_5->setEnabled(0);
+    readfile.pushButton_2->setEnabled(0);
+    readfile.pushButton->setEnabled(0);
 
     makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
     plotObjVec.push_back(makePlot);
@@ -465,6 +472,7 @@ void CallerMainWindow::addStart() {
     counter = 0;
     flushCounter = 0;
     shotCounter = 0;
+    msgVar1 = msgVar11 = msgVar2 = msgVar22 = msgVar3 = msgVar33 = 0;
 
     if (cntSettings->countersNumTrig==0) {
         coeff_a = coefSettings->coeff_a;
@@ -531,10 +539,14 @@ void CallerMainWindow::addStartFile() {
     pushButton_2->setEnabled(0);
     pushButton_4->setEnabled(0);
     pushButton_5->setEnabled(0);
+    readfile.pushButton_2->setEnabled(0);
+    readfile.pushButton->setEnabled(0);
+
 
     if (fileName!= nullptr)
     {
         shotCounter = 0;
+        msgVar1 = msgVar11 = msgVar2 = msgVar22 = msgVar3 = msgVar33 = 0;
         makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
         plotObjVec.push_back(makePlot);
         makePlotRough = new Plotter(vecDataFileRough, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
@@ -738,13 +750,18 @@ void CallerMainWindow::addStartFile() {
             vecDataFile->cleanUp();
             vecDataFileRough->cleanUp();
             edgePointTrig = 0;
-            tempTime=0;
+            tempTime = 0;
             tempTimeShift = 0;
+            tempTimeR = 0;
+            tempTimeShiftR = 0;
+            edgePointTrigR = 0;
             pushButton->setEnabled(1);
             if (trigCOM==0)
                 pushButton_2->setEnabled(1);
             pushButton_4->setEnabled(1);
             pushButton_5->setEnabled(1);
+            readfile.pushButton_2->setEnabled(1);
+            readfile.pushButton->setEnabled(1);
             lineEdit_2->setText(QString::number(0));
             lineEdit_3->setText(QString::number(0));
             lineEdit_4->setText(QString::number(0));
@@ -760,8 +777,10 @@ void CallerMainWindow::addStartFile() {
             vecDataFileRough->cleanUp();
             edgePointTrig = 0;
             edgePointTrigR = 0;
-            tempTime=0;
+            tempTime = 0;
             tempTimeShift = 0;
+            tempTimeR = 0;
+            tempTimeShiftR = 0;
             pushButton->setEnabled(1);
             if (trigCOM==0)
                 pushButton_2->setEnabled(1);
@@ -1094,6 +1113,8 @@ void CallerMainWindow::startUpFunc() {
     processing.lineEdit_2->setText(QString::number(procSetting->intTime));
     processing.lineEdit_3->setText(QString::number(procSetting->backDelay));
 
+    readFileSettings->pushButton = readfile.pushButton;
+    readFileSettings->pushButton_2 = readfile.pushButton_2;
     readFileSettings->lineEdit = readfile.lineEdit;
     readfile.lineEdit->setText(QString::number(readDelay));
 

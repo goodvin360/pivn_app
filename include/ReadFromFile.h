@@ -7,6 +7,7 @@
 #include "QCheckBox"
 #include "QtWidgets/QCheckBox"
 #include "QtWidgets/QLineEdit"
+#include "QPushButton"
 
 #pragma region Docs
 
@@ -23,6 +24,8 @@ public:
     void editReadDelay(QString);
 
     QLineEdit*lineEdit = nullptr;
+    QPushButton*pushButton = new QPushButton();
+    QPushButton*pushButton_2 = new QPushButton();
 
 signals:
     void sentReadAction();
