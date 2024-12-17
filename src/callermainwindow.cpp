@@ -145,19 +145,11 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
-
-        int var1 = integrationTime;
-        int var2 = tempTime;
-        int var3 = leftTime;
-
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
         if (count==6) {
-            integrationTime = var1;
-            tempTime = var2;
-            leftTime = var3;
             vecDataRough->getDataTotal(vecDataRough->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                        trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR, tempTimeShiftR,
                                        edgePointTrigR,
@@ -177,21 +169,18 @@ void CallerMainWindow::startByTimer() {
         }
 
         lineEdit_10->setText(QString::number(leftTime));
-        lineEdit_7->setText(QString::number(tempTime));
         constFluxSettings->lineEdit->setText(QString::number(tempTime));
 
         if (plotState>0 && isActive)
             makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
         if (!isActive) {
             plotState=0;
-            checkBox_3->setChecked(0);
             plotOptionsSetting->checkBox->setChecked(0);
         }
         if (plotTotalState>0 && isActiveTotal)
             makePlot->PlotGraphTotal(rescaleTrigger,tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
         if (!isActiveTotal) {
             plotTotalState=0;
-            checkBox_4->setChecked(0);
             plotOptionsSetting->checkBox_2->setChecked(0);
         }
 
@@ -199,14 +188,12 @@ void CallerMainWindow::startByTimer() {
             makePlotRough->PlotGraph(rescaleTrigger, xp1difR, xp2difR, yp1difR, yp2difR, isActiveRough);
         if (!isActiveRough) {
             plotStateRough=0;
-            checkBox_2->setChecked(0);
             plotOptionsSetting->checkBox_3->setChecked(0);
         }
         if (plotTotalStateRough > 0 && isActiveTotalRough)
             makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
         if (!isActiveTotalRough) {
             plotTotalStateRough=0;
-            checkBox_9->setChecked(0);
             plotOptionsSetting->checkBox_4->setChecked(0);
         }
 
@@ -314,8 +301,6 @@ void CallerMainWindow::startByTimer() {
 
         onFlag = false;
         pushButton->setEnabled(1);
-        pushButton_4->setEnabled(1);
-        pushButton_5->setEnabled(1);
         readfile.pushButton_2->setEnabled(1);
         readfile.pushButton->setEnabled(1);
         lineEdit_2->setText(QString::number(0));
@@ -453,14 +438,12 @@ void CallerMainWindow::addStop() {
     onFlag = false;
     if (trigCOM==1)
         pushButton->setEnabled(1);
-    pushButton_4->setEnabled(1);
-    pushButton_5->setEnabled(1);
+    readfile.pushButton_2->setEnabled(1);
+    readfile.pushButton->setEnabled(1);
 }
 
 void CallerMainWindow::addStart() {
     pushButton->setEnabled(0);
-    pushButton_4->setEnabled(0);
-    pushButton_5->setEnabled(0);
     readfile.pushButton_2->setEnabled(0);
     readfile.pushButton->setEnabled(0);
 
@@ -537,8 +520,6 @@ void CallerMainWindow::addStartFile() {
     std::cout << fileName.toStdString() << std::endl;
     pushButton->setEnabled(0);
     pushButton_2->setEnabled(0);
-    pushButton_4->setEnabled(0);
-    pushButton_5->setEnabled(0);
     readfile.pushButton_2->setEnabled(0);
     readfile.pushButton->setEnabled(0);
 
@@ -661,21 +642,18 @@ void CallerMainWindow::addStartFile() {
                     }
 
                     lineEdit_10->setText(QString::number(leftTime));
-                    lineEdit_7->setText(QString::number(tempTime));
                     constFluxSettings->lineEdit->setText(QString::number(tempTime));
 
                     if (plotState > 0 && isActive)
                         makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
                     if (!isActive) {
                         plotState=0;
-                        checkBox_3->setChecked(0);
                         plotOptionsSetting->checkBox->setChecked(0);
                     }
                     if (plotTotalState > 0 && isActiveTotal)
                         makePlot->PlotGraphTotal(rescaleTrigger, tempTime, xp1tot, xp2tot, yp1tot, yp2tot, isActiveTotal);
                     if (!isActiveTotal) {
                         plotTotalState=0;
-                        checkBox_4->setChecked(0);
                         plotOptionsSetting->checkBox_2->setChecked(0);
                     }
 
@@ -683,14 +661,12 @@ void CallerMainWindow::addStartFile() {
                         makePlotRough->PlotGraph(rescaleTrigger, xp1difR, xp2difR, yp1difR, yp2difR, isActiveRough);
                     if (!isActiveRough) {
                         plotStateRough=0;
-                        checkBox_2->setChecked(0);
                         plotOptionsSetting->checkBox_3->setChecked(0);
                     }
                     if (plotTotalStateRough > 0 && isActiveTotalRough)
                         makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
                     if (!isActiveTotalRough) {
                         plotTotalStateRough=0;
-                        checkBox_9->setChecked(0);
                         plotOptionsSetting->checkBox_4->setChecked(0);
                     }
 
@@ -758,8 +734,6 @@ void CallerMainWindow::addStartFile() {
             pushButton->setEnabled(1);
             if (trigCOM==0)
                 pushButton_2->setEnabled(1);
-            pushButton_4->setEnabled(1);
-            pushButton_5->setEnabled(1);
             readfile.pushButton_2->setEnabled(1);
             readfile.pushButton->setEnabled(1);
             lineEdit_2->setText(QString::number(0));
@@ -784,8 +758,8 @@ void CallerMainWindow::addStartFile() {
             pushButton->setEnabled(1);
             if (trigCOM==0)
                 pushButton_2->setEnabled(1);
-            pushButton_4->setEnabled(1);
-            pushButton_5->setEnabled(1);
+            readfile.pushButton_2->setEnabled(1);
+            readfile.pushButton->setEnabled(1);
             lineEdit_2->setText(QString::number(0));
             lineEdit_3->setText(QString::number(0));
             lineEdit_4->setText(QString::number(0));
@@ -918,16 +892,12 @@ void CallerMainWindow::autoTrigger(int st) {
     if (st>0)
     {
         trigMode = 0;
-        checkBox_7->setChecked(false);
-        pushButton_7->setEnabled(0);
         triggerModeSettings->checkBox->setChecked(false);
         triggerModeSettings->pushButton->setEnabled(0);
     }
     else
     {
         trigMode = 1;
-        checkBox_7->setChecked(true);
-        pushButton_7->setEnabled(1);
         triggerModeSettings->checkBox->setChecked(true);
         triggerModeSettings->pushButton->setEnabled(1);
     }
@@ -937,16 +907,12 @@ void CallerMainWindow::manualTrigger(int st) {
     if (st>0)
     {
         trigMode = 1;
-        checkBox_6->setChecked(false);
-        pushButton_7->setEnabled(1);
         triggerModeSettings->checkBox_2->setChecked(false);
         triggerModeSettings->pushButton->setEnabled(1);
     }
     else
     {
         trigMode = 0;
-        checkBox_6->setChecked(true);
-        pushButton_7->setEnabled(0);
         triggerModeSettings->checkBox_2->setChecked(true);
         triggerModeSettings->pushButton->setEnabled(0);
     }
@@ -960,19 +926,11 @@ void CallerMainWindow::addConstFluxGo() {
 void CallerMainWindow::addConstFluxTrig(int st) {
     constFluxTrig = st;
     if (st>0) {
-        pushButton_8->setEnabled(1);
-        pushButton_10->setEnabled(1);
-        pushButton_11->setEnabled(1);
-
         constFlux.pushButton->setEnabled(1);
         constFlux.pushButton_2->setEnabled(1);
         constFlux.pushButton_3->setEnabled(1);
     }
     else {
-        pushButton_8->setEnabled(0);
-        pushButton_10->setEnabled(0);
-        pushButton_11->setEnabled(0);
-
         constFlux.pushButton->setEnabled(0);
         constFlux.pushButton_2->setEnabled(0);
         constFlux.pushButton_3->setEnabled(0);
@@ -981,13 +939,11 @@ void CallerMainWindow::addConstFluxTrig(int st) {
 
 void CallerMainWindow::edgePointPlus() {
     tempTimeShift++;
-    lineEdit_7->setText(QString::number(tempTime));
     constFluxSettings->lineEdit->setText(QString::number(tempTime));
 }
 
 void CallerMainWindow::edgePointMinus() {
     tempTimeShift--;
-    lineEdit_7->setText(QString::number(tempTime));
     constFluxSettings->lineEdit->setText(QString::number(tempTime));
 }
 

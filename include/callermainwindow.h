@@ -79,8 +79,6 @@ public:
     QLineEdit*lineEdit_4 = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
-    QLineEdit*lineEdit_7 = nullptr;
-    QLineEdit*lineEdit_8 = nullptr;
     QLineEdit*lineEdit_9 = nullptr;
     QLineEdit*lineEdit_10 = nullptr;
     QLineEdit*lineEdit_11 = nullptr;
@@ -96,23 +94,11 @@ public:
     QPushButton*pushButton = new QPushButton();         //start
     QPushButton*pushButton_2 = new QPushButton();       //connect to COM
     QPushButton*pushButton_3 = new QPushButton();       //stop
-    QPushButton*pushButton_4 = new QPushButton();       //loadFile
-    QPushButton*pushButton_5 = new QPushButton();       //start from file
-    QPushButton*pushButton_7 = new QPushButton();       //Go for manual trigger mode
-    QPushButton*pushButton_8 = new QPushButton();       //Go for const. flux
-    QPushButton*pushButton_10 = new QPushButton();      //Edge point plus
-    QPushButton*pushButton_11 = new QPushButton();      //Edge point minus
     //pushButtons 6,9,12 - clear buttons
 
     QCheckBox*checkBox = new QCheckBox();
-    QCheckBox*checkBox_2 = new QCheckBox();
-    QCheckBox*checkBox_3 = new QCheckBox();
-    QCheckBox*checkBox_4 = new QCheckBox();
     QCheckBox*checkBox_5 = new QCheckBox();
-    QCheckBox*checkBox_6 = new QCheckBox();
-    QCheckBox*checkBox_7 = new QCheckBox();
     QCheckBox*checkBox_8 = new QCheckBox();
-    QCheckBox*checkBox_9 = new QCheckBox();
 
     bool portIsMissing = false;
     bool portHasBeenCrashed = false;
@@ -144,12 +130,6 @@ public:
     int constFluxTrig = 0;
     int edgePointTrig = 0, edgePointTrigR = 0;
 
-    int cnt1_trig = 0;
-    int cnt2_trig = 0;
-    int cnt3_trig = 0;
-    int cnt4_trig = 0;
-    int cnt5_trig = 0;
-    int cnt6_trig = 0;
     int msgVar1 = 0, msgVar11 = 0, msgVar2 = 0, msgVar22 = 0, msgVar3 = 0, msgVar33 = 0;
     std::vector<int> cntTrigValues;
     int counter = 0;
@@ -164,7 +144,6 @@ public:
     bool isActiveRough = true;
     bool isActiveTotalRough = true;
     std::vector<double> resTime{};
-//    double resTime[6] {200, 300, 400, 350, 200, 200};
     int count = 0;
     std::vector<QLineEdit*> countersData;
     std::vector<QCheckBox*> cntTriggers;
