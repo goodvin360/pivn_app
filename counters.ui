@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>291</width>
-    <height>238</height>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -158,8 +158,8 @@
    <slot>cnt1(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>59</y>
+     <x>74</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>12</x>
@@ -175,7 +175,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>98</x>
-     <y>88</y>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>131</x>
@@ -191,7 +191,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>98</x>
-     <y>117</y>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>231</x>
@@ -207,10 +207,10 @@
    <hints>
     <hint type="sourcelabel">
      <x>98</x>
-     <y>146</y>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
-     <x>338</x>
+     <x>290</x>
      <y>12</y>
     </hint>
    </hints>
@@ -222,8 +222,8 @@
    <slot>cnt5(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>16</x>
-     <y>166</y>
+     <x>26</x>
+     <y>155</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -238,8 +238,8 @@
    <slot>cnt6(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>39</x>
-     <y>194</y>
+     <x>49</x>
+     <y>180</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -254,11 +254,11 @@
    <slot>fourCounters(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>162</x>
-     <y>226</y>
+     <x>280</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
+     <x>290</x>
      <y>227</y>
     </hint>
    </hints>
@@ -270,12 +270,12 @@
    <slot>sixCounters(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>156</x>
-     <y>253</y>
+     <x>280</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
-     <x>352</x>
-     <y>258</y>
+     <x>290</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>

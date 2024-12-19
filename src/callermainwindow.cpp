@@ -145,11 +145,17 @@ void CallerMainWindow::startByTimer() {
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
         }
+
+        double var1 = trigVal;
+        bool var2 = portHasBeenCrashed;
+
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
         if (count==6) {
+            trigVal = var1;
+            portHasBeenCrashed = var2;
             vecDataRough->getDataTotal(vecDataRough->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                        trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR, tempTimeShiftR,
                                        edgePointTrigR,
@@ -234,6 +240,7 @@ void CallerMainWindow::startByTimer() {
             portIsMissing = false;
             portHasBeenCrashed = true;
             vecData->fluxTrig=0;
+            vecDataRough->fluxTrig=0;
         }
     }
     else

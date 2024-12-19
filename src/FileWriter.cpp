@@ -17,9 +17,9 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
         std::ofstream myFile(res_out.str(), std::ios::out);
         for (int i = 0; i < res.at(0).size(); i++) {
             for (int j = 0; j < res.size(); j++) {
-                if (j<5)
+                if (j<res.size()-1)
                     myFile << res.at(j).at(i) << '\t';
-                if (j==5)
+                if (j==res.size()-1)
                     myFile << res.at(j).at(i);
             }
             myFile << std::endl;
@@ -37,13 +37,13 @@ void FileWriter::fileWriteVec(std::vector<std::vector<double>> &res, std::string
         for (int j = 0; j < res.size(); j++) {
             if (j==0)
                 myFile << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << '\t';
-            if (j>0 && j<5 && marker=="log")
+            if (j>0 && j<res.size()-1 && marker=="log")
                 myFile << res.at(j).back() << '\t';
-            if (j==5 && marker=="log")
+            if (j==res.size()-1 && marker=="log")
                 myFile << res.at(j).back();
-            if (j>0 && j<5 && marker=="log portIsMissing")
+            if (j>0 && j<res.size()-1 && marker=="log portIsMissing")
                 myFile << "null" << '\t';
-            if (j==5 && marker=="log portIsMissing")
+            if (j==res.size()-1 && marker=="log portIsMissing")
                 myFile << "null";
         }
         myFile << std::endl;
