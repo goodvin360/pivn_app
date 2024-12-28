@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Plotter.h"
 
-Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d,
-                 int roughTrigger):Data(data) {
+Plotter::Plotter(vecFill*data, PlotterOptions*settings, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d,
+                 int roughTrigger):Data(data), plotSettings(settings) {
 
     if (roughTrigger ==0) {
         var1 = 4; //num of counters
@@ -23,7 +23,10 @@ Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d
     {
         QLineSeries*series = new QLineSeries();
         series->setName(QString("channel " + QString::number(i+var3)));
-        series->setUseOpenGL(true);
+        if (plotSettings->checkBox_6->isChecked())
+            series->setUseOpenGL(true);
+        else
+            series->setUseOpenGL(false);
         lsVector.push_back(series);
     }
 
@@ -64,7 +67,10 @@ Plotter::Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d
             series->setName(QString("total counts"));
         if (i==1)
             series->setName(QString("background"));
-        series->setUseOpenGL(true);
+        if (plotSettings->checkBox_6->isChecked())
+            series->setUseOpenGL(true);
+        else
+            series->setUseOpenGL(false);
         lsVectorTot.push_back(series);
     }
 

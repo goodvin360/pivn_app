@@ -23,6 +23,7 @@ public:
     QCheckBox*checkBox_3 = new QCheckBox();
     QCheckBox*checkBox_4 = new QCheckBox();
     QCheckBox*checkBox_5 = new QCheckBox();
+    QCheckBox*checkBox_6 = new QCheckBox();
 
     void setPlotTrigVal(int val);
     void setPlotTotTrigVal(int val);

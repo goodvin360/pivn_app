@@ -7,13 +7,14 @@
 #include "Chart.h"
 #include "ChartView.h"
 #include "vecFill.h"
+#include "PlotterOptions.h"
 #include "vector"
 #include "cmath"
 
 class Plotter
 {
 public:
-    Plotter(vecFill*data, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d, int roughTrigger);
+    Plotter(vecFill*data, PlotterOptions*settings, int &xp1, int &xp2, int &yp1, int &yp2, int &xp1d, int &xp2d, int &yp1d, int &yp2d, int roughTrigger);
     ~Plotter();
 
     void PlotGraph(int rescaleTrig, int &xp1, int &xp2, int &yp1, int &yp2, bool &isActive);
@@ -39,6 +40,7 @@ private:
     std::vector<double> maxValVec;
     int rescaleSize = 200;
     int var1 = 0, var2 = 0, var3 = 0;
+    PlotterOptions*plotSettings;
 
 };
 

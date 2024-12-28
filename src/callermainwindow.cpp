@@ -454,9 +454,9 @@ void CallerMainWindow::addStart() {
     readfile.pushButton_2->setEnabled(0);
     readfile.pushButton->setEnabled(0);
 
-    makePlot = new Plotter(vecData, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
+    makePlot = new Plotter(vecData, plotOptionsSetting, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
     plotObjVec.push_back(makePlot);
-    makePlotRough = new Plotter(vecDataRough, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
+    makePlotRough = new Plotter(vecDataRough, plotOptionsSetting, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
     plotObjVec.push_back(makePlotRough);
     onFlag = true;
     counter = 0;
@@ -535,9 +535,9 @@ void CallerMainWindow::addStartFile() {
     {
         shotCounter = 0;
         msgVar1 = msgVar11 = msgVar2 = msgVar22 = msgVar3 = msgVar33 = 0;
-        makePlot = new Plotter(vecDataFile, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
+        makePlot = new Plotter(vecDataFile, plotOptionsSetting, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
         plotObjVec.push_back(makePlot);
-        makePlotRough = new Plotter(vecDataFileRough, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
+        makePlotRough = new Plotter(vecDataFileRough, plotOptionsSetting, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
         plotObjVec.push_back(makePlotRough);
         textBrowser->setText("\n");
 
@@ -1086,6 +1086,8 @@ void CallerMainWindow::startUpFunc() {
     plotOptionsSetting->checkBox_3 = plotter.checkBox_3;
     plotOptionsSetting->checkBox_4 = plotter.checkBox_4;
     plotOptionsSetting->checkBox_5 = plotter.checkBox_5;
+    plotOptionsSetting->checkBox_6 = plotter.checkBox_6;
+    plotter.checkBox_6->setChecked(1);
 
     triggerModeSettings->checkBox = trigger.checkBox;
     triggerModeSettings->checkBox_2 = trigger.checkBox_2;
