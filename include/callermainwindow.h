@@ -65,6 +65,8 @@ public:
     Ui::Form_TriggerMode trigger;
     Ui::Form_ConstFlux constFlux;
 
+    QMainWindow*mWin = new QMainWindow();
+
     Counters*cntSettings;
     Coefficients*coefSettings;
     Processing*procSetting;
@@ -145,6 +147,7 @@ public:
     bool isActiveTotalRough = true;
     std::vector<double> resTime{};
     int count = 0;
+    int mWinX, mWinY = 0;
     std::vector<QLineEdit*> countersData;
     std::vector<QCheckBox*> cntTriggers;
 

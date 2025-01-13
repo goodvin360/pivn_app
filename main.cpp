@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
           {caller.comboBox->addItem(serialPortInfo.portName());}
     window->resize(480, 640);
     window->show();
+    window->mWin = window;
     return QApplication::exec();
 }
 

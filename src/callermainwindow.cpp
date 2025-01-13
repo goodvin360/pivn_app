@@ -3,6 +3,7 @@
 
 
 CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
+
     parent = nullptr;
 
     cntSettings = new Counters();
@@ -964,31 +965,52 @@ void CallerMainWindow::setAverageWindow(QString window) {
 
 void CallerMainWindow::on_actioncounters_triggered()
 {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    cntSettings->window()->setGeometry(mWinX+mWin->width(),mWinY,256,242);
     cntSettings->show();
 }
 
 void CallerMainWindow::on_actioncoefficients_triggered()
 {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    coefSettings->window()->setGeometry(mWinX+mWin->width(),mWinY+242+25,256,181);
     coefSettings->show();
 }
 
 void CallerMainWindow::on_actionProcessing_triggered() {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    procSetting->window()->setGeometry(mWinX+mWin->width(),mWinY+242+25+181+25,256,179);
     procSetting->show();
 }
 
 void CallerMainWindow::on_actionReadFile_triggered() {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    readFileSettings->window()->setGeometry(mWinX-256,mWinY,256,118);
     readFileSettings->show();
 }
 
 void CallerMainWindow::on_actionPlotOption_triggered() {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    plotOptionsSetting->window()->setGeometry(mWinX-256,mWinY+118+25,256,110);
     plotOptionsSetting->show();
 }
 
 void CallerMainWindow::on_actionTriggerMode_triggered() {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    triggerModeSettings->window()->setGeometry(mWinX-256,mWinY+118+25+110+25,256,83);
     triggerModeSettings->show();
 }
 
 void CallerMainWindow::on_actionConstFlux_triggered() {
+    mWinX = mWin->geometry().x();
+    mWinY = mWin->geometry().y();
+    constFluxSettings->window()->setGeometry(mWinX-256,mWinY+118+25+110+25+83+25,256,93);
     constFluxSettings->show();
 }
 

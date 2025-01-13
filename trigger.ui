@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>177</width>
+    <width>256</width>
     <height>83</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Trigger mode</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -60,11 +60,11 @@
    <slot>addGoTrigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>81</y>
+     <x>159</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
-     <x>261</x>
+     <x>176</x>
      <y>4</y>
     </hint>
    </hints>
@@ -77,7 +77,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>28</x>
-     <y>75</y>
+     <y>40</y>
     </hint>
     <hint type="destinationlabel">
      <x>127</x>
@@ -93,7 +93,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>49</x>
-     <y>99</y>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>13</x>
