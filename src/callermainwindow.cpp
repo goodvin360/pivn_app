@@ -27,6 +27,8 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     constFluxSettings = new ConstFlux();
     constFlux.setupUi(constFluxSettings);
 
+    settingsSaver = new SettingsSL();
+
     startUpFunc();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -150,11 +152,15 @@ void CallerMainWindow::startByTimer() {
         double var1 = trigVal;
         bool var2 = portHasBeenCrashed;
 
+        coeff_a = coefSettings->coeff_a;
+        coeff_b = coefSettings->coeff_b;
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
         if (count==6) {
+            coeff_a = coefSettings->coeff_a_rough;
+            coeff_b = coefSettings->coeff_b_rough;
             trigVal = var1;
             portHasBeenCrashed = var2;
             vecDataRough->getDataTotal(vecDataRough->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
@@ -465,15 +471,6 @@ void CallerMainWindow::addStart() {
     shotCounter = 0;
     msgVar1 = msgVar11 = msgVar2 = msgVar22 = msgVar3 = msgVar33 = 0;
 
-    if (cntSettings->countersNumTrig==0) {
-        coeff_a = coefSettings->coeff_a;
-        coeff_b = coefSettings->coeff_b;
-    }
-    else {
-        coeff_a = coefSettings->coeff_a_rough;
-        coeff_b = coefSettings->coeff_b_rough;
-    }
-
     textBrowser->clear();
 
     resultsNew.clear();
@@ -541,15 +538,6 @@ void CallerMainWindow::addStartFile() {
         makePlotRough = new Plotter(vecDataFileRough, plotOptionsSetting, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
         plotObjVec.push_back(makePlotRough);
         textBrowser->setText("\n");
-
-        if (cntSettings->countersNumTrig==0) {
-            coeff_a = coefSettings->coeff_a;
-            coeff_b = coefSettings->coeff_b;
-        }
-        else {
-            coeff_a = coefSettings->coeff_a_rough;
-            coeff_b = coefSettings->coeff_b_rough;
-        }
 
         std::vector<std::string> fileData{};
         fileData = fileRead(fileName.toStdString());
@@ -623,12 +611,16 @@ void CallerMainWindow::addStartFile() {
                     };
                 }
                 if (vecDataFile->resultsDb.size() > 0) {
+                    coeff_a = coefSettings->coeff_a;
+                    coeff_b = coefSettings->coeff_b;
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                               procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
 
                     if (count==6) {
+                        coeff_a = coefSettings->coeff_a_rough;
+                        coeff_b = coefSettings->coeff_b_rough;
                         vecDataFileRough->getDataTotal(vecDataFileRough->resultsDb, integrationTime, nFlux, coeff_a,
                                                        coeff_b, portHasBeenCrashed,
                                                        trigMode, trigVal, edgePointR, constFluxTrig, tempTimeR,
@@ -709,7 +701,7 @@ void CallerMainWindow::addStartFile() {
                 printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
 
                 if (cntSettings->countersNumTrig==1) {
-                    error = vecDataFileRough->statErr * vecDataFile->Flux;
+                    error = vecDataFileRough->statErr * vecDataFileRough->Flux;
                     printMsg(QString::number(vecDataFileRough->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 11);
                 }
 
@@ -1094,6 +1086,7 @@ void CallerMainWindow::startUpFunc() {
     processing.checkBox_4->setChecked(true);
     procSetting->lineEdit = processing.lineEdit;
     procSetting->lineEdit_2 = processing.lineEdit_2;
+    procSetting->lineEdit_3 = processing.lineEdit_3;
     processing.lineEdit->setText(QString::number(procSetting->critVal));
     processing.lineEdit_2->setText(QString::number(procSetting->intTime));
     processing.lineEdit_3->setText(QString::number(procSetting->backDelay));
@@ -1143,5 +1136,134 @@ void CallerMainWindow::clearCounts() {
 
 void CallerMainWindow::clearMessage() {
     textBrowser->clear();
+}
+
+void CallerMainWindow::on_actionSave_settings_triggered() {
+
+
+    settingsSaver->measTime = integrationTime;
+    settingsSaver->averageTime = avWindow;
+
+    settingsSaver->cnt1_res = counters.lineEdit->text().toDouble();
+    settingsSaver->cnt2_res = counters.lineEdit_2->text().toDouble();
+    settingsSaver->cnt3_res = counters.lineEdit_3->text().toDouble();
+    settingsSaver->cnt4_res = counters.lineEdit_4->text().toDouble();
+    settingsSaver->cnt5_res = counters.lineEdit_5->text().toDouble();
+    settingsSaver->cnt6_res = counters.lineEdit_6->text().toDouble();
+
+    settingsSaver->cnt1 = counters.checkBox->isChecked();
+    settingsSaver->cnt2 = counters.checkBox_2->isChecked();
+    settingsSaver->cnt3 = counters.checkBox_3->isChecked();
+    settingsSaver->cnt4 = counters.checkBox_4->isChecked();
+    settingsSaver->cnt5 = counters.checkBox_5->isChecked();
+    settingsSaver->cnt6 = counters.checkBox_6->isChecked();
+
+    settingsSaver->cnt_num = cntSettings->countersNumTrig;
+
+
+    settingsSaver->coef_a=coefSettings->coeff_a;
+    settingsSaver->coef_b=coefSettings->coeff_b;
+    settingsSaver->coef_a_r=coefSettings->coeff_a_rough;
+    settingsSaver->coef_b_r= coefSettings->coeff_b_rough;
+    settingsSaver->MeV_14 = coefSettings->coef14;
+    settingsSaver->MeV_2_5 = coefSettings->coef2_5;
+    settingsSaver->userCoef = coefSettings->coefState;
+    settingsSaver->distance = coefSettings->distance;
+
+    settingsSaver->clearBack = procSetting->clearBackVecTrig;
+    settingsSaver->multiPulse = procSetting->multiPulsesTrig;
+    settingsSaver->intTime = procSetting->intTime;
+    settingsSaver->backDelay = procSetting->backDelay;
+    settingsSaver->critVal = procSetting->critVal;
+    settingsSaver->nucleusTrig = procSetting->nucleusTrig;
+
+    settingsSaver->saveSettings();
+}
+
+void CallerMainWindow::on_actionLoad_settings_triggered() {
+
+    QString nameVar;
+    nameVar = QFileDialog::getOpenFileName(this,tr("Open File"), "../../settings", tr("txt files (*.txt)"));
+    settingsSaver->settingsFileNameLoad=nameVar.toStdString();
+
+    settingsSaver->loadSettings();
+
+    integrationTime = settingsSaver->measTime;
+    avWindow = settingsSaver->averageTime;
+    lineEdit_5->setText(QString::number(integrationTime));
+    lineEdit_9->setText(QString::number(avWindow));
+    lineEdit_10->setText(QString::number(integrationTime));
+
+    counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
+    counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));
+    counters.lineEdit_3->setText(QString::number(settingsSaver->cnt3_res));
+    counters.lineEdit_4->setText(QString::number(settingsSaver->cnt4_res));
+    counters.lineEdit_5->setText(QString::number(settingsSaver->cnt5_res));
+    counters.lineEdit_6->setText(QString::number(settingsSaver->cnt6_res));
+
+    counters.checkBox->setChecked(settingsSaver->cnt1);
+    counters.checkBox_2->setChecked(settingsSaver->cnt2);
+    counters.checkBox_3->setChecked(settingsSaver->cnt3);
+    counters.checkBox_4->setChecked(settingsSaver->cnt4);
+    counters.checkBox_5->setChecked(settingsSaver->cnt5);
+    counters.checkBox_6->setChecked(settingsSaver->cnt6);
+
+    /*if (settingsSaver->cnt_num==0)
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<4; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }
+    else
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<6; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }*/
+
+    if (settingsSaver->cnt_num == 0) {
+        cntSettings->fourCounters(1);
+    }
+    if (settingsSaver->cnt_num == 1) {
+        cntSettings->sixCounters(1);
+    }
+
+    coefSettings->coeff_a=settingsSaver->coef_a;
+    coefSettings->lineEdit->setText(QString::number(settingsSaver->coef_a));
+    coefSettings->coeff_b=settingsSaver->coef_b;
+    coefSettings->lineEdit_2->setText(QString::number(settingsSaver->coef_b));
+    coefSettings->coeff_a_rough=settingsSaver->coef_a_r;
+    coefSettings->lineEdit_4->setText(QString::number(settingsSaver->coef_a_r));
+    coefSettings->coeff_b_rough=settingsSaver->coef_b_r;
+    coefSettings->lineEdit_5->setText(QString::number(settingsSaver->coef_b_r));
+    coefSettings->trig14(settingsSaver->MeV_14);
+    coefSettings->trig2_5(settingsSaver->MeV_2_5);
+    coefSettings->coefTrig(settingsSaver->userCoef);
+    coefSettings->checkBox->setChecked(settingsSaver->userCoef);
+    coefSettings->setDist(QString::number(settingsSaver->distance));
+    coefSettings->lineEdit_3->setText(QString::number(settingsSaver->distance));
+
+    procSetting->clearBack(settingsSaver->clearBack);
+    procSetting->checkBox->setChecked(settingsSaver->clearBack);
+    procSetting->multiPulses(settingsSaver->multiPulse);
+    procSetting->checkBox_2->setChecked(settingsSaver->multiPulse);
+    procSetting->addIntTime(QString::number(settingsSaver->intTime));
+    procSetting->lineEdit_2->setText(QString::number(settingsSaver->intTime));
+    procSetting->addBackDelay(QString::number(settingsSaver->backDelay));
+    procSetting->lineEdit_3->setText(QString::number(settingsSaver->backDelay));
+    procSetting->addCriticalVal(QString::number(settingsSaver->critVal));
+    procSetting->lineEdit->setText(QString::number(settingsSaver->critVal));
+    procSetting->addInTrig(settingsSaver->nucleusTrig);
+
 }
 

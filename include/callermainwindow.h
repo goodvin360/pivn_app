@@ -37,6 +37,7 @@
 #include "PlotterOptions.h"
 #include "TriggerMode.h"
 #include "ConstFlux.h"
+#include "SettingsSL.h"
 #include "../ui_counters.h"
 #include "../ui_coefficients.h"
 #include "../ui_processing.h"
@@ -74,6 +75,8 @@ public:
     PlotterOptions*plotOptionsSetting;
     TriggerMode*triggerModeSettings;
     ConstFlux*constFluxSettings;
+
+    SettingsSL*settingsSaver;
 
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
@@ -209,6 +212,8 @@ public slots:
     void on_actionPlotOption_triggered();
     void on_actionTriggerMode_triggered();
     void on_actionConstFlux_triggered();
+    void on_actionSave_settings_triggered();
+    void on_actionLoad_settings_triggered();
 };
 
 #endif //PIVN_APP_VER_1_CALLERMAINWINDOW_H

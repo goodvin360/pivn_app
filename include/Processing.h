@@ -22,6 +22,7 @@ public: Processing(QWidget* parent = nullptr);
     QCheckBox*checkBox_4 = new QCheckBox();
     QLineEdit*lineEdit = nullptr;
     QLineEdit*lineEdit_2 = nullptr;
+    QLineEdit*lineEdit_3 = nullptr;
     QWidget*tab = new QWidget;
     int clearBackVecTrig = 0;
     int multiPulsesTrig = 0;

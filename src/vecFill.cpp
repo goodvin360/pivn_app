@@ -151,14 +151,14 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
             }
         resultsDbTotalRoughP.at(1).push_back(sumRough);
         resultsDbTotalRoughP.at(2).push_back(0);
-        if (resultsDbTotalRoughP.at(2).size()>2)
-        {
-            double last_val = resultsDbTotalRoughP.at(2).at(resultsDbTotalRoughP.at(2).size()-2);
-            if (last_val>0) {
-                resultsDbTotalRoughP.at(2).pop_back();
-                resultsDbTotalRoughP.at(2).push_back(last_val);
+            if (resultsDbTotalRoughP.at(2).size()>2)
+            {
+                double last_val = resultsDbTotalRoughP.at(2).at(resultsDbTotalRoughP.at(2).size()-2);
+                if (last_val>0) {
+                    resultsDbTotalRoughP.at(2).pop_back();
+                    resultsDbTotalRoughP.at(2).push_back(last_val);
+                }
             }
-        }
         resultsDbTotalP.at(3).push_back(sum_clean);
         resultsDbTotalRoughP.at(3).push_back(sum_cleanRough);
     }
