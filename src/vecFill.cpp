@@ -784,11 +784,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
 //            minusBack = totalCnt-backVal*fluxTime;
 //            backOut = backVal*backVecConst.size();
-            for (int i=0; i<fluxTime;i++)
+            for (int i=1; i<fluxTime;i++)
             {
                 minusBack+=resultsDbTotal.at(1).at(tPoint+i)-resultsDbTotal.at(2).at(tPoint+i);
             }
-            for (int i=0; i<backVecConst.size();i++)
+            for (int i=1; i<backVecConst.size();i++)
             {
                 backOut+=resultsDbTotal.at(2).at(tPoint+fluxTime+backDelayTime+i);
             }
@@ -842,6 +842,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             int tail = 400;
             if (derivativeAllVec.size()<tail)
                 tail = 0;
+            else
+                tail = derivativeAllVec.size()-400;
             for (auto it=derivativeAllVec.size()-1; it!=tail; it--) {
                 if (derivativeAllVec.at(it)>derMax) {
                     derMax = derivativeAllVec.at(it);
