@@ -175,6 +175,7 @@ public:
     std::vector<std::string> fileRead (std::string str);
     void inputProcessing(double &var, std::string inp);
     void startUpFunc();
+    void loadLastSettings();
 
 public slots:
     void printMsg(QString msg, int num);

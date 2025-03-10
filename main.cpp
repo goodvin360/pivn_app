@@ -17,10 +17,12 @@
 #include "ConstFlux.h"
 #include "QScrollBar"
 #include  <locale.h>
+#include <windows.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-
+    SetConsoleOutputCP(CP_UTF8);
+    setlocale(LC_ALL, ".UTF8");
     CallerMainWindow *window = new CallerMainWindow(nullptr);
     Counters *countersWin = new Counters(nullptr);
     Coefficients * coefWin = new Coefficients(nullptr);
@@ -97,6 +99,7 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_12->setReadOnly(1);
     caller.lineEdit_13->setReadOnly(1);
     caller.lineEdit_14->setReadOnly(1);
+    window->loadLastSettings();
 
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
           {caller.comboBox->addItem(serialPortInfo.portName());}

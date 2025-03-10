@@ -68,6 +68,7 @@ CallerMainWindow::~CallerMainWindow() {
     plotOptionsSetting->close();
     triggerModeSettings->close();
     constFluxSettings->close();
+    on_actionSave_settings_triggered();
 }
 
 void CallerMainWindow::startByTimer() {
@@ -1183,7 +1184,7 @@ void CallerMainWindow::on_actionSave_settings_triggered() {
 void CallerMainWindow::on_actionLoad_settings_triggered() {
 
     QString nameVar;
-    nameVar = QFileDialog::getOpenFileName(this,tr("Open File"), "../../settings", tr("txt files (*.txt)"));
+    nameVar = QFileDialog::getOpenFileName(this,tr("Open File"), "./settings", tr("txt files (*.txt)"));
     settingsSaver->settingsFileNameLoad=nameVar.toStdString();
 
     settingsSaver->loadSettings();
@@ -1264,6 +1265,89 @@ void CallerMainWindow::on_actionLoad_settings_triggered() {
     procSetting->addCriticalVal(QString::number(settingsSaver->critVal));
     procSetting->lineEdit->setText(QString::number(settingsSaver->critVal));
     procSetting->addInTrig(settingsSaver->nucleusTrig);
+}
 
+void CallerMainWindow::loadLastSettings() {
+
+    settingsSaver->settingsFileNameLoad="./settings/settings.txt";
+
+    settingsSaver->loadSettings();
+
+    integrationTime = settingsSaver->measTime;
+    avWindow = settingsSaver->averageTime;
+    lineEdit_5->setText(QString::number(integrationTime));
+    lineEdit_9->setText(QString::number(avWindow));
+    lineEdit_10->setText(QString::number(integrationTime));
+
+    counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
+    counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));
+    counters.lineEdit_3->setText(QString::number(settingsSaver->cnt3_res));
+    counters.lineEdit_4->setText(QString::number(settingsSaver->cnt4_res));
+    counters.lineEdit_5->setText(QString::number(settingsSaver->cnt5_res));
+    counters.lineEdit_6->setText(QString::number(settingsSaver->cnt6_res));
+
+    counters.checkBox->setChecked(settingsSaver->cnt1);
+    counters.checkBox_2->setChecked(settingsSaver->cnt2);
+    counters.checkBox_3->setChecked(settingsSaver->cnt3);
+    counters.checkBox_4->setChecked(settingsSaver->cnt4);
+    counters.checkBox_5->setChecked(settingsSaver->cnt5);
+    counters.checkBox_6->setChecked(settingsSaver->cnt6);
+
+    /*if (settingsSaver->cnt_num==0)
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<4; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }
+    else
+    {
+        resTime.clear();
+        cntTrigValues.clear();
+        for (int i=0; i<6; i++) {
+            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        }
+
+        count = resTime.size();
+    }*/
+
+    if (settingsSaver->cnt_num == 0) {
+        cntSettings->fourCounters(1);
+    }
+    if (settingsSaver->cnt_num == 1) {
+        cntSettings->sixCounters(1);
+    }
+
+    coefSettings->coeff_a=settingsSaver->coef_a;
+    coefSettings->lineEdit->setText(QString::number(settingsSaver->coef_a));
+    coefSettings->coeff_b=settingsSaver->coef_b;
+    coefSettings->lineEdit_2->setText(QString::number(settingsSaver->coef_b));
+    coefSettings->coeff_a_rough=settingsSaver->coef_a_r;
+    coefSettings->lineEdit_4->setText(QString::number(settingsSaver->coef_a_r));
+    coefSettings->coeff_b_rough=settingsSaver->coef_b_r;
+    coefSettings->lineEdit_5->setText(QString::number(settingsSaver->coef_b_r));
+    coefSettings->trig14(settingsSaver->MeV_14);
+    coefSettings->trig2_5(settingsSaver->MeV_2_5);
+    coefSettings->coefTrig(settingsSaver->userCoef);
+    coefSettings->checkBox->setChecked(settingsSaver->userCoef);
+    coefSettings->setDist(QString::number(settingsSaver->distance));
+    coefSettings->lineEdit_3->setText(QString::number(settingsSaver->distance));
+
+    procSetting->clearBack(settingsSaver->clearBack);
+    procSetting->checkBox->setChecked(settingsSaver->clearBack);
+    procSetting->multiPulses(settingsSaver->multiPulse);
+    procSetting->checkBox_2->setChecked(settingsSaver->multiPulse);
+    procSetting->addIntTime(QString::number(settingsSaver->intTime));
+    procSetting->lineEdit_2->setText(QString::number(settingsSaver->intTime));
+    procSetting->addBackDelay(QString::number(settingsSaver->backDelay));
+    procSetting->lineEdit_3->setText(QString::number(settingsSaver->backDelay));
+    procSetting->addCriticalVal(QString::number(settingsSaver->critVal));
+    procSetting->lineEdit->setText(QString::number(settingsSaver->critVal));
+    procSetting->addInTrig(settingsSaver->nucleusTrig);
 }
 

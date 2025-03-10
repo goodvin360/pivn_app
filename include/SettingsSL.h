@@ -7,6 +7,7 @@
 #include "vector"
 #include "fstream"
 #include "iostream"
+#include "QDir"
 
 class SettingsSL
 {

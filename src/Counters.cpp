@@ -9,7 +9,7 @@ Counters::~Counters() {}
 
 void Counters::cnt1(int val) {
     cnt1_trig = val;
-    std::cout << cnt1_trig << std::endl;
+//    std::cout << cnt1_trig << std::endl;
 }
 
 void Counters::cnt2(int val) {

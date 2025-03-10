@@ -46,12 +46,22 @@ void SettingsSL::saveSettings() {
     else
         std::cout << "settings data is empty" << std::endl;
 
-    settingFileNameSave = "../../settings/settings.txt";
+    std::stringstream dirName;
+    dirName << "./settings";
+    QDir dir(QString::fromStdString(dirName.str()));
+    if (!dir.exists())
+        dir.mkpath(".");
 
-    if (!settingFileNameSave.empty()) {
-        std::ofstream myFile(settingFileNameSave, std::ios::out);
-        for (auto it = settingsDataSave.begin(); it != settingsDataSave.end(); it++) {
-            myFile << it->first << '\t' << it->second << std::endl;
+    for (int i=0; i<2; i++) {
+        if (i==0)
+            settingFileNameSave = "./settings/settings.txt";
+        if (i==1)
+            settingFileNameSave = "../../settings/settings.txt";
+        if (!settingFileNameSave.empty()) {
+            std::ofstream myFile(settingFileNameSave, std::ios::out);
+            for (auto it = settingsDataSave.begin(); it != settingsDataSave.end(); it++) {
+                myFile << it->first << '\t' << it->second << std::endl;
+            }
         }
     }
 

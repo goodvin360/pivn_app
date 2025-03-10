@@ -282,12 +282,12 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             backVec.push_back(resultsDbTotal.at(1).back());
-            for (auto it=backVec.begin(); it!=backVec.end(); it++)
+            /*for (auto it=backVec.begin(); it!=backVec.end(); it++)
             {
                 backVal+=it.operator*();
             }
-            backVal = backVal/double(backVec.size());
-//            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+            backVal = backVal/double(backVec.size());*/
+            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
             backLastVal = backVal;
