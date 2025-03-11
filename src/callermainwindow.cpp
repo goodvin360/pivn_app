@@ -52,6 +52,8 @@ CallerMainWindow::CallerMainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(constFluxSettings, &ConstFlux::sentConstFluxTrig, this, &CallerMainWindow::addConstFluxTrig);
     QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointPlus, this, &CallerMainWindow::edgePointPlus);
     QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointMinus, this, &CallerMainWindow::edgePointMinus);
+    QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointPlusR, this, &CallerMainWindow::edgePointPlusR);
+    QObject::connect(constFluxSettings, &ConstFlux::sentEdgePointMinusR, this, &CallerMainWindow::edgePointMinusR);
 
     m_timer = new QTimer();
     connect(m_timer, &QTimer::timeout, this, &CallerMainWindow::startByTimer);
@@ -177,13 +179,15 @@ void CallerMainWindow::startByTimer() {
         lineEdit_4->setText(QString::number(vecData->resultsDbTotalP.at(3).back(),'f',2));
 
         if (count==6) {
-            lineEdit_13->setText(QString::number(vecData->resultsDbTotalRoughP.at(1).back(), 'f', 2));
-            lineEdit_11->setText(QString::number(vecData->resultsDbTotalRoughP.at(2).back(), 'f', 2));
-            lineEdit_12->setText(QString::number(vecData->resultsDbTotalRoughP.at(3).back(), 'f', 2));
+            lineEdit_13->setText(QString::number(vecDataRough->resultsDbTotalRoughP.at(1).back(), 'f', 2));
+            lineEdit_11->setText(QString::number(vecDataRough->resultsDbTotalRoughP.at(2).back(), 'f', 2));
+            lineEdit_12->setText(QString::number(vecDataRough->resultsDbTotalRoughP.at(3).back(), 'f', 2));
         }
 
         lineEdit_10->setText(QString::number(leftTime));
+        lineEdit_7->setText(QString::number(leftTimeR));
         constFluxSettings->lineEdit->setText(QString::number(tempTime));
+        constFluxSettings->lineEdit_2->setText(QString::number(tempTimeR));
 
         if (plotState>0 && isActive)
             makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
@@ -205,7 +209,7 @@ void CallerMainWindow::startByTimer() {
             plotOptionsSetting->checkBox_3->setChecked(0);
         }
         if (plotTotalStateRough > 0 && isActiveTotalRough)
-            makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
+            makePlotRough->PlotGraphTotal(rescaleTrigger, tempTimeR, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
         if (!isActiveTotalRough) {
             plotTotalStateRough=0;
             plotOptionsSetting->checkBox_4->setChecked(0);
@@ -643,7 +647,9 @@ void CallerMainWindow::addStartFile() {
                     }
 
                     lineEdit_10->setText(QString::number(leftTime));
+                    lineEdit_7->setText(QString::number(leftTimeR));
                     constFluxSettings->lineEdit->setText(QString::number(tempTime));
+                    constFluxSettings->lineEdit_2->setText(QString::number(tempTimeR));
 
                     if (plotState > 0 && isActive)
                         makePlot->PlotGraph(rescaleTrigger, xp1dif, xp2dif, yp1dif, yp2dif, isActive);
@@ -665,7 +671,7 @@ void CallerMainWindow::addStartFile() {
                         plotOptionsSetting->checkBox_3->setChecked(0);
                     }
                     if (plotTotalStateRough > 0 && isActiveTotalRough)
-                        makePlotRough->PlotGraphTotal(rescaleTrigger, tempTime, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
+                        makePlotRough->PlotGraphTotal(rescaleTrigger, tempTimeR, xp1totR, xp2totR, yp1totR, yp2totR, isActiveTotalRough);
                     if (!isActiveTotalRough) {
                         plotTotalStateRough=0;
                         plotOptionsSetting->checkBox_4->setChecked(0);
@@ -880,8 +886,10 @@ void CallerMainWindow::setFiniteTime(int stTime) {
 void CallerMainWindow::setCountIntTime(QString intTime) {
     if (intTime.length()>0) {
         integrationTime = std::stod(intTime.toStdString());
+        lineEdit_7->setText(QString::number(integrationTime));
         lineEdit_10->setText(QString::number(integrationTime));
         leftTime = integrationTime;
+        leftTimeR = integrationTime;
     }
 }
 
@@ -930,11 +938,15 @@ void CallerMainWindow::addConstFluxTrig(int st) {
         constFlux.pushButton->setEnabled(1);
         constFlux.pushButton_2->setEnabled(1);
         constFlux.pushButton_3->setEnabled(1);
+        constFlux.pushButton_4->setEnabled(1);
+        constFlux.pushButton_5->setEnabled(1);
     }
     else {
         constFlux.pushButton->setEnabled(0);
         constFlux.pushButton_2->setEnabled(0);
         constFlux.pushButton_3->setEnabled(0);
+        constFlux.pushButton_4->setEnabled(0);
+        constFlux.pushButton_5->setEnabled(0);
     }
 }
 
@@ -946,6 +958,16 @@ void CallerMainWindow::edgePointPlus() {
 void CallerMainWindow::edgePointMinus() {
     tempTimeShift--;
     constFluxSettings->lineEdit->setText(QString::number(tempTime));
+}
+
+void CallerMainWindow::edgePointPlusR() {
+    tempTimeShiftR++;
+    constFluxSettings->lineEdit_2->setText(QString::number(tempTimeR));
+}
+
+void CallerMainWindow::edgePointMinusR() {
+    tempTimeShiftR--;
+    constFluxSettings->lineEdit_2->setText(QString::number(tempTimeR));
 }
 
 void CallerMainWindow::setReadDelay(QString delay) {
@@ -1114,12 +1136,18 @@ void CallerMainWindow::startUpFunc() {
     constFluxSettings->pushButton = constFlux.pushButton;
     constFluxSettings->pushButton_2 = constFlux.pushButton_2;
     constFluxSettings->pushButton_3 = constFlux.pushButton_3;
+    constFluxSettings->pushButton_4 = constFlux.pushButton_4;
+    constFluxSettings->pushButton_5 = constFlux.pushButton_5;
     constFluxSettings->lineEdit = constFlux.lineEdit;
+    constFluxSettings->lineEdit_2 = constFlux.lineEdit_2;
     constFlux.lineEdit->setText(QString::number(edgePoint));
+    constFlux.lineEdit_2->setText(QString::number(edgePointR));
     constFlux.lineEdit->setReadOnly(1);
     constFlux.pushButton->setEnabled(0);
     constFlux.pushButton_2->setEnabled(0);
     constFlux.pushButton_3->setEnabled(0);
+    constFlux.pushButton_4->setEnabled(0);
+    constFlux.pushButton_5->setEnabled(0);
 }
 
 void CallerMainWindow::clearNeutrons() {
@@ -1132,6 +1160,7 @@ void CallerMainWindow::clearCounts() {
     textBrowser_4->clear();
     lineEdit_6->setText("0");
     lineEdit_14->setText("0");
+    lineEdit_7->setText(QString::number(integrationTime));
     lineEdit_10->setText(QString::number(integrationTime));
 }
 
@@ -1192,6 +1221,7 @@ void CallerMainWindow::on_actionLoad_settings_triggered() {
     integrationTime = settingsSaver->measTime;
     avWindow = settingsSaver->averageTime;
     lineEdit_5->setText(QString::number(integrationTime));
+    lineEdit_7->setText(QString::number(integrationTime));
     lineEdit_9->setText(QString::number(avWindow));
     lineEdit_10->setText(QString::number(integrationTime));
 
@@ -1269,85 +1299,91 @@ void CallerMainWindow::on_actionLoad_settings_triggered() {
 
 void CallerMainWindow::loadLastSettings() {
 
-    settingsSaver->settingsFileNameLoad="./settings/settings.txt";
+    std::stringstream dirName;
+    dirName << "./settings";
+    QDir dir(QString::fromStdString(dirName.str()));
+    if (dir.exists()) {
+        settingsSaver->settingsFileNameLoad = "./settings/settings.txt";
 
-    settingsSaver->loadSettings();
+        settingsSaver->loadSettings();
 
-    integrationTime = settingsSaver->measTime;
-    avWindow = settingsSaver->averageTime;
-    lineEdit_5->setText(QString::number(integrationTime));
-    lineEdit_9->setText(QString::number(avWindow));
-    lineEdit_10->setText(QString::number(integrationTime));
+        integrationTime = settingsSaver->measTime;
+        avWindow = settingsSaver->averageTime;
+        lineEdit_5->setText(QString::number(integrationTime));
+        lineEdit_7->setText(QString::number(integrationTime));
+        lineEdit_9->setText(QString::number(avWindow));
+        lineEdit_10->setText(QString::number(integrationTime));
 
-    counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
-    counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));
-    counters.lineEdit_3->setText(QString::number(settingsSaver->cnt3_res));
-    counters.lineEdit_4->setText(QString::number(settingsSaver->cnt4_res));
-    counters.lineEdit_5->setText(QString::number(settingsSaver->cnt5_res));
-    counters.lineEdit_6->setText(QString::number(settingsSaver->cnt6_res));
+        counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
+        counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));
+        counters.lineEdit_3->setText(QString::number(settingsSaver->cnt3_res));
+        counters.lineEdit_4->setText(QString::number(settingsSaver->cnt4_res));
+        counters.lineEdit_5->setText(QString::number(settingsSaver->cnt5_res));
+        counters.lineEdit_6->setText(QString::number(settingsSaver->cnt6_res));
 
-    counters.checkBox->setChecked(settingsSaver->cnt1);
-    counters.checkBox_2->setChecked(settingsSaver->cnt2);
-    counters.checkBox_3->setChecked(settingsSaver->cnt3);
-    counters.checkBox_4->setChecked(settingsSaver->cnt4);
-    counters.checkBox_5->setChecked(settingsSaver->cnt5);
-    counters.checkBox_6->setChecked(settingsSaver->cnt6);
+        counters.checkBox->setChecked(settingsSaver->cnt1);
+        counters.checkBox_2->setChecked(settingsSaver->cnt2);
+        counters.checkBox_3->setChecked(settingsSaver->cnt3);
+        counters.checkBox_4->setChecked(settingsSaver->cnt4);
+        counters.checkBox_5->setChecked(settingsSaver->cnt5);
+        counters.checkBox_6->setChecked(settingsSaver->cnt6);
 
-    /*if (settingsSaver->cnt_num==0)
-    {
-        resTime.clear();
-        cntTrigValues.clear();
-        for (int i=0; i<4; i++) {
-            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
-            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+        /*if (settingsSaver->cnt_num==0)
+        {
+            resTime.clear();
+            cntTrigValues.clear();
+            for (int i=0; i<4; i++) {
+                resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+                cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+            }
+
+            count = resTime.size();
+        }
+        else
+        {
+            resTime.clear();
+            cntTrigValues.clear();
+            for (int i=0; i<6; i++) {
+                resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
+                cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
+            }
+
+            count = resTime.size();
+        }*/
+
+        if (settingsSaver->cnt_num == 0) {
+            cntSettings->fourCounters(1);
+        }
+        if (settingsSaver->cnt_num == 1) {
+            cntSettings->sixCounters(1);
         }
 
-        count = resTime.size();
+        coefSettings->coeff_a = settingsSaver->coef_a;
+        coefSettings->lineEdit->setText(QString::number(settingsSaver->coef_a));
+        coefSettings->coeff_b = settingsSaver->coef_b;
+        coefSettings->lineEdit_2->setText(QString::number(settingsSaver->coef_b));
+        coefSettings->coeff_a_rough = settingsSaver->coef_a_r;
+        coefSettings->lineEdit_4->setText(QString::number(settingsSaver->coef_a_r));
+        coefSettings->coeff_b_rough = settingsSaver->coef_b_r;
+        coefSettings->lineEdit_5->setText(QString::number(settingsSaver->coef_b_r));
+        coefSettings->trig14(settingsSaver->MeV_14);
+        coefSettings->trig2_5(settingsSaver->MeV_2_5);
+        coefSettings->coefTrig(settingsSaver->userCoef);
+        coefSettings->checkBox->setChecked(settingsSaver->userCoef);
+        coefSettings->setDist(QString::number(settingsSaver->distance));
+        coefSettings->lineEdit_3->setText(QString::number(settingsSaver->distance));
+
+        procSetting->clearBack(settingsSaver->clearBack);
+        procSetting->checkBox->setChecked(settingsSaver->clearBack);
+        procSetting->multiPulses(settingsSaver->multiPulse);
+        procSetting->checkBox_2->setChecked(settingsSaver->multiPulse);
+        procSetting->addIntTime(QString::number(settingsSaver->intTime));
+        procSetting->lineEdit_2->setText(QString::number(settingsSaver->intTime));
+        procSetting->addBackDelay(QString::number(settingsSaver->backDelay));
+        procSetting->lineEdit_3->setText(QString::number(settingsSaver->backDelay));
+        procSetting->addCriticalVal(QString::number(settingsSaver->critVal));
+        procSetting->lineEdit->setText(QString::number(settingsSaver->critVal));
+        procSetting->addInTrig(settingsSaver->nucleusTrig);
     }
-    else
-    {
-        resTime.clear();
-        cntTrigValues.clear();
-        for (int i=0; i<6; i++) {
-            resTime.push_back(std::stod(countersData.at(i)->text().toStdString())*1e-6);
-            cntTrigValues.push_back(cntTriggers.at(i)->isChecked());
-        }
-
-        count = resTime.size();
-    }*/
-
-    if (settingsSaver->cnt_num == 0) {
-        cntSettings->fourCounters(1);
-    }
-    if (settingsSaver->cnt_num == 1) {
-        cntSettings->sixCounters(1);
-    }
-
-    coefSettings->coeff_a=settingsSaver->coef_a;
-    coefSettings->lineEdit->setText(QString::number(settingsSaver->coef_a));
-    coefSettings->coeff_b=settingsSaver->coef_b;
-    coefSettings->lineEdit_2->setText(QString::number(settingsSaver->coef_b));
-    coefSettings->coeff_a_rough=settingsSaver->coef_a_r;
-    coefSettings->lineEdit_4->setText(QString::number(settingsSaver->coef_a_r));
-    coefSettings->coeff_b_rough=settingsSaver->coef_b_r;
-    coefSettings->lineEdit_5->setText(QString::number(settingsSaver->coef_b_r));
-    coefSettings->trig14(settingsSaver->MeV_14);
-    coefSettings->trig2_5(settingsSaver->MeV_2_5);
-    coefSettings->coefTrig(settingsSaver->userCoef);
-    coefSettings->checkBox->setChecked(settingsSaver->userCoef);
-    coefSettings->setDist(QString::number(settingsSaver->distance));
-    coefSettings->lineEdit_3->setText(QString::number(settingsSaver->distance));
-
-    procSetting->clearBack(settingsSaver->clearBack);
-    procSetting->checkBox->setChecked(settingsSaver->clearBack);
-    procSetting->multiPulses(settingsSaver->multiPulse);
-    procSetting->checkBox_2->setChecked(settingsSaver->multiPulse);
-    procSetting->addIntTime(QString::number(settingsSaver->intTime));
-    procSetting->lineEdit_2->setText(QString::number(settingsSaver->intTime));
-    procSetting->addBackDelay(QString::number(settingsSaver->backDelay));
-    procSetting->lineEdit_3->setText(QString::number(settingsSaver->backDelay));
-    procSetting->addCriticalVal(QString::number(settingsSaver->critVal));
-    procSetting->lineEdit->setText(QString::number(settingsSaver->critVal));
-    procSetting->addInTrig(settingsSaver->nucleusTrig);
 }
 

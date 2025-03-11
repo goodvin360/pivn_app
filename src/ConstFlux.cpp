@@ -24,6 +24,14 @@ void ConstFlux::setEdgePointMinus() {
     sentEdgePointMinus();
 }
 
+void ConstFlux::setEdgePointPlusR() {
+    sentEdgePointPlusR();
+}
+
+void ConstFlux::setEdgePointMinusR() {
+    sentEdgePointMinusR();
+}
+
 void ConstFlux::addConstFluxGo() {
     setConstFluxGo();
 }
@@ -38,4 +46,12 @@ void ConstFlux::edgePointPlus() {
 
 void ConstFlux::edgePointMinus() {
     setEdgePointMinus();
+}
+
+void ConstFlux::edgePointPlusR() {
+    setEdgePointPlusR();
+}
+
+void ConstFlux::edgePointMinusR() {
+    setEdgePointMinusR();
 }

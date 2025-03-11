@@ -84,6 +84,7 @@ public:
     QLineEdit*lineEdit_4 = nullptr;
     QLineEdit*lineEdit_5 = nullptr;
     QLineEdit*lineEdit_6 = nullptr;
+    QLineEdit*lineEdit_7 = nullptr;
     QLineEdit*lineEdit_9 = nullptr;
     QLineEdit*lineEdit_10 = nullptr;
     QLineEdit*lineEdit_11 = nullptr;
@@ -203,6 +204,8 @@ public slots:
     void setAverageWindow(QString window);
     void edgePointPlus();
     void edgePointMinus();
+    void edgePointPlusR();
+    void edgePointMinusR();
     void clearNeutrons();
     void clearCounts();
     void clearMessage();

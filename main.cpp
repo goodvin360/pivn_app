@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
     window->lineEdit_4 = caller.lineEdit_4;
     window->lineEdit_5 = caller.lineEdit_5;
     window->lineEdit_6 = caller.lineEdit_6;
+    window->lineEdit_7 = caller.lineEdit_7;
     window->lineEdit_9 = caller.lineEdit_9;
     window->lineEdit_10 = caller.lineEdit_10;
     window->lineEdit_11 = caller.lineEdit_11;
@@ -77,6 +78,7 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_2->setText(QString::number(0));
     caller.lineEdit_3->setText(QString::number(0));
     caller.lineEdit_4->setText(QString::number(0));
+    caller.lineEdit_7->setText(QString::number(window->leftTimeR));
     caller.lineEdit_9->setText(QString::number(window->avWindow));
     caller.lineEdit_10->setText(QString::number(window->leftTime));
     caller.lineEdit_11->setText(QString::number(0));
@@ -94,6 +96,7 @@ int main(int argc, char *argv[]) {
     caller.lineEdit_3->setReadOnly(1);
     caller.lineEdit_4->setReadOnly(1);
     caller.lineEdit_6->setReadOnly(1);
+    caller.lineEdit_7->setReadOnly(1);
     caller.lineEdit_10->setReadOnly(1);
     caller.lineEdit_11->setReadOnly(1);
     caller.lineEdit_12->setReadOnly(1);

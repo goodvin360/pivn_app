@@ -1,5 +1,5 @@
 14_MeV	0
-2.5_MeV	2
+2.5_MeV	1
 averageTime	50
 backDelay	70
 clearBack	0
