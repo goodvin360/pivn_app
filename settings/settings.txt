@@ -1,6 +1,6 @@
 14_MeV	0
-2.5_MeV	1
-averageTime	50
+2.5_MeV	2
+averageTime	500
 backDelay	70
 clearBack	0
 cnt1_res	200
@@ -22,7 +22,7 @@ coef_b	13354
 coef_b_r	13354
 critLvl	50
 distance	24
-intTime	100
+intTime	30
 measTime	30
 multiPulse	0
 nucleusTrig	1

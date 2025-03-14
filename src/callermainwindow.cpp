@@ -320,6 +320,7 @@ void CallerMainWindow::startByTimer() {
 
         onFlag = false;
         pushButton->setEnabled(1);
+        pushButton_2->setEnabled(1);
         readfile.pushButton_2->setEnabled(1);
         readfile.pushButton->setEnabled(1);
         lineEdit_2->setText(QString::number(0));
@@ -455,8 +456,10 @@ void CallerMainWindow::connectCOM() {
 
 void CallerMainWindow::addStop() {
     onFlag = false;
-    if (trigCOM==1)
+    if (trigCOM==1) {
         pushButton->setEnabled(1);
+        pushButton_2->setEnabled(1);
+    }
     readfile.pushButton_2->setEnabled(1);
     readfile.pushButton->setEnabled(1);
 }
