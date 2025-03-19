@@ -27,7 +27,7 @@ public:
     std::vector<std::vector<double>> getData(std::string &str, int &counter, std::vector<int> cntTrig, std::vector<double> resT, int);
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
-                      double backDelayTime, int window, double&lftTime, int mPulses, int clearTrig,
+                      double backDelayTime, int window, double& lftTime, int mPulses, int clearTrig,
                       double critLvl, double intTime, int nucleus, int roughTrigger);
 
     void cleanUp();
@@ -93,6 +93,7 @@ public:
     double criticalTime = 0;
     double critTimeActual = 0;
     bool criticalChange = false;
+    bool isCritical = false;
     double nCritical = 0;
     double maxCountRate = 0;
     double maxResTime = 0;
@@ -104,11 +105,15 @@ public:
     double tempErr2 = 0;
     double countErr = 0;
     double deltaResTime = 0.2;
+    double In116m1Val = 0.0009027726, In114Val = 0.009643049, Ag108Val = 0.028;
     QString constDataMsg;
     QString pulseDataMsg;
 
     void printMessage(QString msg, int num);
     void msgFillUp();
+    void calcFlux(int nucleus, double intTime, double c_a, double c_b, double totTime, double &flux, double &lftTime,
+                  double &backDelayTime, int var3, int var4, double var5);
+    void pulseFinish(int roughTrigger, double &leftTime, double &totalTime, int clearTrig, double backDelTime);
 
 signals:
     void sentMessage(QString, int);

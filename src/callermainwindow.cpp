@@ -755,6 +755,35 @@ void CallerMainWindow::addStartFile() {
         }
 
         if (onFlag) {
+
+            if (vecDataFile->Flux>0 || vecDataFileRough->Flux>0) {
+                QString s(0x00B1);
+                double error = 0;
+                error = vecDataFile->statErr * vecDataFile->Flux;
+                printMsg(QString::number(vecDataFile->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
+
+                if (cntSettings->countersNumTrig==1) {
+                    error = vecDataFileRough->statErr * vecDataFileRough->Flux;
+                    printMsg(QString::number(vecDataFileRough->Flux, 'g', 3) + s + QString::number(error, 'g', 3), 11);
+                }
+
+                vecDataFile->msgFillUp();
+
+                if (cntSettings->countersNumTrig==1)
+                    vecDataFileRough->msgFillUp();
+
+                if (constFluxTrig==0) {
+                    printMsg(vecDataFile->pulseDataMsg, 2);
+                    if (cntSettings->countersNumTrig==1)
+                        printMsg(vecDataFileRough->pulseDataMsg, 22);
+                }
+                if (constFluxTrig>0) {
+                    printMsg(vecDataFile->constDataMsg, 3);
+                    if (cntSettings->countersNumTrig==1)
+                        printMsg(vecDataFileRough->constDataMsg, 33);
+                }
+            }
+
             onFlag = false;
             textBrowser->setText(textBrowser->toPlainText() + "Finished" + '\n');
             vecDataFile->cleanUp();
@@ -889,10 +918,10 @@ void CallerMainWindow::setFiniteTime(int stTime) {
 void CallerMainWindow::setCountIntTime(QString intTime) {
     if (intTime.length()>0) {
         integrationTime = std::stod(intTime.toStdString());
-        lineEdit_7->setText(QString::number(integrationTime));
-        lineEdit_10->setText(QString::number(integrationTime));
-        leftTime = integrationTime;
-        leftTimeR = integrationTime;
+        lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
+        lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
+        leftTime = integrationTime+procSetting->backDelay;
+        leftTimeR = integrationTime+procSetting->backDelay;
     }
 }
 
@@ -1151,6 +1180,9 @@ void CallerMainWindow::startUpFunc() {
     constFlux.pushButton_3->setEnabled(0);
     constFlux.pushButton_4->setEnabled(0);
     constFlux.pushButton_5->setEnabled(0);
+
+    leftTime = leftTime+procSetting->backDelay;
+    leftTimeR = leftTimeR+procSetting->backDelay;
 }
 
 void CallerMainWindow::clearNeutrons() {
@@ -1163,8 +1195,8 @@ void CallerMainWindow::clearCounts() {
     textBrowser_4->clear();
     lineEdit_6->setText("0");
     lineEdit_14->setText("0");
-    lineEdit_7->setText(QString::number(integrationTime));
-    lineEdit_10->setText(QString::number(integrationTime));
+    lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
+    lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
 }
 
 void CallerMainWindow::clearMessage() {
@@ -1224,9 +1256,9 @@ void CallerMainWindow::on_actionLoad_settings_triggered() {
     integrationTime = settingsSaver->measTime;
     avWindow = settingsSaver->averageTime;
     lineEdit_5->setText(QString::number(integrationTime));
-    lineEdit_7->setText(QString::number(integrationTime));
+    lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
     lineEdit_9->setText(QString::number(avWindow));
-    lineEdit_10->setText(QString::number(integrationTime));
+    lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
 
     counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
     counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));
@@ -1313,9 +1345,9 @@ void CallerMainWindow::loadLastSettings() {
         integrationTime = settingsSaver->measTime;
         avWindow = settingsSaver->averageTime;
         lineEdit_5->setText(QString::number(integrationTime));
-        lineEdit_7->setText(QString::number(integrationTime));
+        lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
         lineEdit_9->setText(QString::number(avWindow));
-        lineEdit_10->setText(QString::number(integrationTime));
+        lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
 
         counters.lineEdit->setText(QString::number(settingsSaver->cnt1_res));
         counters.lineEdit_2->setText(QString::number(settingsSaver->cnt2_res));

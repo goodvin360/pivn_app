@@ -23,7 +23,7 @@ coef_b_r	13354
 critLvl	50
 distance	24
 intTime	30
-measTime	30
+measTime	60
 multiPulse	0
 nucleusTrig	1
 userCoef	2

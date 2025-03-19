@@ -194,7 +194,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         var5 = 4;
     }
 
-    fluxTime = totTime+countStartTime;
+    fluxTime = totTime+countStartTimeReal;
     nCritical = (critLvl/100)/maxResTime;
     if (data.at(0).size()==1) {
         if (trMode==0)
@@ -210,7 +210,134 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         else
             temp = trVal;
 
-        currentVecSize=data.at(1).size();
+        if (temp>fluxTrig)
+        {
+            isBack = false;
+            pulsesTime.push_back(resultsDbTotal.at(0).back());
+            fluxTrig = temp;
+        }
+
+        if (isBack)
+        {
+            if (backVec.size()>window && !backVec.empty())
+            {
+                for (int i=0; i<backVec.size()-window;i++)
+                    backVec.erase(backVec.begin());
+            }
+
+            backVec.push_back(resultsDbTotal.at(1).back());
+            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+            resultsDbTotal.at(2).pop_back();
+            resultsDbTotal.at(2).push_back(backVal);
+            backLastVal = backVal;
+        }
+
+        if (!isBack)
+        {
+
+            if (maxCountRate<=nCritical && !criticalChange && !isCritical)
+            {
+                if (!isPulse) {
+                    countStartTimeReal = resultsDbTotal.at(0).back();
+                    isPulse = true;
+                }
+
+//                totalCnt += resultsDbTotal.at(1).back();
+                resultsDbTotal.at(2).pop_back();
+                resultsDbTotal.at(2).push_back(backLastVal);
+//                totalCntClean += resultsDbTotal.at(3).back();
+
+                ///////////
+                lftTime = totTime+backDelayTime-fluxTimeCounter;
+                if (fluxTimeCounter<=totTime)
+                    calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                //////////
+
+                if (fluxTimeCounter==totTime+backDelayTime)
+                {
+                    isBack = true;
+                    isPulse = false;
+                    fluxTimeCounter = 0;
+                    //////////
+                    pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                    /////////
+                }
+            }
+
+            if (maxCountRate>nCritical && !criticalChange)
+            {
+                isCritical = true;
+                totalCnt = 0;
+                totalCntClean = 0;
+                resultsDbTotal.at(2).pop_back();
+                resultsDbTotal.at(2).push_back(backLastVal);
+                lftTime = totTime+backDelayTime+50;
+                if (fluxTimeCounter>0)
+                    fluxTimeCounter=0;
+            }
+
+            if (maxCountRate<=nCritical && isCritical)
+            {
+                criticalChange = true;
+                countStartTimeReal = resultsDbTotal.at(0).back();
+                isCritical = false;
+            }
+
+            if (criticalChange)
+            {
+//                totalCnt += resultsDbTotal.at(1).back();
+//                totalCntClean += resultsDbTotal.at(3).back();
+                resultsDbTotal.at(2).pop_back();
+                resultsDbTotal.at(2).push_back(backLastVal);
+
+                lftTime = totTime+backDelayTime+50-fluxTimeCounter;
+
+                if (fluxTimeCounter>totTime+backDelayTime)
+                {
+                    if (backVec.size()>25 && !backVec.empty())
+                    {
+                        for (int i=0; i<backVec.size()-25;i++)
+                            backVec.erase(backVec.begin());
+                    }
+
+                    backVec.push_back(resultsDbTotal.at(1).back());
+                    backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backVal);
+
+                    for (int i=0; i<fluxTimeCounter; i++)
+                    {
+                        if (nucleus==1)
+                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal+0.9*(backVal-backLastVal)*exp(lmd116m*(fluxTimeCounter-i))+0.0125*(backVal-backLastVal)*exp(lmd114*(fluxTimeCounter-i));
+                        else
+                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal+0.9*(backVal-backLastVal)*exp(lmdAg108*(fluxTimeCounter-i));
+                    }
+                    ///////////
+//                    if (fluxTimeCounter<=totTime+backDelayTime)
+                        calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                    //////////
+                }
+
+                if (fluxTimeCounter==totTime+backDelayTime+50)
+                {
+                    isBack = true;
+                    isCritical = false;
+                    criticalChange = false;
+                    fluxTimeCounter = 0;
+                    //////////
+                    pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                    /////////
+                }
+            }
+
+            fluxTimeCounter++;
+        }
+
+
+
+        ///////old algo
+        /*currentVecSize=data.at(1).size();
         if (currentVecSize>previousVecSize && !offTrigger)
             previousVecSize = currentVecSize;
         if (currentVecSize>previousVecSize && offTrigger){
@@ -282,11 +409,11 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             backVec.push_back(resultsDbTotal.at(1).back());
-            /*for (auto it=backVec.begin(); it!=backVec.end(); it++)
-            {
-                backVal+=it.operator*();
-            }
-            backVal = backVal/double(backVec.size());*/
+//            for (auto it=backVec.begin(); it!=backVec.end(); it++)
+//            {
+//                backVal+=it.operator*();
+//            }
+//            backVal = backVal/double(backVec.size());
             backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(backVal);
@@ -322,9 +449,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                     for (int i=0; i<pulseCounter-1; i++)
                     {
                         double t = resultsDbTotal.at(0).back()-pulsesTime.at(i);
-                        /*backFromPulses += prePulsesData.at(i)*exp(-lmd116*t)+
-                                            0.002027726*prePulsesData.at(i)*exp(-lmd116m*t)+
-                                            0.002643049*prePulsesData.at(i)*exp(-lmd114*t);*/
 
                         if (nucleus==1)
                             backFromPulses += prePulsesData.at(i)*exp(-lmd116*t);
@@ -333,9 +457,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                     }
                     if (nucleus==1)
                     {
-                        backFromPulses+=(0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                        (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                             0.002643049*exp(-lmd114*fluxTimeCounter));
+                        backFromPulses+=(In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
+                        (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
+                             In114Val*exp(-lmd114*fluxTimeCounter));
                     }
                     else
                     {
@@ -356,9 +480,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             } else if (pulseCounter==1){
                 if (nucleus==1)
                 {
-                    backVal = backLastVal+  (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                    (prePulsesData.back())/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                                            0.002643049*exp(-lmd114*fluxTimeCounter));
+                    backVal = backLastVal+  (In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
+                    (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
+                                            In114Val*exp(-lmd114*fluxTimeCounter));
                 }
                 else
                 {
@@ -428,9 +552,9 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             fluxTimeCounter++;
-        }
 
-        if (fluxTimeCounter == fluxTime || isSecondPulse) {
+
+            if (fluxTimeCounter == fluxTime || isSecondPulse) {
             QString s(0x00B1);
             double error = statErr*Flux;
             msgFillUp();
@@ -476,181 +600,6 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 backVec.clear();
         }
 
-       /* if (multiPulseTrig==0)
-            isSecondPulse = false;
-
-        if (isPulse && temp>fluxTrig)
-        {
-            if (multiPulseTrig>0)
-                isSecondPulse = true;
-            t_last_pulse = resultsDbTotal.at(0).back();
-        }
-
-        if (fluxTimeCounter == fluxTime+1)
-        {
-            isPulse = false;
-            plsD = fluxTimeCounter;
-            fluxTimeCounter = 0;
-        }
-
-        if (isSecondPulse)
-        {
-            QString s(0x00B1);
-            double error = 0.09*Flux;
-            if (isPulse) {
-                printMessage(QString::number(Flux, 'g', 3) + s + QString::number(error, 'g', 3), 1);
-                printMessage(QString::number(totalCntClean) + "   " + QString::number(totalCnt) + "   " + QString::number(minusBack), 2);
-            }
-//            plsD = fluxTimeCounter;
-            fluxTimeCounter = 0;
-            minusBack = 0;
-            Flux = 0;
-            isSecondPulse = false;
-            secondPulseCounter = true;
-            prePulse = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2)-1*resultsDbTotal.at(2).at(resultsDbTotal.at(2).size()-2);
-            pulseCounter++;
-        }
-
-        if (temp > fluxTrig && !isPulse) {
-            trigDelta = temp - fluxTrig;
-            isBack = false;
-            isPulse = true;
-            fileTrigger = true;
-            t_last_pulse = resultsDbTotal.at(0).back();
-        }
-
-        fluxTrig = temp;
-
-        if (fileTrigger)
-            fileTimer++;
-
-        if (fileTimer>=150 && fileParting)
-        {
-            int start = 0;
-            if (resultsDb.at(0).size()>200)
-                start = resultsDb.at(0).back()-200;
-            for (int i = start; i<resultsDb.at(0).size(); i++)
-            {
-                for (int j=0; j<resultsDb.size(); j++)
-                {
-                    resultsDbPart.at(j).push_back(resultsDb.at(j).at(i));
-                }
-            }
-
-            fileWriter->fileWriteVec(resultsDbPart, "part");
-
-            for (int i=0; i<resultsDbPart.size(); i++)
-                resultsDbPart.at(i).clear();
-
-            fileTimer = 0;
-            fileTrigger = false;
-        }
-
-        if (isBack) {
-            if (backVec.size()>window && !backVec.empty())
-            {
-                for (int i=0; i<backVec.size()-window;i++)
-                    backVec.erase(backVec.begin());
-            }
-
-            backVec.push_back(resultsDbTotal.at(1).back());
-            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
-            resultsDbTotal.at(2).pop_back();
-            resultsDbTotal.at(2).push_back(backVal);
-        }
-
-        if (!isBack && fluxTimeCounter < 1) {
-            peakVal = resultsDbTotal.at(1).back()-trigDelta*0;
-            resultsDbTotal.at(1).back() = peakVal;
-            peakValClean = resultsDbTotal.at(3).back()-trigDelta*0;
-            resultsDbTotal.at(3).back() = peakValClean;
-            backLastVal = backVal;
-            totalCnt=peakVal;
-            totalCntClean=peakValClean;
-            fluxTimeCounter++;
-        }
-        double t = resultsDbTotal.at(0).back()-t_last_pulse;
-
-        if (!isBack && fluxTimeCounter>0) {
-
-            if (!secondPulseCounter && pulseCounter==0)
-            backVal = backLastVal*1+
-                    (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                                    (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                    0.002643049*exp(-lmd114*fluxTimeCounter));
-
-            if (!secondPulseCounter && pulseCounter>0)
-                backVal = backLastVal*0+
-                          (exp(-lmd116*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
-                          backLastVal*exp(-lmd116*fluxTimeCounter)+
-                          (0.002027726*exp(-lmd116m*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
-                          backLastVal*exp(-lmd116m*fluxTimeCounter)+
-                          (0.002643049*exp(-lmd114*t)/(exp(-lmd116*t)+0.002027726*exp(-lmd116m*t)+0.002643049*exp(-lmd114*t)))*
-                          backLastVal*exp(-lmd114*fluxTimeCounter)+
-                          (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                          (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                                                 0.002643049*exp(-lmd114*fluxTimeCounter));
-
-            if (secondPulseCounter)
-                backVal = backLastVal*0 +
-                        (exp(-lmd116*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                                backLastVal*exp(-lmd116*fluxTimeCounter)+
-                        (0.002027726*exp(-lmd116m*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                                backLastVal*exp(-lmd116m*fluxTimeCounter)+
-                        (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                                backLastVal*exp(-lmd114*fluxTimeCounter)+
-                        (0.002027726*exp(-lmd116m*fluxTimeCounter) + 0.002643049*exp(-lmd114*fluxTimeCounter)) *
-                        (peakVal - backLastVal)/(1 + 0.002027726*exp(-lmd116m*fluxTimeCounter) +
-                                                 0.002643049*exp(-lmd114*fluxTimeCounter))+
-                        (exp(-lmd116*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                        prePulse*exp(-lmd116*fluxTimeCounter)+
-                        (0.002027726*exp(-lmd116m*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                        prePulse*exp(-lmd116m*fluxTimeCounter)+
-                        (0.002643049*exp(-lmd114*plsD)/(exp(-lmd116*plsD)+0.002027726*exp(-lmd116m*plsD)+0.002643049*exp(-lmd114*plsD)))*
-                        prePulse*exp(-lmd114*fluxTimeCounter);
-
-//            backVal = backLastVal;
-
-            resultsDbTotal.at(2).pop_back();
-            resultsDbTotal.at(2).push_back(backVal);
-
-            if (fluxTimeCounter>1) {
-                totalCnt += resultsDbTotal.at(1).back();
-                totalCntClean += resultsDbTotal.at(3).back();
-            }
-
-            if (fluxTimeCounter>0)
-                minusBack+=(resultsDbTotal.at(1).back()-resultsDbTotal.at(2).back());
-
-            if (fluxTimeCounter>0) {
-                Flux = minusBack *
-                       ((1-exp(-(log(2)*100/14.1)))/(exp(-(log(2)*0/14.1)) - exp(-(log(2)*fluxTimeCounter/14.1)))) * c_a +
-                       c_b;
-                flux = Flux;
-            }
-
-            lftTime = fluxTime-fluxTimeCounter;
-
-            fluxTimeCounter++;
-        }
-
-        if (fluxTimeCounter == fluxTime+1) {
-            QString s(0x00B1);
-            double error = 0.09*Flux;
-            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
-            printMessage(QString::number(totalCntClean)+"   "+QString::number(totalCnt)+"   "+QString::number(minusBack),2);
-            isBack = true;
-//            isPulse = false;
-//            fluxTimeCounter = 0;
-            backVal = 0;
-            backVec.clear();
-            temp = 0;
-            minusBack = 0;
-            Flux = 0;
-            lftTime = fluxTime;
-            plsD = 0;
-            secondPulseCounter = false;
-            pulseCounter++;
         }*/
 
     }
@@ -881,7 +830,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             totalCnt = 0;
             totalCntClean = 0;
             totalCntFullTime = 0;
-            lftTime = fluxTime;
+            lftTime = fluxTime+backDelayTime+window;
             derivativeVec.clear();
             derivativeAllVec.clear();
             derivativeAllTime.clear();
@@ -974,4 +923,114 @@ void vecFill::msgFillUp() {
     constDataMsg = QString::number(totalCntClean)+'\t'+QString::number(totalCnt)+'\t'+QString::number(minusBack)+
                     '\t'+QString::number(backOut)+ '\t'+QString::number(countErr,'f',2)+ '\t'+QString::number(minusBackTrue)+
                    '\t'+QString::number(derMaxTime)+'\t'+QString::number(derMinTime)+'\t'+QString::number(countStartTimeConst);
+}
+
+void vecFill::calcFlux(int nucleus, double intTime, double c_a, double c_b, double totalTime, double &flux, double &leftTime,
+                       double &backDelayTime, int var3, int var4, double var5) {
+
+    minusBack = 0;
+    totalCnt = 0;
+    totalCntClean = 0;
+    double fluxTimeVar = 0;
+    if (fluxTimeCounter<=totalTime+backDelayTime)
+        fluxTimeVar = fluxTimeCounter;
+    else
+        fluxTimeVar = fluxTimeCounter-totalTime-backDelayTime;
+
+    if (fluxTimeVar>totalTime)
+        fluxTimeVar=totalTime;
+
+    std::cout << fluxTimeVar << std::endl;
+
+    for (int i=int(countStartTimeReal); i<countStartTimeReal+fluxTimeVar; i++)
+    {
+        minusBack += (resultsDbTotal.at(1).at(i) - resultsDbTotal.at(2).at(i));
+        totalCnt+=resultsDbTotal.at(1).at(i);
+        totalCntClean+=resultsDbTotal.at(3).at(i);
+    }
+
+
+    backOut = backVal*backVec.size();
+    if (nucleus==1)
+    {
+        minusBackTrue = minusBack*((1 - exp(-(lmd116*intTime))) /
+                                   (exp(-(lmd116*(countStartTimeReal-pulsesTime.back()))) - exp(-(lmd116*(fluxTimeVar+(countStartTimeReal-pulsesTime.back()))))));
+
+        totalCntFullTime = totalCnt*((1 - exp(-(lmd116*intTime))) /
+                                     (exp(-(lmd116*(countStartTimeReal-pulsesTime.back()))) - exp(-(lmd116*(fluxTimeVar+(countStartTimeReal-pulsesTime.back()))))));
+    }
+    else
+    {
+        minusBackTrue = minusBack*((1 - exp(-(lmdAg110*intTime))) /
+                                   (exp(-(lmdAg110*(countStartTimeReal-pulsesTime.back()))) - exp(-(lmdAg110*(fluxTimeVar+(countStartTimeReal-pulsesTime.back()))))));
+
+        totalCntFullTime = totalCnt*((1 - exp(-(lmdAg110*intTime))) /
+                                     (exp(-(lmdAg110*(countStartTimeReal-pulsesTime.back()))) - exp(-(lmdAg110*(fluxTimeVar+(countStartTimeReal-pulsesTime.back()))))));
+    }
+
+
+    Flux = minusBackTrue * c_a + c_b;
+    flux = Flux;
+    statErr = sqrt(totalCnt+backOut*pow(totalTime/double(backVec.size()),2))/minusBack;
+    if (statErr<0)
+        statErr = 0;
+
+    double var1 = 0;
+    double var2 = 1;
+
+    for (int i=var3; i<var4; i++)
+    {
+        var1=resultsDbSeparated.at(i).back()+pow(deltaResTime*resTime[i-1],2)*pow(resultsDbSeparated.at(i).back(),4);
+        var2=pow((resTime[i-1]*resultsDbSeparated.at(i).back()-1),2);
+        tempErr1+=var1/var2;
+    }
+
+    tempErr2 = 0;
+    for (int i=var3; i<var4; i++)
+    {
+        var1 = backLastVal/var5+pow(deltaResTime*resTime[i-1],2)*pow(backVal/var5,4);
+        var2 = pow((resTime[i-1]*backVal/var5-1),2);
+        tempErr2+=var1/var2;
+    }
+    tempErr2=backVec.size()*tempErr2;
+
+    countErr = sqrt(tempErr1+tempErr2*pow(totalTime/backVec.size(),2))/minusBack;
+    if (countErr<0)
+        countErr = 0;
+
+}
+
+void vecFill::pulseFinish(int roughTrigger, double& leftTime, double& totTime, int clearTrig, double backDelTime) {
+
+        QString s(0x00B1);
+        double error = statErr*Flux;
+        msgFillUp();
+        if (roughTrigger==0) {
+            printMessage(pulseDataMsg, 2);
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),1);
+        }
+        else {
+            printMessage(pulseDataMsg, 22);
+            printMessage(QString::number(Flux,'g',3)+s+QString::number(error,'g',3),11);
+        }
+
+        minusBack = 0;
+        minusBackTrue = 0;
+        totalCnt = 0;
+        totalCntClean = 0;
+        totalCntFullTime = 0;
+        Flux = 0;
+        leftTime = totTime+backDelTime;
+        isPulse = false;
+        maxCountRate = 0;
+        maxResTime = 0;
+        criticalChange = false;
+        pulseDataMsg.clear();
+        backOut = 0;
+        statErr = 0;
+        tempErr1 = 0;
+        tempErr2 = 0;
+        countErr = 0;
+        if (clearTrig>0)
+            backVec.clear();
 }
