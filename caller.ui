@@ -370,6 +370,13 @@
        <item row="5" column="0" colspan="5">
         <widget class="QTextBrowser" name="textBrowser_4"/>
        </item>
+       <item row="2" column="3">
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="text">
+          <string>Skip</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -826,6 +833,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addSkip()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addStart()</slot>
@@ -855,5 +878,6 @@
   <slot>clearMessage()</slot>
   <slot>plotTriggerRough(int)</slot>
   <slot>plotTriggerTotalRough(int)</slot>
+  <slot>addSkip()</slot>
  </slots>
 </ui>

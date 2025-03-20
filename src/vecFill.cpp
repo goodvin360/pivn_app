@@ -168,7 +168,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
 void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTime, double &flux, double&c_a, double&c_b,
                            bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                            double backDelayTime, int window, double &lftTime, int mPulses, int clearTrig,
-                           double critLvl, double intTime, int nucleus, int roughTrigger) {
+                           double critLvl, double intTime, int nucleus, int roughTrigger, int& skipTrig) {
     int var3 = 0;
     int var4 = 0;
     double var5 = 0;
@@ -196,6 +196,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
 
     fluxTime = totTime+countStartTimeReal;
     nCritical = (critLvl/100)/maxResTime;
+
     if (data.at(0).size()==1) {
         if (trMode==0)
             fluxTrig = data.at(1).back();
@@ -210,130 +211,315 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
         else
             temp = trVal;
 
-        if (temp>fluxTrig)
-        {
-            isBack = false;
-            pulsesTime.push_back(resultsDbTotal.at(0).back());
+        if (fluxTrig>temp)
             fluxTrig = temp;
-        }
 
-        if (isBack)
-        {
-            if (backVec.size()>window && !backVec.empty())
-            {
-                for (int i=0; i<backVec.size()-window;i++)
-                    backVec.erase(backVec.begin());
+        if (mPulses==0) {
+            if (temp > fluxTrig) {
+                if (isBack)
+                    pulsesTime.push_back(resultsDbTotal.at(0).back());
+                isBack = false;
+                fluxTrig = temp;
             }
 
-            backVec.push_back(resultsDbTotal.at(1).back());
-            backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
-            resultsDbTotal.at(2).pop_back();
-            resultsDbTotal.at(2).push_back(backVal);
-            backLastVal = backVal;
-        }
-
-        if (!isBack)
-        {
-
-            if (maxCountRate<=nCritical && !criticalChange && !isCritical)
-            {
-                if (!isPulse) {
-                    countStartTimeReal = resultsDbTotal.at(0).back();
-                    isPulse = true;
+            if (isBack) {
+                if (backVec.size() > window && !backVec.empty()) {
+                    for (int i = 0; i < backVec.size() - window; i++)
+                        backVec.erase(backVec.begin());
                 }
 
-//                totalCnt += resultsDbTotal.at(1).back();
+                backVec.push_back(resultsDbTotal.at(1).back());
+                backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
                 resultsDbTotal.at(2).pop_back();
-                resultsDbTotal.at(2).push_back(backLastVal);
-//                totalCntClean += resultsDbTotal.at(3).back();
+                resultsDbTotal.at(2).push_back(backVal);
+                backLastVal = backVal;
+            }
 
-                ///////////
-                lftTime = totTime+backDelayTime-fluxTimeCounter;
-                if (fluxTimeCounter<=totTime)
-                    calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
-                //////////
+            if (!isBack) {
 
-                if (fluxTimeCounter==totTime+backDelayTime)
+                if (maxCountRate <= nCritical && !criticalChange && !isCritical) {
+                    if (!isPulse) {
+                        countStartTimeReal = resultsDbTotal.at(0).back();
+                        prePulsesData.push_back(resultsDbTotal.at(1).back() - backLastVal);
+                        isPulse = true;
+                    }
+
+/*                if (!prePulsesData.empty())
                 {
-                    isBack = true;
-                    isPulse = false;
-                    fluxTimeCounter = 0;
-                    //////////
-                    pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
-                    /////////
-                }
-            }
-
-            if (maxCountRate>nCritical && !criticalChange)
-            {
-                isCritical = true;
-                totalCnt = 0;
-                totalCntClean = 0;
-                resultsDbTotal.at(2).pop_back();
-                resultsDbTotal.at(2).push_back(backLastVal);
-                lftTime = totTime+backDelayTime+50;
-                if (fluxTimeCounter>0)
-                    fluxTimeCounter=0;
-            }
-
-            if (maxCountRate<=nCritical && isCritical)
-            {
-                criticalChange = true;
-                countStartTimeReal = resultsDbTotal.at(0).back();
-                isCritical = false;
-            }
-
-            if (criticalChange)
-            {
-//                totalCnt += resultsDbTotal.at(1).back();
-//                totalCntClean += resultsDbTotal.at(3).back();
-                resultsDbTotal.at(2).pop_back();
-                resultsDbTotal.at(2).push_back(backLastVal);
-
-                lftTime = totTime+backDelayTime+50-fluxTimeCounter;
-
-                if (fluxTimeCounter>totTime+backDelayTime)
-                {
-                    if (backVec.size()>25 && !backVec.empty())
+                    if (nucleus==1)
                     {
-                        for (int i=0; i<backVec.size()-25;i++)
+                        backVal = backLastVal+  (In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
+                                                (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
+                                                                        In114Val*exp(-lmd114*fluxTimeCounter));
+                    }
+                    else
+                    {
+                        backVal = backLastVal+  (Ag108Val*exp(-lmdAg108*fluxTimeCounter)) *
+                                                (prePulsesData.back())/(1 + Ag108Val*exp(-lmdAg108*fluxTimeCounter));
+                    }
+
+                    if (backVec.size()>window && !backVec.empty())
+                    {
+                        for (int i=0; i<backVec.size()-window;i++)
                             backVec.erase(backVec.begin());
                     }
-
-                    backVec.push_back(resultsDbTotal.at(1).back());
-                    backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
-
+                    backVec.push_back(backVal);
                     resultsDbTotal.at(2).pop_back();
                     resultsDbTotal.at(2).push_back(backVal);
+                }*/
 
-                    for (int i=0; i<fluxTimeCounter; i++)
-                    {
-                        if (nucleus==1)
-                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal+0.9*(backVal-backLastVal)*exp(lmd116m*(fluxTimeCounter-i))+0.0125*(backVal-backLastVal)*exp(lmd114*(fluxTimeCounter-i));
-                        else
-                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal+0.9*(backVal-backLastVal)*exp(lmdAg108*(fluxTimeCounter-i));
-                    }
-                    ///////////
-//                    if (fluxTimeCounter<=totTime+backDelayTime)
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backLastVal);
+
+
+                    lftTime = totTime + backDelayTime + 50 - fluxTimeCounter;
+
+                    if (fluxTimeCounter > totTime + backDelayTime) {
+                        if (backVec.size() > 25 && !backVec.empty()) {
+                            for (int i = 0; i < backVec.size() - 25; i++)
+                                backVec.erase(backVec.begin());
+                        }
+
+                        backVec.push_back(resultsDbTotal.at(1).back());
+                        backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+
+                        resultsDbTotal.at(2).pop_back();
+                        resultsDbTotal.at(2).push_back(backVal);
+
+                        for (int i = 0; i < fluxTimeCounter; i++) {
+                            if (nucleus == 1)
+                                resultsDbTotal.at(2).at(int(countStartTimeReal) + i) = backVal;
+//                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal+0.8*(backVal-backLastVal)*exp(lmd116m*(fluxTimeCounter-i))+0.1125*(backVal-backLastVal)*exp(lmd114*(fluxTimeCounter-i));
+                            else
+                                resultsDbTotal.at(2).at(int(countStartTimeReal) + i) = backLastVal +
+                                                                                       0.8 * (backVal - backLastVal) *
+                                                                                       exp(lmdAg108 *
+                                                                                           (fluxTimeCounter - i));
+                        }
+                        ///////////
                         calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
-                    //////////
+                        //////////
+                    }
+
+/*                ///////////
+                if (fluxTimeCounter<=totTime)
+                    calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                //////////*/
+
+                    if (fluxTimeCounter == totTime + backDelayTime + 50) {
+                        isBack = true;
+                        isPulse = false;
+                        fluxTimeCounter = 0;
+                        //////////
+                        pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                        /////////
+                    }
                 }
 
-                if (fluxTimeCounter==totTime+backDelayTime+50)
-                {
-                    isBack = true;
+                if (maxCountRate > nCritical && !criticalChange) {
+                    isCritical = true;
+                    totalCnt = 0;
+                    totalCntClean = 0;
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backLastVal);
+                    lftTime = totTime + backDelayTime + 50;
+                    if (fluxTimeCounter > 0)
+                        fluxTimeCounter = 0;
+                }
+
+                if (maxCountRate <= nCritical && isCritical) {
+                    criticalChange = true;
+                    countStartTimeReal = resultsDbTotal.at(0).back();
                     isCritical = false;
-                    criticalChange = false;
-                    fluxTimeCounter = 0;
-                    //////////
-                    pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
-                    /////////
                 }
-            }
 
-            fluxTimeCounter++;
+                if (criticalChange) {
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backLastVal);
+
+                    lftTime = totTime + backDelayTime + 50 - fluxTimeCounter;
+
+                    if (fluxTimeCounter > totTime + backDelayTime) {
+                        if (backVec.size() > 25 && !backVec.empty()) {
+                            for (int i = 0; i < backVec.size() - 25; i++)
+                                backVec.erase(backVec.begin());
+                        }
+
+                        backVec.push_back(resultsDbTotal.at(1).back());
+                        backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+
+                        resultsDbTotal.at(2).pop_back();
+                        resultsDbTotal.at(2).push_back(backVal);
+
+                        for (int i = 0; i < fluxTimeCounter; i++) {
+                            if (nucleus == 1)
+                                resultsDbTotal.at(2).at(int(countStartTimeReal) + i) = backLastVal +
+                                                                                       0.8 * (backVal - backLastVal) *
+                                                                                       exp(lmd116m *
+                                                                                           (fluxTimeCounter - i)) +
+                                                                                       0.1125 *
+                                                                                       (backVal - backLastVal) *
+                                                                                       exp(lmd114 *
+                                                                                           (fluxTimeCounter - i));
+                            else
+                                resultsDbTotal.at(2).at(int(countStartTimeReal) + i) = backLastVal +
+                                                                                       0.8 * (backVal - backLastVal) *
+                                                                                       exp(lmdAg108 *
+                                                                                           (fluxTimeCounter - i));
+                        }
+                        ///////////
+                        calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                        //////////
+                    }
+
+                    if (fluxTimeCounter == totTime + backDelayTime + 50) {
+                        isBack = true;
+                        isCritical = false;
+                        criticalChange = false;
+                        fluxTimeCounter = 0;
+                        //////////
+                        pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                        /////////
+                    }
+                }
+
+                fluxTimeCounter++;
+            }
         }
 
+        if (mPulses>0)
+        {
+            if (temp > fluxTrig) {
+                pulsesTime.push_back(resultsDbTotal.at(0).back());
+                isBack = false;
+                fluxTrig = temp;
+                if (isPulse)
+                    isSecondPulse = true;
+            }
+
+            if (isSecondPulse)
+            {
+                fluxTimeCounter = 0;
+                isCritical = false;
+                criticalChange = false;
+                isPulse = false;
+                backLastVal = resultsDbTotal.at(1).at(resultsDbTotal.at(1).size()-2)-backVal;
+                pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                isSecondPulse = false;
+            }
+
+            if (isBack) {
+                if (backVec.size() > window && !backVec.empty()) {
+                    for (int i = 0; i < backVec.size() - window; i++)
+                        backVec.erase(backVec.begin());
+                }
+
+                backVec.push_back(resultsDbTotal.at(1).back());
+                backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+                resultsDbTotal.at(2).pop_back();
+                resultsDbTotal.at(2).push_back(backVal);
+                backLastVal = backVal;
+            }
+
+            if (!isBack) {
+
+                if (maxCountRate <= nCritical && !criticalChange && !isCritical) {
+                    if (!isPulse) {
+                        countStartTimeReal = resultsDbTotal.at(0).back();
+                        prePulsesData.push_back(resultsDbTotal.at(1).back() - backLastVal);
+                        isPulse = true;
+                    }
+
+                    for (int i = 0; i < fluxTimeCounter; i++) {
+                        if (nucleus == 1)
+                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i) = backLastVal*exp(-lmd116*i);
+                        else
+                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i) = backLastVal*exp(-lmdAg110*i);;
+                    }
+
+                    lftTime = totTime - fluxTimeCounter;
+
+                    ///////////
+                    if (fluxTimeCounter<=totTime)
+                        calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                    //////////
+
+                    if (fluxTimeCounter == totTime) {
+                        isBack = true;
+                        isPulse = false;
+                        fluxTimeCounter = 0;
+                        //////////
+                        pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                        /////////
+                    }
+                }
+
+                if (maxCountRate > nCritical && !criticalChange) {
+                    isCritical = true;
+                    totalCnt = 0;
+                    totalCntClean = 0;
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backLastVal);
+                    lftTime = totTime;
+                    if (fluxTimeCounter > 0)
+                        fluxTimeCounter = 0;
+                }
+
+                if (maxCountRate <= nCritical && isCritical) {
+                    criticalChange = true;
+                    countStartTimeReal = resultsDbTotal.at(0).back();
+                    isCritical = false;
+                }
+
+                if (criticalChange) {
+
+                    for (int i = 0; i < fluxTimeCounter; i++) {
+                        if (nucleus == 1)
+                            resultsDbTotal.at(2).at(int(countStartTimeReal)+i)=backLastVal*exp(-lmd116*i);
+                        else
+                            resultsDbTotal.at(2).at(int(countStartTimeReal) + i) = backLastVal*exp(-lmdAg110*i);;
+                    }
+
+                    lftTime = totTime - fluxTimeCounter;
+
+                    ///////////
+                    if (fluxTimeCounter<=totTime)
+                        calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                    //////////
+
+                    if (fluxTimeCounter == totTime) {
+                        isBack = true;
+                        isCritical = false;
+                        criticalChange = false;
+                        fluxTimeCounter = 0;
+                        //////////
+                        pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                        /////////
+                    }
+                }
+
+                fluxTimeCounter++;
+            }
+        }
+
+        if (skipTrig>0)
+        {
+            isBack = true;
+            isPulse = false;
+            isCritical = false;
+            criticalChange = false;
+            if (!prePulsesData.empty())
+                prePulsesData.pop_back();
+            if(!pulsesTime.empty())
+                pulsesTime.pop_back();
+            fluxTimeCounter = 0;
+            lftTime = totTime+backDelayTime;
+            flux = 0;
+            totalCnt = 0;
+            totalCntClean = 0;
+            minusBack = 0;
+            skipTrig = 0;
+        }
 
 
         ///////old algo
@@ -939,8 +1125,6 @@ void vecFill::calcFlux(int nucleus, double intTime, double c_a, double c_b, doub
 
     if (fluxTimeVar>totalTime)
         fluxTimeVar=totalTime;
-
-    std::cout << fluxTimeVar << std::endl;
 
     for (int i=int(countStartTimeReal); i<countStartTimeReal+fluxTimeVar; i++)
     {

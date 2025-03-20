@@ -28,7 +28,7 @@ public:
     void getDataTotal(std::vector<std::vector<double>> &data, double totTime, double&flux, double&coef_a, double&coef_b,
                       bool& offTrigger, int trMode, int &trVal, double &ePoint, int constFluxTr, double &tPoint, double &tPointShift, int &constTrig,
                       double backDelayTime, int window, double& lftTime, int mPulses, int clearTrig,
-                      double critLvl, double intTime, int nucleus, int roughTrigger);
+                      double critLvl, double intTime, int nucleus, int roughTrigger, int& skipTrig);
 
     void cleanUp();
 
@@ -105,7 +105,8 @@ public:
     double tempErr2 = 0;
     double countErr = 0;
     double deltaResTime = 0.2;
-    double In116m1Val = 0.0009027726, In114Val = 0.009643049, Ag108Val = 0.028;
+//    double In116m1Val = 0.002, In114Val = 0.003, Ag108Val = 0.028;    //for 4 counters (?)
+    double In116m1Val = 0.013, In114Val = 0.018, Ag108Val = 0.028; //for 6 counters (?)
     QString constDataMsg;
     QString pulseDataMsg;
 

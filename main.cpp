@@ -73,6 +73,7 @@ int main(int argc, char *argv[]) {
     window->pushButton = caller.pushButton;
     window->pushButton_2 = caller.pushButton_2;
     window->pushButton_3 = caller.pushButton_3;
+    window->pushButton_4 = caller.pushButton_4;
 
     caller.lineEdit->setText(QString::number(window->measTime));
     caller.lineEdit_2->setText(QString::number(0));

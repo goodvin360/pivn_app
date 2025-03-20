@@ -100,6 +100,7 @@ public:
     QPushButton*pushButton = new QPushButton();         //start
     QPushButton*pushButton_2 = new QPushButton();       //connect to COM
     QPushButton*pushButton_3 = new QPushButton();       //stop
+    QPushButton*pushButton_4 = new QPushButton();       //skip pulse
     //pushButtons 6,9,12 - clear buttons
 
     QCheckBox*checkBox = new QCheckBox();
@@ -149,6 +150,8 @@ public:
     bool isActiveTotal = true;
     bool isActiveRough = true;
     bool isActiveTotalRough = true;
+    int skipTrigger = 0;
+    int skipTriggerR = 0;
     std::vector<double> resTime{};
     int count = 0;
     int mWinX, mWinY = 0;
@@ -209,6 +212,7 @@ public slots:
     void clearNeutrons();
     void clearCounts();
     void clearMessage();
+    void addSkip();
     void on_actioncounters_triggered();
     void on_actioncoefficients_triggered();
     void on_actionProcessing_triggered();

@@ -160,7 +160,7 @@ void CallerMainWindow::startByTimer() {
         vecData->getDataTotal(vecData->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
+                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0, skipTrigger);
         if (count==6) {
             coeff_a = coefSettings->coeff_a_rough;
             coeff_b = coefSettings->coeff_b_rough;
@@ -171,7 +171,7 @@ void CallerMainWindow::startByTimer() {
                                        edgePointTrigR,
                                        procSetting->backDelay, avWindow, leftTimeR, procSetting->multiPulsesTrig,
                                        procSetting->clearBackVecTrig,
-                                       procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 1);
+                                       procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 1, skipTriggerR);
         }
 
         lineEdit_2->setText(QString::number(vecData->resultsDbTotalP.at(1).back(),'f',2));
@@ -624,7 +624,7 @@ void CallerMainWindow::addStartFile() {
                     vecDataFile->getDataTotal(vecDataFile->resultsDb, integrationTime, nFlux, coeff_a, coeff_b, portHasBeenCrashed,
                                               trigMode, trigVal, edgePoint, constFluxTrig, tempTime, tempTimeShift, edgePointTrig,
                                               procSetting->backDelay, avWindow, leftTime, procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
-                                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0);
+                                              procSetting->critVal, procSetting->intTime, procSetting->nucleusTrig, 0, skipTrigger);
 
                     if (count==6) {
                         coeff_a = coefSettings->coeff_a_rough;
@@ -636,7 +636,7 @@ void CallerMainWindow::addStartFile() {
                                                        procSetting->backDelay, avWindow, leftTimeR,
                                                        procSetting->multiPulsesTrig, procSetting->clearBackVecTrig,
                                                        procSetting->critVal, procSetting->intTime,
-                                                       procSetting->nucleusTrig, 1);
+                                                       procSetting->nucleusTrig, 1, skipTriggerR);
                     }
 
                     lineEdit_2->setText(QString::number(vecDataFile->resultsDbTotalP.at(1).back(),'f',2));
@@ -1201,6 +1201,11 @@ void CallerMainWindow::clearCounts() {
 
 void CallerMainWindow::clearMessage() {
     textBrowser->clear();
+}
+
+void CallerMainWindow::addSkip() {
+    skipTrigger = 1;
+    skipTriggerR = 1;
 }
 
 void CallerMainWindow::on_actionSave_settings_triggered() {
