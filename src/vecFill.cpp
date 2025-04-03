@@ -340,7 +340,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                     lftTime = totTime + backDelayTime + window - fluxTimeCounter;
 
                     if (fluxTimeCounter > totTime + backDelayTime) {
-                        if (backVec.size() > 50 && !backVec.empty()) {
+                        if (backVec.size() > window && !backVec.empty()) {
                             for (int i = 0; i < backVec.size() - window; i++)
                                 backVec.erase(backVec.begin());
                         }
