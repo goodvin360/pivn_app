@@ -169,6 +169,7 @@ public:
     Plotter*makePlot;
     Plotter*makePlotRough;
     std::vector<Plotter*> plotObjVec;
+    FileWriter*writerLog;
 
     std::map<double, std::string> resultsNew;
     int tempVar1 = 0;

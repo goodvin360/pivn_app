@@ -70,6 +70,7 @@ CallerMainWindow::~CallerMainWindow() {
     plotOptionsSetting->close();
     triggerModeSettings->close();
     constFluxSettings->close();
+    delete writerLog;
     on_actionSave_settings_triggered();
 }
 
@@ -147,6 +148,11 @@ void CallerMainWindow::startByTimer() {
 
     if (vecData->resultsDb.size()>0)
     {
+        if (!portIsMissing)
+            writerLog->fileWriteVec(vecData->resultsDb, "log");
+        else
+            writerLog->fileWriteVec(vecData->resultsDb, "log portIsMissing");
+
         std::stringstream res_out;
         for (int i = 0; i < vecData->resultsDb.size(); i++) {
             res_out << vecData->resultsDb.at(i).back() << " ";
@@ -261,12 +267,6 @@ void CallerMainWindow::startByTimer() {
         portIsMissing = true;
     }
 
-
-    FileWriter writerLog;
-    if (!portIsMissing)
-        writerLog.fileWriteVec(vecData->resultsDb, "log");
-    else
-        writerLog.fileWriteVec(vecData->resultsDb, "log portIsMissing");
 
     if (counter>=measTime || !onFlag)
     {
@@ -468,11 +468,11 @@ void CallerMainWindow::addStart() {
     pushButton->setEnabled(0);
     readfile.pushButton_2->setEnabled(0);
     readfile.pushButton->setEnabled(0);
-
     makePlot = new Plotter(vecData, plotOptionsSetting, xp1tot, xp2tot, yp1tot, yp2tot, xp1dif, xp2dif, yp1dif, yp2dif, 0);
     plotObjVec.push_back(makePlot);
     makePlotRough = new Plotter(vecDataRough, plotOptionsSetting, xp1totR, xp2totR, yp1totR, yp2totR, xp1difR, xp2difR, yp1difR, yp2difR, 1);
     plotObjVec.push_back(makePlotRough);
+    writerLog = new FileWriter();
     onFlag = true;
     counter = 0;
     flushCounter = 0;

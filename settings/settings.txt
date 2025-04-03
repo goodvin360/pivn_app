@@ -1,14 +1,14 @@
 14_MeV	0
-2.5_MeV	1
-averageTime	10
-backDelay	70
+2.5_MeV	2
+averageTime	120
+backDelay	0
 clearBack	0
 cnt1_res	200
 cnt2_res	300
 cnt3_res	400
 cnt4_res	350
-cnt5_res	250
-cnt6_res	250
+cnt5_res	350
+cnt6_res	350
 cnt_1	1
 cnt_2	1
 cnt_3	1
@@ -24,6 +24,6 @@ critLvl	50
 distance	24
 intTime	30
 measTime	30
-multiPulse	2
+multiPulse	0
 nucleusTrig	1
 userCoef	2
