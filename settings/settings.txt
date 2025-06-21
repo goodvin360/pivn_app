@@ -1,8 +1,8 @@
-14_MeV	0
-2.5_MeV	2
-averageTime	120
+14_MeV	1
+2.5_MeV	0
+averageTime	100
 backDelay	70
-clearBack	0
+clearBack	2
 cnt1_res	200
 cnt2_res	300
 cnt3_res	400
@@ -16,10 +16,10 @@ cnt_4	1
 cnt_5	1
 cnt_6	1
 cnt_num	1
-coef_a	2840
-coef_a_r	2840
-coef_b	13354
-coef_b_r	13354
+coef_a	497
+coef_a_r	4970
+coef_b	-53842
+coef_b_r	-53842
 critLvl	50
 distance	24
 intTime	30

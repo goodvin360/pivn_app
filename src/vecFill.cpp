@@ -56,49 +56,38 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
     }
 
     int m = 0;
-    std::string var;
+    std::string sVar;
     std::string delimiter2 = ":";
     size_t pos = 0;
     std::string token;
     bool flag = true;
-    var = str;
-    var += '\n';
-    while ((pos = var.find(delimiter2)) != std::string::npos) {
-        token = var.substr(0, pos);
+    sVar = str;
+    sVar += '\n';
+    while ((pos = sVar.find(delimiter2)) != std::string::npos) {
+        token = sVar.substr(0, pos);
         for (int k = 0; k < token.size(); k++) {
             if (token[k] < '0' || token[k] > '9') {
                 flag = false;
             }
         }
-        if (m==0 && flag)
-        {
+        if (m==0 && flag) {
 //            resultsDb.at(m).push_back(0.001*stod(token));
             resultsDb.at(m).push_back(counter);
         }
-        else if (flag)
-        {
-//            if (m==2 && cnt1 == 0)
-//                token = "0";
-//            if (m==3 && cnt2 == 0)
-//                token = "0";
-//            if (m==4 && cnt3 == 0)
-//                token = "0";
+        else if (m!=0 && flag) {
             resultsDb.at(m).push_back(stod(token));
         }
-        var.erase(0, pos + delimiter2.length());
+        sVar.erase(0, pos + delimiter2.length());
         m++;
         flag = true;
     }
-    for (int k = 0; k < var.size()-1; k++) {
-        if (var[k] < '0' || var[k] > '9') {
+    for (int k = 0; k < sVar.size()-1; k++) {
+        if (sVar[k] < '0' || sVar[k] > '9') {
             flag = false;
         }
     }
-    if (flag)
-    {
-//        if (m==5 && cnt4 == 0)
-//            var = "0";
-        resultsDb.at(m).push_back(stod(var));
+    if (flag) {
+        resultsDb.at(m).push_back(stod(sVar));
     }
 
     if (!resultsDb.at(0).empty())
@@ -117,14 +106,7 @@ std::vector<std::vector<double>> vecFill::getData(std::string &str, int &counter
                 if (cntTrig[i-2]==0)
                     resultsDb.at(i).back() = 0;
             }
-//            if (cnt1 == 0)
-//                resultsDb.at(2).back() = 0;
-//            if (cnt2 == 0)
-//                resultsDb.at(3).back() = 0;
-//            if (cnt3 == 0)
-//                resultsDb.at(4).back() = 0;
-//            if (cnt4 == 0)
-//                resultsDb.at(5).back() = 0;
+
             if (resultsDb.at(i).back() >= 1 / resT[i - 2])
                 var = 1 / resT[i - 2] - 1;
             else var = resultsDb.at(i).back();
@@ -179,8 +161,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             if (resultsDb.at(i).back()>maxCountRate)
                 maxCountRate = resultsDb.at(i).back();
         }
-        var3 = 5;   // the first counter in array number
-        var4 = 7;   // the last counter in array number
+        var3 = 5;   // number of the first counter in array
+        var4 = 7;   // number of the last counter in array
         var5 = 2;   // amount of counters in array
     }
     if (roughTrigger == 0) {
@@ -236,41 +218,38 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             }
 
             if (!isBack) {
-
-                if (maxCountRate <= nCritical && !criticalChange && !isCritical) {
+                //background estimation after pulse
+                /*if (maxCountRate <= nCritical && !criticalChange && !isCritical) {
                     if (!isPulse) {
                         countStartTimeReal = resultsDbTotal.at(0).back();
                         prePulsesData.push_back(resultsDbTotal.at(1).back() - backLastVal);
                         isPulse = true;
                     }
-
-/*                if (!prePulsesData.empty())
-                {
-                    if (nucleus==1)
-                    {
-                        backVal = backLastVal+  (In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
-                                                (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
-                                                                        In114Val*exp(-lmd114*fluxTimeCounter));
-                    }
-                    else
-                    {
-                        backVal = backLastVal+  (Ag108Val*exp(-lmdAg108*fluxTimeCounter)) *
-                                                (prePulsesData.back())/(1 + Ag108Val*exp(-lmdAg108*fluxTimeCounter));
-                    }
-
-                    if (backVec.size()>window && !backVec.empty())
-                    {
-                        for (int i=0; i<backVec.size()-window;i++)
-                            backVec.erase(backVec.begin());
-                    }
-                    backVec.push_back(backVal);
-                    resultsDbTotal.at(2).pop_back();
-                    resultsDbTotal.at(2).push_back(backVal);
-                }*/
-
+//                if (!prePulsesData.empty())
+//                {
+//                    if (nucleus==1)
+//                    {
+//                        backVal = backLastVal+  (In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
+//                                                (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
+//                                                                        In114Val*exp(-lmd114*fluxTimeCounter));
+//                    }
+//                    else
+//                    {
+//                        backVal = backLastVal+  (Ag108Val*exp(-lmdAg108*fluxTimeCounter)) *
+//                                                (prePulsesData.back())/(1 + Ag108Val*exp(-lmdAg108*fluxTimeCounter));
+//                    }
+//
+//                    if (backVec.size()>window && !backVec.empty())
+//                    {
+//                        for (int i=0; i<backVec.size()-window;i++)
+//                            backVec.erase(backVec.begin());
+//                    }
+//                    backVec.push_back(backVal);
+//                    resultsDbTotal.at(2).pop_back();
+//                    resultsDbTotal.at(2).push_back(backVal);
+//                }
                     resultsDbTotal.at(2).pop_back();
                     resultsDbTotal.at(2).push_back(backLastVal);
-
 
                     lftTime = totTime + backDelayTime + window - fluxTimeCounter;
 
@@ -301,12 +280,67 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                         //////////
                     }
 
-/*                ///////////
-                if (fluxTimeCounter<=totTime)
-                    calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
-                //////////*/
-
                     if (fluxTimeCounter == totTime + backDelayTime + window) {
+                        isBack = true;
+                        isPulse = false;
+                        fluxTimeCounter = 0;
+                        //////////
+                        pulseFinish(roughTrigger, lftTime, totTime, clearTrig, backDelayTime);
+                        /////////
+                    }
+                }*/
+
+                //background estimation before pulse
+                if (maxCountRate <= nCritical && !criticalChange && !isCritical) {
+                    if (!isPulse) {
+                        countStartTimeReal = resultsDbTotal.at(0).back();
+                        prePulsesData.push_back(resultsDbTotal.at(1).back() - backLastVal);
+                        isPulse = true;
+                    }
+
+                    resultsDbTotal.at(2).pop_back();
+                    resultsDbTotal.at(2).push_back(backLastVal);
+
+                    lftTime = totTime + backDelayTime - fluxTimeCounter;
+
+                    if (fluxTimeCounter >= 0) {
+//                        if (backVec.size() > window && !backVec.empty()) {
+//                            for (int i = 0; i < backVec.size() - window; i++)
+//                                backVec.erase(backVec.begin());
+//                        }
+//
+//                        backVec.push_back(resultsDbTotal.at(1).back());
+//                        backVal = std::accumulate(backVec.begin(), backVec.end(), 0) / (double(backVec.size()));
+//
+//                        resultsDbTotal.at(2).pop_back();
+//                        resultsDbTotal.at(2).push_back(backVal);
+
+                        if (!prePulsesData.empty()) {
+                            if (nucleus==1) {
+                                backVal = backLastVal +  (In116m1Val*exp(-lmd116m*fluxTimeCounter) + In114Val*exp(-lmd114*fluxTimeCounter)) *
+                                                        (prePulsesData.back())/(1 + In116m1Val*exp(-lmd116m*fluxTimeCounter) +
+                                                                                In114Val*exp(-lmd114*fluxTimeCounter));
+                            }
+                            else {
+                                backVal = backLastVal+  (Ag108Val*exp(-lmdAg108*fluxTimeCounter)) *
+                                                        (prePulsesData.back())/(1 + Ag108Val*exp(-lmdAg108*fluxTimeCounter));
+                            }
+
+                            if (backVec.size()>window && !backVec.empty()) {
+                                for (int i=0; i<backVec.size()-window;i++)
+                                    backVec.erase(backVec.begin());
+                            }
+                            backVec.push_back(backVal);
+                            resultsDbTotal.at(2).pop_back();
+                            resultsDbTotal.at(2).push_back(backVal);
+                        }
+
+                        ///////////
+                        calcFlux(nucleus, intTime, c_a, c_b, totTime, flux, lftTime, backDelayTime, var3, var4, var5);
+                        //////////
+                    }
+
+                    if (fluxTimeCounter == totTime+backDelayTime) {
                         isBack = true;
                         isPulse = false;
                         fluxTimeCounter = 0;
@@ -922,6 +956,7 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             {
                 if (nucleus==1)
                     resultsDbTotal.at(2).at(tPoint+i)=0.9*backVal*exp(lmd116m*(fluxTimeCounter-i))+0.0125*backVal*exp(lmd114*(fluxTimeCounter-i));
+//                    resultsDbTotal.at(2).at(tPoint+i)=backVal;
                 else
                     resultsDbTotal.at(2).at(tPoint+i)=0.9*backVal*exp(lmdAg108*(fluxTimeCounter-i));
             }
@@ -932,6 +967,8 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
             resultsDbTotal.at(2).pop_back();
             resultsDbTotal.at(2).push_back(0);
         }
+
+        countStartTimeConst = resultsDbTotal.at(0).back()-backDelayTime-backConstWindow-fluxTime;
 
         if (fluxTimeCounter == fluxTime+backConstWindow+backDelayTime) {
 //            minusBack = totalCnt-backVal*fluxTime;
@@ -945,11 +982,13 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 backOut+=resultsDbTotal.at(2).at(tPoint+fluxTime+backDelayTime+i);
             }
 
+            std::cout << fluxTime << std::endl << countStartTimeConst << std::endl << last_tPoint << std::endl;
+
             if (nucleus==1) {
                 totalCntFullTime = minusBack * ((1 - exp(-(lmd116 * intTime)))/
                                                 (exp(-(lmd116 * criticalTime)) - exp(-(lmd116 * fluxTimeCounter))));
                 minusBackTrue = minusBack * ((1 - exp(-(lmd116 * intTime)))/
-                                             (exp(-(lmd116 * criticalTime)) - exp(-(lmd116 * fluxTimeCounter))));
+                                             (exp(-(lmd116 * (countStartTimeConst-last_tPoint))) - exp(-(lmd116 * (countStartTimeConst-last_tPoint+fluxTime)))));
             }
             else{
                 totalCntFullTime = minusBack*((1 - exp(-(lmdAg110*intTime)))/
@@ -1150,7 +1189,8 @@ void vecFill::calcFlux(int nucleus, double intTime, double c_a, double c_b, doub
         totalCntClean+=resultsDbTotal.at(3).at(i);
     }
 
-    backOut = backVal*backVec.size();
+//    backOut = backVal*backVec.size();
+    backOut = std::accumulate(backVec.begin(), backVec.end(),0);
     if (nucleus==1)
     {
         minusBackTrue = minusBack*((1 - exp(-(lmd116*intTime))) /

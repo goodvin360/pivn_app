@@ -106,7 +106,7 @@ public:
     double countErr = 0;
     double deltaResTime = 0.2;
 //    double In116m1Val = 0.002, In114Val = 0.003, Ag108Val = 0.028;    //for 4 counters (?)
-    double In116m1Val = 0.013, In114Val = 0.018, Ag108Val = 0.028; //for 6 counters (?)
+    double In116m1Val = 0.010, In114Val = 0.013, Ag108Val = 0.028; //for 6 counters (?)
     QString constDataMsg;
     QString pulseDataMsg;
 
