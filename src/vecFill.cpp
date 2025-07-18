@@ -1115,6 +1115,8 @@ void vecFill::cleanUp() {
     truePulse = false;
     fluxTimeCounter = 0;
     countStartTime = 0;
+    countStartTimeReal = 0;
+    fluxTime = 0;
     countStartFlag = false;
     temp = 0;
     minusBack = 0;

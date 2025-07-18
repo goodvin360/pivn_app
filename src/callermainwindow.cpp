@@ -315,6 +315,10 @@ void CallerMainWindow::startByTimer() {
         tempTimeR = 0;
         tempTimeShiftR = 0;
         edgePointTrigR = 0;
+        lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
+        lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
+        leftTime = integrationTime+procSetting->backDelay;
+        leftTimeR = integrationTime+procSetting->backDelay;
 
         delete esp32;
 
@@ -741,6 +745,10 @@ void CallerMainWindow::addStartFile() {
             tempTimeR = 0;
             tempTimeShiftR = 0;
             edgePointTrigR = 0;
+            lineEdit_7->setText(QString::number(integrationTime+procSetting->backDelay));
+            lineEdit_10->setText(QString::number(integrationTime+procSetting->backDelay));
+            leftTime = integrationTime+procSetting->backDelay;
+            leftTimeR = integrationTime+procSetting->backDelay;
             pushButton->setEnabled(1);
             if (trigCOM==0)
                 pushButton_2->setEnabled(1);

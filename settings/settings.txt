@@ -2,7 +2,7 @@
 2.5_MeV	0
 averageTime	100
 backDelay	70
-clearBack	2
+clearBack	0
 cnt1_res	200
 cnt2_res	300
 cnt3_res	400
