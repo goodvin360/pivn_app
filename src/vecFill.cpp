@@ -982,13 +982,14 @@ void vecFill::getDataTotal(std::vector<std::vector<double>> &data, double totTim
                 backOut+=resultsDbTotal.at(2).at(tPoint+fluxTime+backDelayTime+i);
             }
 
-            std::cout << fluxTime << std::endl << countStartTimeConst << std::endl << last_tPoint << std::endl;
+//            std::cout << fluxTime << std::endl << countStartTimeConst << std::endl << last_tPoint << std::endl;
 
             if (nucleus==1) {
                 totalCntFullTime = minusBack * ((1 - exp(-(lmd116 * intTime)))/
                                                 (exp(-(lmd116 * criticalTime)) - exp(-(lmd116 * fluxTimeCounter))));
                 minusBackTrue = minusBack * ((1 - exp(-(lmd116 * intTime)))/
-                                             (exp(-(lmd116 * (countStartTimeConst-last_tPoint))) - exp(-(lmd116 * (countStartTimeConst-last_tPoint+fluxTime)))));
+                                             (exp(-(lmd116 * (critTimeActual))) - exp(-(lmd116 * (critTimeActual+fluxTime)))));
+                std::cout << critTimeActual << std::endl;
             }
             else{
                 totalCntFullTime = minusBack*((1 - exp(-(lmdAg110*intTime)))/

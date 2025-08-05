@@ -1,6 +1,6 @@
 14_MeV	1
 2.5_MeV	0
-averageTime	100
+averageTime	50
 backDelay	70
 clearBack	0
 cnt1_res	200
